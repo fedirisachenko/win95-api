@@ -15,19 +15,27 @@
     "skipLibCheck": true,
     "strictBindCallApply": true,
     "paths": {
+      "@apps/core": [
+        "apps/core/src/*"
+      ],
+      "@apps/database/*": [
+        "apps/database/src/*"
+      ],
+      "@config/*": [
+        "config/*"
+      ],
       "@libs/orm": [
         "libs/orm/src"
       ],
       "@libs/orm/*": [
         "libs/orm/src/*"
       ],
-      "@app/database/*": [
-        "apps/database/src/*"
+      "@libs/core": [
+        "libs/core/src"
       ],
-      "@app/core": [
-        "apps/core/src/*"
-      ],
-      "@config/*": ["config/*"]
+      "@libs/core/*": [
+        "libs/core/src/*"
+      ]
     }
   }
 }

@@ -10,6 +10,18 @@
   "monorepo": true,
   "root": "apps/win95",
   "projects": {
+    "configs": {
+      "type": "config"
+    },
+    "core": {
+      "type": "library",
+      "root": "libs/core",
+      "entryFile": "index",
+      "sourceRoot": "libs/core/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/core/tsconfig.lib.json"
+      }
+    },
     "database": {
       "type": "application",
       "root": "apps/database",
@@ -27,18 +39,6 @@
       "compilerOptions": {
         "tsConfigPath": "libs/orm/tsconfig.lib.json"
       }
-    },
-    "win95": {
-      "type": "application",
-      "root": "apps/win95",
-      "entryFile": "main",
-      "sourceRoot": "apps/win95/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/win95/tsconfig.app.json"
-      }
-    },
-    "configs": {
-      "type": "config"
     }
   }
 }

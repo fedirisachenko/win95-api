@@ -87,7 +87,8 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/orm(|/.*)$": "<rootDir>/libs/orm/src/$1"
+      "^@apps/orm(|/.*)$": "<rootDir>/libs/orm/src/$1",
+      "^libs/core(|/.*)$": "<rootDir>/libs/core/src/$1"
     }
   },
   "mikro-orm": {

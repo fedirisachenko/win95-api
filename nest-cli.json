@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/win95/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/win95/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/win95",
+  "projects": {
+    "database": {
+      "type": "application",
+      "root": "apps/database",
+      "entryFile": "main",
+      "sourceRoot": "apps/database/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/database/tsconfig.app.json"
+      }
+    },
+    "orm": {
+      "type": "library",
+      "root": "libs/orm",
+      "entryFile": "index",
+      "sourceRoot": "libs/orm/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/orm/tsconfig.lib.json"
+      }
+    },
+    "win95": {
+      "type": "application",
+      "root": "apps/win95",
+      "entryFile": "main",
+      "sourceRoot": "apps/win95/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/win95/tsconfig.app.json"
+      }
+    },
+    "configs": {
+      "type": "config"
+    }
+  }
+}

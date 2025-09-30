@@ -2,8 +2,10 @@ import 'dotenv/config';
 import { Module } from '@nestjs/common';
 import { OrmModule } from '@libs/orm';
 import mikroOrmConfig from '@config/mikro-orm.config';
+import { ConfigModule } from '@nestjs/config';
+import coreConfig from '@config/config.config';
 
 @Module({
-    imports: [OrmModule.register(mikroOrmConfig)],
+    imports: [ConfigModule.forRoot(coreConfig), OrmModule.register(mikroOrmConfig)],
 })
 export class DatabaseModule {}

@@ -4,7 +4,7 @@ import { AbstractNotificationEvent, NotificationManager, NOTIFICATION_MANAGER } 
 export type SendOtpPayload = {
     email: string;
     code: string;
-    purpose: string;
+    purpose: number;
 };
 
 @Injectable()

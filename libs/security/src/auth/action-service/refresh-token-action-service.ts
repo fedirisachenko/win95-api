@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { TokenService } from '../../tokens/token.service';
 import { TokenBlacklistService } from '../../tokens/token-blacklist.service';
 import { RefreshTokenInput } from '../dto/input';
-import { TokenPairOutput } from '../dto/output';
+import { TokenPair } from '../interfaces/token-pair.interface';
 
 @Injectable()
 export class RefreshTokenActionService {
@@ -11,7 +11,7 @@ export class RefreshTokenActionService {
         private readonly tokenBlacklistService: TokenBlacklistService,
     ) {}
 
-    async invoke(data: RefreshTokenInput): Promise<TokenPairOutput> {
+    async invoke(data: RefreshTokenInput): Promise<TokenPair> {
         if (this.tokenBlacklistService.isBlacklisted(data.refreshToken)) {
             throw new UnauthorizedException('Token has been revoked');
         }

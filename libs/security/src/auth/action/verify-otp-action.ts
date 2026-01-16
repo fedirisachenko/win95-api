@@ -1,7 +1,6 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { VerifyOtpInput } from '../dto/input';
-import { OtpVerifiedOutput } from '../dto/output';
 import { VerifyOtpActionService } from '../action-service/verify-otp-action-service';
 
 @ApiTags('Auth')
@@ -12,9 +11,10 @@ export class VerifyOtpAction {
     @Post()
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Verify OTP code' })
-    @ApiResponse({ status: 200, description: 'OTP verified successfully', type: OtpVerifiedOutput })
+    @ApiResponse({ status: 200, description: 'OTP verified successfully' })
     @ApiResponse({ status: 400, description: 'Invalid or expired OTP' })
-    async invoke(@Body() data: VerifyOtpInput): Promise<OtpVerifiedOutput> {
-        return this.actionService.invoke(data);
+    async invoke(@Body() data: VerifyOtpInput): Promise<boolean> {
+        await this.actionService.invoke(data);
+        return true;
     }
 }

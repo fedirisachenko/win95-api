@@ -1,13 +1,13 @@
-import { IsEmail, IsEnum } from 'class-validator';
+import { IsEmail, IsIn } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { OtpPurposeEnum } from '../../enum/otp-purpose-enum';
+import { OtpPurpose } from '@libs/orm';
 
 export class SendOtpInput {
     @ApiProperty({ example: 'user@example.com' })
     @IsEmail()
     email: string;
 
-    @ApiProperty({ enum: OtpPurposeEnum, example: OtpPurposeEnum.LOGIN })
-    @IsEnum(OtpPurposeEnum)
-    purpose: OtpPurposeEnum;
+    @ApiProperty({ enum: OtpPurpose.getValues(), example: OtpPurpose.LOGIN })
+    @IsIn(OtpPurpose.getValues())
+    purpose: number;
 }

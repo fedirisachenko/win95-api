@@ -1,7 +1,6 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { SendOtpInput } from '../dto/input';
-import { OtpSentOutput } from '../dto/output';
 import { SendOtpActionService } from '../action-service/send-otp-action-service';
 
 @ApiTags('Auth')
@@ -12,8 +11,8 @@ export class SendOtpAction {
     @Post()
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Send OTP code' })
-    @ApiResponse({ status: 200, description: 'OTP sent successfully', type: OtpSentOutput })
-    async invoke(@Body() data: SendOtpInput): Promise<OtpSentOutput> {
+    @ApiResponse({ status: 200, description: 'OTP sent successfully, returns expiration time in seconds' })
+    async invoke(@Body() data: SendOtpInput): Promise<number> {
         return this.actionService.invoke(data);
     }
 }

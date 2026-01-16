@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { UserEntity } from '@libs/orm';
 import { TokenService } from '../../tokens/token.service';
 import { SignUpInput } from '../dto/input';
-import { AuthOutput } from '../dto/output';
+import { TokenPair } from '../interfaces/token-pair.interface';
 
 @Injectable()
 export class SignUpActionService {
@@ -13,7 +13,7 @@ export class SignUpActionService {
         private readonly tokenService: TokenService,
     ) {}
 
-    async invoke(data: SignUpInput): Promise<AuthOutput> {
+    async invoke(data: SignUpInput): Promise<TokenPair> {
         const existingUser = await this.em.findOne(UserEntity, { email: data.email });
 
         if (existingUser) {
@@ -30,15 +30,6 @@ export class SignUpActionService {
 
         await this.em.persistAndFlush(user);
 
-        const tokens = await this.tokenService.generateTokenPair(user.id, user.email);
-
-        return {
-            ...tokens,
-            user: {
-                id: user.id,
-                email: user.email,
-                name: user.name,
-            },
-        };
+        return this.tokenService.generateTokenPair(user.id, user.email);
     }
 }

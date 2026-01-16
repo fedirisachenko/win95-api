@@ -5,7 +5,6 @@ import { NotificationEmitter } from '@libs/notification';
 import { AUTH_CONFIG } from '../../constants';
 import { AuthConfig } from '../interfaces/auth-config.interface';
 import { SendOtpInput } from '../dto/input';
-import { OtpSentOutput } from '../dto/output';
 import { SendOtpNotification } from '../notification/send-otp-notification';
 
 @Injectable()
@@ -16,7 +15,7 @@ export class SendOtpActionService {
         @Inject(AUTH_CONFIG) private readonly config: AuthConfig,
     ) {}
 
-    async invoke(data: SendOtpInput): Promise<OtpSentOutput> {
+    async invoke(data: SendOtpInput): Promise<number> {
         await this.em.nativeDelete(OtpEntity, {
             email: data.email,
             purpose: data.purpose,
@@ -39,10 +38,7 @@ export class SendOtpActionService {
             purpose: data.purpose,
         });
 
-        return {
-            success: true,
-            expiresIn: this.config.otp.expiresInSeconds,
-        };
+        return this.config.otp.expiresInSeconds;
     }
 
     private generateOtpCode(): string {

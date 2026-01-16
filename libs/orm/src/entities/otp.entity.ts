@@ -14,8 +14,8 @@ export class OtpEntity {
     @Property({ fieldName: 'code', type: 'string' })
     code: string;
 
-    @Property({ fieldName: 'purpose', type: 'string' })
-    purpose: string;
+    @Property({ fieldName: 'purpose', type: 'smallint', unsigned: true })
+    purpose: number;
 
     @Property({ fieldName: 'attempts', type: 'integer', default: 0 })
     attempts: number = 0;

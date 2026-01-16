@@ -1,7 +1,6 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { SendResetPasswordInput } from '../dto/input';
-import { SuccessOutput } from '../dto/output';
 import { SendResetPasswordActionService } from '../action-service/send-reset-password-action-service';
 
 @ApiTags('Auth')
@@ -12,8 +11,9 @@ export class SendResetPasswordAction {
     @Post()
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Send reset password email' })
-    @ApiResponse({ status: 200, description: 'Reset password email sent', type: SuccessOutput })
-    async invoke(@Body() data: SendResetPasswordInput): Promise<SuccessOutput> {
-        return this.actionService.invoke(data);
+    @ApiResponse({ status: 200, description: 'Reset password email sent' })
+    async invoke(@Body() data: SendResetPasswordInput): Promise<boolean> {
+        await this.actionService.invoke(data);
+        return true;
     }
 }

@@ -1,5 +1,6 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Mapper, JsonOutput } from '@libs/core';
 import { RefreshTokenInput } from '../dto/input';
 import { TokenPairOutput } from '../dto/output';
 import { RefreshTokenActionService } from '../action-service/refresh-token-action-service';
@@ -7,7 +8,10 @@ import { RefreshTokenActionService } from '../action-service/refresh-token-actio
 @ApiTags('Auth')
 @Controller('refresh')
 export class RefreshTokenAction {
-    constructor(private readonly actionService: RefreshTokenActionService) {}
+    constructor(
+        private readonly actionService: RefreshTokenActionService,
+        private readonly mapper: Mapper,
+    ) {}
 
     @Post()
     @HttpCode(HttpStatus.OK)
@@ -15,6 +19,7 @@ export class RefreshTokenAction {
     @ApiResponse({ status: 200, description: 'Tokens refreshed successfully', type: TokenPairOutput })
     @ApiResponse({ status: 401, description: 'Invalid refresh token' })
     async invoke(@Body() data: RefreshTokenInput): Promise<TokenPairOutput> {
-        return this.actionService.invoke(data);
+        const result = await this.actionService.invoke(data);
+        return this.mapper.map(TokenPairOutput, new JsonOutput(result));
     }
 }

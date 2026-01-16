@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { UserEntity } from '@libs/orm';
 import { TokenService } from '../../tokens/token.service';
 import { SignInInput } from '../dto/input';
-import { AuthOutput } from '../dto/output';
+import { TokenPair } from '../interfaces/token-pair.interface';
 
 @Injectable()
 export class SignInActionService {
@@ -13,7 +13,7 @@ export class SignInActionService {
         private readonly tokenService: TokenService,
     ) {}
 
-    async invoke(data: SignInInput): Promise<AuthOutput> {
+    async invoke(data: SignInInput): Promise<TokenPair> {
         const user = await this.em.findOne(UserEntity, { email: data.email });
 
         if (!user) {
@@ -26,15 +26,6 @@ export class SignInActionService {
             throw new UnauthorizedException('Invalid credentials');
         }
 
-        const tokens = await this.tokenService.generateTokenPair(user.id, user.email);
-
-        return {
-            ...tokens,
-            user: {
-                id: user.id,
-                email: user.email,
-                name: user.name,
-            },
-        };
+        return this.tokenService.generateTokenPair(user.id, user.email);
     }
 }

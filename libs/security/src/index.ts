@@ -25,6 +25,7 @@ export * from './auth/dto';
 
 // Auth Config
 export * from './auth/interfaces/auth-config.interface';
+export * from './auth/interfaces/token-pair.interface';
 
 // Auth Actions
 export * from './auth/action';

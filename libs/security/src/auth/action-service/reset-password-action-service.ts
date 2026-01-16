@@ -4,7 +4,6 @@ import * as bcrypt from 'bcrypt';
 import { UserEntity } from '@libs/orm';
 import { TokenService } from '../../tokens/token.service';
 import { ResetPasswordInput } from '../dto/input';
-import { SuccessOutput } from '../dto/output';
 
 @Injectable()
 export class ResetPasswordActionService {
@@ -13,7 +12,7 @@ export class ResetPasswordActionService {
         private readonly tokenService: TokenService,
     ) {}
 
-    async invoke(data: ResetPasswordInput): Promise<SuccessOutput> {
+    async invoke(data: ResetPasswordInput): Promise<void> {
         const payload = await this.tokenService.verifyResetPasswordToken(data.token);
 
         if (!payload) {
@@ -35,7 +34,5 @@ export class ResetPasswordActionService {
         user.password = await bcrypt.hash(data.newPassword, 10);
         user.resetPasswordToken = undefined;
         await this.em.flush();
-
-        return { success: true };
     }
 }

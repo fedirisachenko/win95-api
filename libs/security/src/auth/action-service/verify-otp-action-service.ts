@@ -4,7 +4,6 @@ import { OtpEntity } from '@libs/orm';
 import { AUTH_CONFIG } from '../../constants';
 import { AuthConfig } from '../interfaces/auth-config.interface';
 import { VerifyOtpInput } from '../dto/input';
-import { OtpVerifiedOutput } from '../dto/output';
 
 @Injectable()
 export class VerifyOtpActionService {
@@ -13,7 +12,7 @@ export class VerifyOtpActionService {
         @Inject(AUTH_CONFIG) private readonly config: AuthConfig,
     ) {}
 
-    async invoke(data: VerifyOtpInput): Promise<OtpVerifiedOutput> {
+    async invoke(data: VerifyOtpInput): Promise<void> {
         const otp = await this.em.findOne(OtpEntity, {
             email: data.email,
             purpose: data.purpose,
@@ -40,7 +39,5 @@ export class VerifyOtpActionService {
         }
 
         await this.em.removeAndFlush(otp);
-
-        return { success: true, verified: true };
     }
 }

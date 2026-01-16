@@ -10,8 +10,6 @@ import { NotificationModule } from '@libs/notification';
 import { TokenService } from './tokens/token.service';
 import { TokenBlacklistService } from './tokens/token-blacklist.service';
 import { AUTH_CONFIG } from './constants';
-
-// Actions
 import {
     SignUpAction,
     SignInAction,
@@ -22,8 +20,6 @@ import {
     SendOtpAction,
     VerifyOtpAction,
 } from './auth/action';
-
-// ActionServices
 import {
     SignUpActionService,
     SignInActionService,
@@ -34,8 +30,6 @@ import {
     SendOtpActionService,
     VerifyOtpActionService,
 } from './auth/action-service';
-
-// Notifications
 import { SendOtpNotification, SendResetPasswordNotification } from './auth/notification';
 
 export type SecurityModuleOptions = {
@@ -154,13 +148,7 @@ export class SecurityModule implements OnModuleInit {
             global: true,
             imports,
             controllers,
-            providers: [
-                SecurityRegistry,
-                SecurityGuard,
-                ...transportProviders,
-                ...strategyProviders,
-                ...authProviders,
-            ],
+            providers: [SecurityRegistry, SecurityGuard, ...transportProviders, ...strategyProviders, ...authProviders],
             exports: [
                 SecurityRegistry,
                 SecurityGuard,

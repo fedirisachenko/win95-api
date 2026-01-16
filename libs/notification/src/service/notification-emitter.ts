@@ -6,10 +6,7 @@ import { AbstractNotificationEvent } from './abstract-notification-event';
 export class NotificationEmitter {
     constructor(private readonly moduleRef: ModuleRef) {}
 
-    async emit<T>(
-        notificationClass: Type<AbstractNotificationEvent<T>>,
-        data: T,
-    ): Promise<void> {
+    async emit<T>(notificationClass: Type<AbstractNotificationEvent<T>>, data: T): Promise<void> {
         const notification = await this.moduleRef.resolve(notificationClass);
         notification.setData(data);
         await notification.send();

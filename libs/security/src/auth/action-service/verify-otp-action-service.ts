@@ -16,7 +16,7 @@ export class VerifyOtpActionService {
 
     async invoke(data: VerifyOtpInput): Promise<void> {
         const key = this.getOtpKey(data.email, data.purpose);
-        const otpData = await this.codeStorage.get(key, true) as OtpStorageData | null;
+        const otpData = (await this.codeStorage.get(key, true)) as OtpStorageData | null;
 
         if (!otpData) {
             throw new BadRequestException('OTP not found or expired');

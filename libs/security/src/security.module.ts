@@ -10,6 +10,8 @@ import { NotificationModule } from '@libs/notification';
 import { TokenService } from './tokens/token.service';
 import { TokenBlacklistService } from './tokens/token-blacklist.service';
 import { AUTH_CONFIG } from './constants';
+import { CODE_STORAGE, CodeStorageInterface } from './contract/code-storage.interface';
+import { LocalStorage } from './service/code-storage';
 import {
     SignUpAction,
     SignInAction,
@@ -32,10 +34,16 @@ import {
 } from './auth/action-service';
 import { SendOtpNotification, SendResetPasswordNotification } from './auth/notification';
 
+export type CodeStorageFactory = {
+    useFactory: (...args: any[]) => CodeStorageInterface | Promise<CodeStorageInterface>;
+    inject?: any[];
+};
+
 export type SecurityModuleOptions = {
     transports: Type<Transport>[];
     strategies: Type<AuthStrategy>[];
     auth?: Partial<AuthConfig>;
+    codeStorage?: CodeStorageInterface | CodeStorageFactory;
 };
 
 const DEFAULT_AUTH_CONFIG: AuthConfig = {
@@ -115,15 +123,18 @@ export class SecurityModule implements OnModuleInit {
 
         const authEnabled = authConfig.enabled !== false;
 
+        const codeStorageProvider: Provider = this.createCodeStorageProvider(options.codeStorage);
+
         const authProviders: Provider[] = authEnabled
             ? [
                   { provide: AUTH_CONFIG, useValue: authConfig },
+                  codeStorageProvider,
                   TokenService,
                   TokenBlacklistService,
                   ...AUTH_ACTION_SERVICES,
                   ...AUTH_NOTIFICATIONS,
               ]
-            : [];
+            : [codeStorageProvider];
 
         const controllers = authEnabled ? AUTH_ACTIONS : [];
 
@@ -172,5 +183,33 @@ export class SecurityModule implements OnModuleInit {
             const strategy = this.moduleRef.get(StrategyClass, { strict: false });
             this.registry.registerStrategy(strategy);
         }
+    }
+
+    private static isCodeStorageFactory(
+        storage: CodeStorageInterface | CodeStorageFactory | undefined,
+    ): storage is CodeStorageFactory {
+        return storage !== undefined && 'useFactory' in storage;
+    }
+
+    private static createCodeStorageProvider(storage: CodeStorageInterface | CodeStorageFactory | undefined): Provider {
+        if (!storage) {
+            return {
+                provide: CODE_STORAGE,
+                useValue: new LocalStorage(),
+            };
+        }
+
+        if (this.isCodeStorageFactory(storage)) {
+            return {
+                provide: CODE_STORAGE,
+                useFactory: storage.useFactory,
+                inject: storage.inject || [],
+            };
+        }
+
+        return {
+            provide: CODE_STORAGE,
+            useValue: storage,
+        };
     }
 }

@@ -1,22 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { CODE_STORAGE, CodeStorageInterface } from '../contract/code-storage.interface';
+
+const BLACKLIST_PREFIX = 'token_blacklist:';
+const DEFAULT_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days in ms
 
 @Injectable()
 export class TokenBlacklistService {
-    private blacklist = new Set<string>();
+    constructor(
+        @Inject(CODE_STORAGE)
+        private readonly codeStorage: CodeStorageInterface,
+    ) {}
 
-    add(token: string): void {
-        this.blacklist.add(token);
+    async add(token: string, ttlMs: number = DEFAULT_TTL_MS): Promise<void> {
+        const key = this.getKey(token);
+        await this.codeStorage.set(key, '1', ttlMs);
     }
 
-    isBlacklisted(token: string): boolean {
-        return this.blacklist.has(token);
+    async isBlacklisted(token: string): Promise<boolean> {
+        const key = this.getKey(token);
+        return this.codeStorage.exists(key);
     }
 
-    remove(token: string): void {
-        this.blacklist.delete(token);
+    async remove(token: string): Promise<void> {
+        const key = this.getKey(token);
+        await this.codeStorage.del(key);
     }
 
-    clear(): void {
-        this.blacklist.clear();
+    private getKey(token: string): string {
+        return `${BLACKLIST_PREFIX}${token}`;
     }
 }

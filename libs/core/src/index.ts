@@ -2,6 +2,7 @@ export * from './core.module';
 
 // Service
 export * from './service/mapper';
+export * from './service/paginator';
 
 // Decorators
 export * from './decorator/map-class.decorator';

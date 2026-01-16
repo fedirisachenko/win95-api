@@ -2,16 +2,12 @@ import { Injectable, Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AUTH_CONFIG } from '../constants';
 import { AuthConfig } from '../auth/interfaces/auth-config.interface';
+import { TokenPair } from '../auth/interfaces/token-pair.interface';
 
 export type TokenPayload = {
     sub: string;
     email: string;
     type: 'access' | 'refresh';
-};
-
-export type TokenPair = {
-    accessToken: string;
-    refreshToken: string;
 };
 
 @Injectable()

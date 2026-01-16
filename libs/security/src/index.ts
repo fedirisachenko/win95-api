@@ -39,3 +39,7 @@ export * from './auth/notification';
 // Tokens
 export * from './tokens/token.service';
 export * from './tokens/token-blacklist.service';
+
+// Code Storage
+export * from './contract/code-storage.interface';
+export * from './service/code-storage';

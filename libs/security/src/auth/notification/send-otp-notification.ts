@@ -4,7 +4,6 @@ import { AbstractNotificationEvent, NotificationManager, NOTIFICATION_MANAGER } 
 export type SendOtpPayload = {
     email: string;
     code: string;
-    purpose: number;
 };
 
 @Injectable()
@@ -17,11 +16,11 @@ export class SendOtpNotification extends AbstractNotificationEvent<SendOtpPayloa
     }
 
     async send(): Promise<void> {
-        const { email, code, purpose } = this.getData();
+        const { email, code } = this.getData();
         await this.manager.send({
             type: 'otp',
             to: email,
-            payload: { code, purpose },
+            payload: { code },
         });
     }
 }

@@ -15,7 +15,7 @@ export class VerifyOtpActionService {
     ) {}
 
     async invoke(data: VerifyOtpInput): Promise<void> {
-        const key = this.getOtpKey(data.email, data.purpose);
+        const key = this.getOtpKey(data.email);
         const otpData = (await this.codeStorage.get(key, true)) as OtpStorageData | null;
 
         if (!otpData) {
@@ -36,7 +36,7 @@ export class VerifyOtpActionService {
         await this.codeStorage.del(key);
     }
 
-    private getOtpKey(email: string, purpose: number): string {
-        return `${OTP_PREFIX}${email}:${purpose}`;
+    private getOtpKey(email: string): string {
+        return `${OTP_PREFIX}${email}`;
     }
 }

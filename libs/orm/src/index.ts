@@ -6,4 +6,3 @@ export * from './entities/user.entity';
 
 // Entity Enums
 export * from './entity-enum/abstract-enum';
-export * from './entity-enum/otp-purpose';

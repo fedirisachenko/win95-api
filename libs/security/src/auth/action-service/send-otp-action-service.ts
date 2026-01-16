@@ -23,7 +23,7 @@ export class SendOtpActionService {
 
     async invoke(data: SendOtpInput): Promise<number> {
         const code = this.generateOtpCode();
-        const key = this.getOtpKey(data.email, data.purpose);
+        const key = this.getOtpKey(data.email);
         const ttlMs = this.config.otp.expiresInSeconds * 1000;
 
         const otpData: OtpStorageData = {
@@ -36,7 +36,6 @@ export class SendOtpActionService {
         await this.notification.emit(SendOtpNotification, {
             email: data.email,
             code,
-            purpose: data.purpose,
         });
 
         return this.config.otp.expiresInSeconds;
@@ -49,7 +48,7 @@ export class SendOtpActionService {
         return Math.floor(min + Math.random() * (max - min + 1)).toString();
     }
 
-    private getOtpKey(email: string, purpose: number): string {
-        return `${OTP_PREFIX}${email}:${purpose}`;
+    private getOtpKey(email: string): string {
+        return `${OTP_PREFIX}${email}`;
     }
 }

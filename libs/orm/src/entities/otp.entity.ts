@@ -2,7 +2,7 @@ import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 import { v4 } from 'uuid';
 
 @Entity({
-    tableName: 'otps',
+    tableName: 'otp',
 })
 export class OtpEntity {
     @PrimaryKey({ fieldName: 'id', type: 'uuid' })

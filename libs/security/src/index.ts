@@ -19,3 +19,22 @@ export * from './guards/security.guard';
 
 // Decorators
 export * from './decorators/api-security.decorator';
+
+// Auth DTOs
+export * from './auth/dto';
+
+// Auth Config
+export * from './auth/interfaces/auth-config.interface';
+
+// Auth Actions
+export * from './auth/action';
+
+// Auth ActionServices
+export * from './auth/action-service';
+
+// Auth Notifications
+export * from './auth/notification';
+
+// Tokens
+export * from './tokens/token.service';
+export * from './tokens/token-blacklist.service';

@@ -1,0 +1,119 @@
+import { Injectable, Inject } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { AUTH_CONFIG } from '../constants';
+import { AuthConfig } from '../auth/interfaces/auth-config.interface';
+
+export type TokenPayload = {
+    sub: string;
+    email: string;
+    type: 'access' | 'refresh';
+};
+
+export type TokenPair = {
+    accessToken: string;
+    refreshToken: string;
+};
+
+@Injectable()
+export class TokenService {
+    constructor(
+        private readonly jwtService: JwtService,
+        @Inject(AUTH_CONFIG) private readonly config: AuthConfig,
+    ) {}
+
+    async generateTokenPair(userId: string, email: string): Promise<TokenPair> {
+        const [accessToken, refreshToken] = await Promise.all([
+            this.generateAccessToken(userId, email),
+            this.generateRefreshToken(userId, email),
+        ]);
+
+        return { accessToken, refreshToken };
+    }
+
+    async generateAccessToken(userId: string, email: string): Promise<string> {
+        const payload: TokenPayload = {
+            sub: userId,
+            email,
+            type: 'access',
+        };
+
+        return this.jwtService.signAsync(payload, {
+            secret: this.config.jwt.accessTokenSecret,
+            expiresIn: this.config.jwt.accessTokenExpiresIn,
+        });
+    }
+
+    async generateRefreshToken(userId: string, email: string): Promise<string> {
+        const payload: TokenPayload = {
+            sub: userId,
+            email,
+            type: 'refresh',
+        };
+
+        return this.jwtService.signAsync(payload, {
+            secret: this.config.jwt.refreshTokenSecret,
+            expiresIn: this.config.jwt.refreshTokenExpiresIn,
+        });
+    }
+
+    async verifyAccessToken(token: string): Promise<TokenPayload | null> {
+        try {
+            const payload = await this.jwtService.verifyAsync<TokenPayload>(token, {
+                secret: this.config.jwt.accessTokenSecret,
+            });
+
+            if (payload.type !== 'access') {
+                return null;
+            }
+
+            return payload;
+        } catch {
+            return null;
+        }
+    }
+
+    async verifyRefreshToken(token: string): Promise<TokenPayload | null> {
+        try {
+            const payload = await this.jwtService.verifyAsync<TokenPayload>(token, {
+                secret: this.config.jwt.refreshTokenSecret,
+            });
+
+            if (payload.type !== 'refresh') {
+                return null;
+            }
+
+            return payload;
+        } catch {
+            return null;
+        }
+    }
+
+    async generateResetPasswordToken(userId: string, email: string): Promise<string> {
+        const payload = {
+            sub: userId,
+            email,
+            type: 'reset_password',
+        };
+
+        return this.jwtService.signAsync(payload, {
+            secret: this.config.jwt.accessTokenSecret,
+            expiresIn: '1h',
+        });
+    }
+
+    async verifyResetPasswordToken(token: string): Promise<{ sub: string; email: string } | null> {
+        try {
+            const payload = await this.jwtService.verifyAsync(token, {
+                secret: this.config.jwt.accessTokenSecret,
+            });
+
+            if (payload.type !== 'reset_password') {
+                return null;
+            }
+
+            return { sub: payload.sub, email: payload.email };
+        } catch {
+            return null;
+        }
+    }
+}

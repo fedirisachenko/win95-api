@@ -35,6 +35,12 @@
       ],
       "@libs/security/*": [
         "libs/security/src/*"
+      ],
+      "@libs/notification": [
+        "libs/notification/src"
+      ],
+      "@libs/notification/*": [
+        "libs/notification/src/*"
       ]
     }
   }

@@ -3,9 +3,9 @@ import { EntityManager } from '@mikro-orm/core';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from '@libs/orm';
 import { NotificationEmitter } from '@libs/notification';
-import { TokenService } from '../../tokens/token.service';
-import { AUTH_CONFIG } from '../../constants';
-import { AuthConfig } from '../interfaces/auth-config.interface';
+import { TokenService } from '../../token/token.service';
+import { AUTH_CONFIG } from '../../constant';
+import { AuthConfig } from '../interface/auth-config.interface';
 import { SendResetPasswordInput } from '../dto/input';
 import { SendResetPasswordNotification } from '../notification/send-reset-password-notification';
 

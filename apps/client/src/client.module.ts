@@ -9,8 +9,8 @@ import redisConfig from '@config/redis.config';
 
 @Module({
     imports: [
-        CoreModule.register(),
         OrmModule.register(mikroOrmConfig),
+        CoreModule.register(),
         RedisModule.forRoot(redisConfig),
         SecurityModule.forRoot({
             transports: [HttpTransport],

@@ -4,13 +4,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { Transport } from './strategy/interface/transport.interface';
 import { AuthStrategy } from './strategy/interface/auth-strategy.interface';
 import { SecurityRegistry } from './security.registry';
-import { SecurityGuard } from './guards/security.guard';
-import { AuthConfig } from './auth/interfaces/auth-config.interface';
+import { SecurityGuard } from './guard/security.guard';
+import { AuthConfig } from './auth/interface/auth-config.interface';
 import { NotificationModule } from '@libs/notification';
-import { TokenService } from './tokens/token.service';
-import { TokenBlacklistService } from './tokens/token-blacklist.service';
-import { AUTH_CONFIG } from './constants';
-import { CODE_STORAGE, CodeStorageInterface } from './contract/code-storage.interface';
+import { TokenService } from './token/token.service';
+import { TokenBlacklistService } from './token/token-blacklist.service';
+import { AUTH_CONFIG, CODE_STORAGE } from './constant';
+import { CodeStorageInterface } from './contract/code-storage.interface';
 import { LocalStorage } from './service/code-storage';
 import {
     SignUpAction,

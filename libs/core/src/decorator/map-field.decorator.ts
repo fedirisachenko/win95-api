@@ -1,4 +1,5 @@
-import { MapFieldNameOrCallback, MapFieldMetadata, MAPPER_METADATA_FIELD } from '../service/mapper';
+import { MapFieldNameOrCallback, MapFieldMetadata } from '../service/mapper';
+import { MAPPER_METADATA_FIELD } from '../constant/mapper.constant';
 
 export function MapField<T = any, U = any>(fieldNameOrCallback?: MapFieldNameOrCallback<T>) {
     return function (target: U, propertyKey: string) {

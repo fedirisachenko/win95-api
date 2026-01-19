@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CODE_STORAGE, CodeStorageInterface } from '../contract/code-storage.interface';
+import { CodeStorageInterface } from '../contract/code-storage.interface';
+import { CODE_STORAGE } from '../constant';
 
 const BLACKLIST_PREFIX = 'token_blacklist:';
 const DEFAULT_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days in ms

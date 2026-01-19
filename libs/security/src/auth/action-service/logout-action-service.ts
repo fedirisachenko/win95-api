@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { TokenBlacklistService } from '../../tokens/token-blacklist.service';
+import { TokenBlacklistService } from '../../token/token-blacklist.service';
 import { LogoutInput } from '../dto/input';
 
 @Injectable()

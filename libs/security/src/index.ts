@@ -1,7 +1,7 @@
 // Module
 export * from './security.module';
 export * from './security.registry';
-export * from './constants';
+export * from './constant';
 
 // Interfaces
 export * from './strategy/interface/transport.interface';
@@ -15,17 +15,17 @@ export * from './strategy/transport/ws.transport';
 export * from './strategy/auth/jwt.strategy';
 
 // Guards
-export * from './guards/security.guard';
+export * from './guard/security.guard';
 
 // Decorators
-export * from './decorators/api-security.decorator';
+export * from './decorator/api-security.decorator';
 
 // Auth DTOs
 export * from './auth/dto';
 
 // Auth Config
-export * from './auth/interfaces/auth-config.interface';
-export * from './auth/interfaces/token-pair.interface';
+export * from './auth/interface/auth-config.interface';
+export * from './auth/interface/token-pair.interface';
 
 // Auth Actions
 export * from './auth/action';
@@ -37,8 +37,8 @@ export * from './auth/action-service';
 export * from './auth/notification';
 
 // Tokens
-export * from './tokens/token.service';
-export * from './tokens/token-blacklist.service';
+export * from './token/token.service';
+export * from './token/token-blacklist.service';
 
 // Code Storage
 export * from './contract/code-storage.interface';

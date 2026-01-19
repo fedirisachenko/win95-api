@@ -2,7 +2,7 @@ import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { SendResetPasswordInput } from '../dto/input';
 import { SendResetPasswordActionService } from '../action-service/send-reset-password-action-service';
-import { ApiSecurity } from '../../decorators/api-security.decorator';
+import { ApiSecurity } from '../../decorator/api-security.decorator';
 
 @ApiTags('Auth')
 @Controller('send-reset-password')

@@ -1,5 +1,5 @@
 import { Abstract, Type } from '@nestjs/common';
-import { MAPPER_METADATA_CLASS, MAPPER_METADATA_CLASS_OPTIONS } from '../service/mapper';
+import { MAPPER_METADATA_CLASS, MAPPER_METADATA_CLASS_OPTIONS } from '../constant/mapper.constant';
 
 export function MapClass<T = Record<string, any>, U = any>(
     className: Type<T> | Abstract<T>,

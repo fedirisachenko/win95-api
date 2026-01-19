@@ -11,7 +11,7 @@ async function bootstrap() {
     const config = new DocumentBuilder().setTitle('Win95 API').setVersion('1.0').addBearerAuth().build();
 
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, document);
+    SwaggerModule.setup('api-client/api', app, document);
 
     await app.listen(process.env.USER_APP_PORT ?? 3000);
 }

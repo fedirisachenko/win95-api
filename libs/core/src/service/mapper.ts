@@ -1,5 +1,10 @@
 import { Injectable, Type } from '@nestjs/common';
 import { MapperException } from '../exception/mapper.exception';
+import {
+    MAPPER_METADATA_FIELD,
+    MAPPER_METADATA_CLASS,
+    MAPPER_METADATA_CLASS_OPTIONS,
+} from '../constant/mapper.constant';
 
 export type MapFieldCallback<T> = (data: {
     e: T;
@@ -13,10 +18,6 @@ export type MapFieldNameOrCallback<T> =
 
 export type MapFieldMetadata<U, T> = Record<keyof U, MapFieldNameOrCallback<T> | string>;
 export type MapClassMetadata<T> = Type<T>;
-
-export const MAPPER_METADATA_FIELD = 'mapperMetadataField';
-export const MAPPER_METADATA_CLASS = 'mapperMetadataClass';
-export const MAPPER_METADATA_CLASS_OPTIONS = 'mapperMetadataClassOptions';
 
 @Injectable()
 export class Mapper {

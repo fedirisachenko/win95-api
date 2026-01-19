@@ -7,5 +7,3 @@ export interface CodeStorageInterface {
 
     exists(key: string): Promise<boolean>;
 }
-
-export const CODE_STORAGE = 'CodeStorage';

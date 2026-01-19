@@ -7,5 +7,3 @@ export type NotificationPayload = {
 export interface NotificationManager {
     send(payload: NotificationPayload): Promise<void>;
 }
-
-export const NOTIFICATION_MANAGER = Symbol('NOTIFICATION_MANAGER');

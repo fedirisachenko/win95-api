@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { SecurityRegistry } from '../security.registry';
-import { SECURITY_METADATA } from '../constants';
+import { SECURITY_METADATA } from '../constant';
 
 export type SecurityMetadata = {
     transport: string;

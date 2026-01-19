@@ -2,7 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/core';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from '@libs/orm';
-import { TokenService } from '../../tokens/token.service';
+import { TokenService } from '../../token/token.service';
 import { ResetPasswordInput } from '../dto/input';
 
 @Injectable()

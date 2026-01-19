@@ -1,8 +1,8 @@
 export * from './orm.module';
 
 // Entities
-export * from './entities/init.entity';
-export * from './entities/user.entity';
+export * from './entity/init.entity';
+export * from './entity/user.entity';
 
 // Entity Enums
 export * from './entity-enum/abstract-enum';

@@ -2,8 +2,8 @@ import { ExecutionContext, Inject, Injectable } from '@nestjs/common';
 import { Transport } from '../interface/transport.interface';
 import { AuthStrategy } from '../interface/auth-strategy.interface';
 import { JwtService } from '@nestjs/jwt';
-import { AUTH_CONFIG } from '../../constants';
-import { AuthConfig } from '../../auth/interfaces/auth-config.interface';
+import { AUTH_CONFIG } from '../../constant';
+import { AuthConfig } from '../../auth/interface/auth-config.interface';
 
 @Injectable()
 export class JwtStrategy implements AuthStrategy {

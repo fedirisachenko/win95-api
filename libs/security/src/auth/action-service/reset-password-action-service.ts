@@ -18,10 +18,7 @@ export class ResetPasswordActionService {
             throw new BadRequestException('Invalid or expired reset token');
         }
 
-        const user = await this.em.findOne(UserEntity, { id: payload.sub });
-        if (!user || !user.resetPasswordToken) {
-            throw new BadRequestException('Invalid or expired reset token');
-        }
+        const user = await this.em.findOneOrFail(UserEntity, { id: payload.sub });
 
         const isTokenValid = await bcrypt.compare(data.token, user.resetPasswordToken);
         if (!isTokenValid) {

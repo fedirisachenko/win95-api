@@ -30,6 +30,6 @@ export class SignUpActionService {
 
         await this.em.persistAndFlush(user);
 
-        return this.tokenService.generateTokenPair(user.id, user.email);
+        return this.tokenService.generateTokenPair(user.id);
     }
 }

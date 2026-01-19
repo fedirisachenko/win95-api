@@ -29,7 +29,8 @@ export class VerifyOtpActionService {
 
         if (otpData.code !== data.code) {
             otpData.attempts += 1;
-            await this.codeStorage.set(key, JSON.stringify(otpData));
+            const ttlMs = this.config.otp.expiresInSeconds * 1000;
+            await this.codeStorage.set(key, JSON.stringify(otpData), ttlMs);
             throw new BadRequestException('Invalid OTP code');
         }
 

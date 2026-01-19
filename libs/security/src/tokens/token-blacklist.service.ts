@@ -21,9 +21,9 @@ export class TokenBlacklistService {
         return this.codeStorage.exists(key);
     }
 
-    async remove(token: string): Promise<void> {
+    async remove(token: string): Promise<boolean> {
         const key = this.getKey(token);
-        await this.codeStorage.del(key);
+        return this.codeStorage.del(key);
     }
 
     private getKey(token: string): string {

@@ -6,7 +6,7 @@ import { LogoutInput } from '../dto/input';
 export class LogoutActionService {
     constructor(private readonly tokenBlacklistService: TokenBlacklistService) {}
 
-    invoke(data: LogoutInput): void {
-        this.tokenBlacklistService.add(data.refreshToken);
+    async invoke(data: LogoutInput): Promise<void> {
+        await this.tokenBlacklistService.add(data.refreshToken);
     }
 }

@@ -6,7 +6,6 @@ import { TokenPair } from '../auth/interfaces/token-pair.interface';
 
 export type TokenPayload = {
     sub: string;
-    email: string;
     type: 'access' | 'refresh';
 };
 
@@ -17,19 +16,18 @@ export class TokenService {
         @Inject(AUTH_CONFIG) private readonly config: AuthConfig,
     ) {}
 
-    async generateTokenPair(userId: string, email: string): Promise<TokenPair> {
+    async generateTokenPair(userId: string): Promise<TokenPair> {
         const [accessToken, refreshToken] = await Promise.all([
-            this.generateAccessToken(userId, email),
-            this.generateRefreshToken(userId, email),
+            this.generateAccessToken(userId),
+            this.generateRefreshToken(userId),
         ]);
 
         return { accessToken, refreshToken };
     }
 
-    async generateAccessToken(userId: string, email: string): Promise<string> {
+    async generateAccessToken(userId: string): Promise<string> {
         const payload: TokenPayload = {
             sub: userId,
-            email,
             type: 'access',
         };
 
@@ -39,10 +37,9 @@ export class TokenService {
         });
     }
 
-    async generateRefreshToken(userId: string, email: string): Promise<string> {
+    async generateRefreshToken(userId: string): Promise<string> {
         const payload: TokenPayload = {
             sub: userId,
-            email,
             type: 'refresh',
         };
 

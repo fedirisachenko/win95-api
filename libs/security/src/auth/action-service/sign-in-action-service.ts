@@ -26,6 +26,6 @@ export class SignInActionService {
             throw new UnauthorizedException('Invalid credentials');
         }
 
-        return this.tokenService.generateTokenPair(user.id, user.email);
+        return this.tokenService.generateTokenPair(user.id);
     }
 }

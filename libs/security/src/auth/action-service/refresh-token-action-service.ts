@@ -12,18 +12,18 @@ export class RefreshTokenActionService {
     ) {}
 
     async invoke(data: RefreshTokenInput): Promise<TokenPair> {
-        if (this.tokenBlacklistService.isBlacklisted(data.refreshToken)) {
-            throw new UnauthorizedException('Token has been revoked');
-        }
-
         const payload = await this.tokenService.verifyRefreshToken(data.refreshToken);
-
         if (!payload) {
             throw new UnauthorizedException('Invalid refresh token');
         }
 
-        this.tokenBlacklistService.add(data.refreshToken);
+        const isBlacklisted = await this.tokenBlacklistService.isBlacklisted(data.refreshToken);
+        if (isBlacklisted) {
+            throw new UnauthorizedException('Token has been revoked');
+        }
 
-        return this.tokenService.generateTokenPair(payload.sub, payload.email);
+        await this.tokenBlacklistService.add(data.refreshToken);
+
+        return this.tokenService.generateTokenPair(payload.sub);
     }
 }

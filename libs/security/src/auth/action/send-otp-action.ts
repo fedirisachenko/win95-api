@@ -1,6 +1,6 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { SendOtpInput } from '../dto/input';
+import { SendOtpInput } from '../dto/input/send-otp-input';
 import { SendOtpActionService } from '../action-service/send-otp-action-service';
 
 @ApiTags('Auth')

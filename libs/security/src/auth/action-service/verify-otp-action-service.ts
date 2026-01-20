@@ -1,9 +1,9 @@
 import { Injectable, Inject, BadRequestException } from '@nestjs/common';
-import { AUTH_CONFIG } from '../../constant';
+import { AUTH_CONFIG } from '../../constant/di-token.constant';
 import { AuthConfig } from '../interface/auth-config.interface';
-import { VerifyOtpInput } from '../dto/input';
+import { VerifyOtpInput } from '../dto/input/verify-otp-input';
 import { CodeStorageInterface } from '../../contract/code-storage.interface';
-import { CODE_STORAGE } from '../../constant';
+import { CODE_STORAGE } from '../../constant/di-token.constant';
 import { OtpStorageData } from './send-otp-action-service';
 
 const OTP_PREFIX = 'otp:';

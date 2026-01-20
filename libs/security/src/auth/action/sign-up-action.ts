@@ -1,9 +1,9 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Mapper, JsonOutput } from '@libs/core';
-import { SignUpInput } from '../dto/input';
-import { TokenPairOutput } from '../dto/output';
-import { SignUpActionService } from '@libs/security/auth/action-service';
+import { SignUpInput } from '../dto/input/sign-up-input';
+import { TokenPairOutput } from '../dto/output/token-pair-output';
+import { SignUpActionService } from '../action-service/sign-up-action-service';
 
 @ApiTags('Auth')
 @Controller('sign-up')

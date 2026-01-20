@@ -15,14 +15,14 @@
     "skipLibCheck": true,
     "strictBindCallApply": true,
     "paths": {
-      "@apps/core": [
-        "apps/core/src/*"
-      ],
-      "@apps/database/*": [
-        "apps/database/src/*"
-      ],
       "@config/*": [
         "config/*"
+      ],
+      "@libs/core": [
+        "libs/core/src"
+      ],
+      "@libs/core/*": [
+        "libs/core/src/*"
       ],
       "@libs/orm": [
         "libs/orm/src"
@@ -30,11 +30,17 @@
       "@libs/orm/*": [
         "libs/orm/src/*"
       ],
-      "@libs/core": [
-        "libs/core/src"
+      "@libs/security": [
+        "libs/security/src"
       ],
-      "@libs/core/*": [
-        "libs/core/src/*"
+      "@libs/security/*": [
+        "libs/security/src/*"
+      ],
+      "@libs/notification": [
+        "libs/notification/src"
+      ],
+      "@libs/notification/*": [
+        "libs/notification/src/*"
       ]
     }
   }

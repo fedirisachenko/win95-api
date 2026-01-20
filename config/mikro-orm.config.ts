@@ -1,15 +1,15 @@
 import { FlushMode, LoadStrategy, PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { join } from 'path';
 import { MikroOrmModuleSyncOptions } from '@mikro-orm/nestjs/typings';
-import { InitEntity } from '../libs/orm/src/entities/init.entity';
+import { InitEntity, UserEntity } from '@libs/orm';
 
-const ENTITIES = [InitEntity];
+const ENTITIES = [InitEntity, UserEntity];
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 
 const MIKRO_ORM_CONFIG: MikroOrmModuleSyncOptions = {
     entities: ENTITIES,
-    entitiesTs: [join(__dirname, '../libs/orm/src/entities/*.entity.ts')],
+    entitiesTs: [join(__dirname, '../libs/orm/src/entity/*.entity.ts')],
 
     clientUrl: process.env.DATABASE_URL_DEFAULT,
 

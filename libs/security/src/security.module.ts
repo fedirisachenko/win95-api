@@ -1,5 +1,5 @@
 import { DynamicModule, Module, OnModuleInit, Provider, Type } from '@nestjs/common';
-import { ModuleRef, RouterModule } from '@nestjs/core';
+import { APP_FILTER, ModuleRef, RouterModule } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { Transport } from './strategy/interface/transport.interface';
 import { AuthStrategy } from './strategy/interface/auth-strategy.interface';
@@ -33,6 +33,7 @@ import {
     VerifyOtpActionService,
 } from './auth/action-service';
 import { SendOtpNotification, SendResetPasswordNotification } from './auth/notification';
+import { HttpExceptionFilter } from './exception/http-exception-filter';
 
 export type CodeStorageFactory = {
     useFactory: (...args: any[]) => CodeStorageInterface | Promise<CodeStorageInterface>;
@@ -159,7 +160,14 @@ export class SecurityModule implements OnModuleInit {
             global: true,
             imports,
             controllers,
-            providers: [SecurityRegistry, SecurityGuard, ...transportProviders, ...strategyProviders, ...authProviders],
+            providers: [
+                SecurityRegistry,
+                SecurityGuard,
+                { provide: APP_FILTER, useClass: HttpExceptionFilter },
+                ...transportProviders,
+                ...strategyProviders,
+                ...authProviders,
+            ],
             exports: [
                 SecurityRegistry,
                 SecurityGuard,

@@ -1,12 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
 import { ClientModule } from './client.module';
+import { TolerantValidationPipe } from '@libs/security';
 
 async function bootstrap() {
     const app = await NestFactory.create(ClientModule);
 
-    app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+    app.useGlobalPipes(TolerantValidationPipe);
 
     const config = new DocumentBuilder().setTitle('Win95 API').setVersion('1.0').addBearerAuth().build();
 

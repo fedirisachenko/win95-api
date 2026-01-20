@@ -43,3 +43,7 @@ export * from './token/token-blacklist.service';
 // Code Storage
 export * from './contract/code-storage.interface';
 export * from './service/code-storage';
+
+// Pipes
+export * from './pipe/strict-validation.pipe';
+export * from './pipe/tolerant-validation.pipe';

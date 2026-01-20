@@ -3,7 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Mapper, JsonOutput } from '@libs/core';
 import { SignUpInput } from '../dto/input';
 import { TokenPairOutput } from '../dto/output';
-import { SignUpActionService } from '../action-service/sign-up-action-service';
+import { SignUpActionService } from '@libs/security/auth/action-service';
 
 @ApiTags('Auth')
 @Controller('sign-up')

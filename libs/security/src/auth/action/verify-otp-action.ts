@@ -1,7 +1,7 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { VerifyOtpInput } from '../dto/input';
-import { VerifyOtpActionService } from '../action-service/verify-otp-action-service';
+import { VerifyOtpActionService } from '@libs/security/auth/action-service';
 
 @ApiTags('Auth')
 @Controller('verify-otp')

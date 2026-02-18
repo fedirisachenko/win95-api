@@ -2,7 +2,7 @@ import { ExecutionContext, Inject, Injectable } from '@nestjs/common';
 import { Transport } from '../interface/transport.interface';
 import { AuthStrategy } from '../interface/auth-strategy.interface';
 import { JwtService } from '@nestjs/jwt';
-import { AUTH_CONFIG } from '../../constant';
+import { AUTH_CONFIG } from '../../constant/di-token.constant';
 import { AuthConfig } from '../../auth/interface/auth-config.interface';
 
 @Injectable()

@@ -1,11 +1,11 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { NotificationEmitter } from '@libs/notification';
-import { AUTH_CONFIG } from '../../constant';
+import { AUTH_CONFIG } from '../../constant/di-token.constant';
 import { AuthConfig } from '../interface/auth-config.interface';
-import { SendOtpInput } from '../dto/input';
+import { SendOtpInput } from '../dto/input/send-otp-input';
 import { SendOtpNotification } from '../notification/send-otp-notification';
 import { CodeStorageInterface } from '../../contract/code-storage.interface';
-import { CODE_STORAGE } from '../../constant';
+import { CODE_STORAGE } from '../../constant/di-token.constant';
 
 const OTP_PREFIX = 'otp:';
 

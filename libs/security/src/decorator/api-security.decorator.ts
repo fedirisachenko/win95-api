@@ -1,6 +1,6 @@
 import { applyDecorators, CanActivate, SetMetadata, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { SECURITY_METADATA } from '../constant';
+import { SECURITY_METADATA } from '../constant/security.constant';
 import { SecurityGuard, SecurityMetadata } from '../guard/security.guard';
 
 export type ApiSecurityOptions = {

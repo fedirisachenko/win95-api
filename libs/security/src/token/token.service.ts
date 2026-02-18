@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AUTH_CONFIG } from '../constant';
+import { AUTH_CONFIG } from '../constant/di-token.constant';
 import { AuthConfig } from '../auth/interface/auth-config.interface';
 import { TokenPair } from '../auth/interface/token-pair.interface';
 

@@ -1,8 +1,8 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Mapper, JsonOutput } from '@libs/core';
-import { RefreshTokenInput } from '../dto/input';
-import { TokenPairOutput } from '../dto/output';
+import { RefreshTokenInput } from '../dto/input/refresh-token-input';
+import { TokenPairOutput } from '../dto/output/token-pair-output';
 import { RefreshTokenActionService } from '../action-service/refresh-token-action-service';
 
 @ApiTags('Auth')

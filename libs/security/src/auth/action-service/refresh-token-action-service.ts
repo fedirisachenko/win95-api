@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { TokenService } from '../../token/token.service';
 import { TokenBlacklistService } from '../../token/token-blacklist.service';
-import { RefreshTokenInput } from '../dto/input';
+import { RefreshTokenInput } from '../dto/input/refresh-token-input';
 import { TokenPair } from '../interface/token-pair.interface';
 
 @Injectable()

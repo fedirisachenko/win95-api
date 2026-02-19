@@ -3,7 +3,7 @@ import { EntityManager } from '@mikro-orm/core';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from '@libs/orm';
 import { TokenService } from '../../token/token.service';
-import { SignUpInput } from '../dto/input';
+import { SignUpInput } from '../dto/input/sign-up-input';
 import { TokenPair } from '../interface/token-pair.interface';
 
 @Injectable()

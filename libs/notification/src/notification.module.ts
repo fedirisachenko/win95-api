@@ -1,7 +1,7 @@
 import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
 import { NotificationEmitter } from './service/notification-emitter';
 import { NotificationManager } from './contract/notification-manager.interface';
-import { NOTIFICATION_MANAGER } from './constant';
+import { NOTIFICATION_MANAGER } from './constant/di-token.constant';
 import { ConsoleNotificationManager } from './manager/console-notification-manager';
 import { AbstractNotificationEvent } from './service/abstract-notification-event';
 

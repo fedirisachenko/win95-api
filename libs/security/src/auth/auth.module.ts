@@ -1,4 +1,5 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { AuthConfig } from '@libs/security/auth/interface/auth-config.interface';
 import { CodeStorageFactory, SecurityModuleOptions } from '@libs/security/security.module';
 import { AUTH_CONFIG, CODE_STORAGE } from '@libs/security/constant/di-token.constant';
@@ -32,46 +33,41 @@ import { TokenBlacklistService } from '@libs/security/token/token-blacklist.serv
 import { CodeStorageInterface } from '@libs/security/contract/code-storage.interface';
 import { LocalStorage } from '@libs/security/service/code-storage/local-storage';
 
-const DEFAULT_AUTH_CONFIG: AuthConfig = {
-    enabled: true,
-    routePrefix: '/auth',
-    jwt: {
-        accessTokenSecret: process.env.JWT_ACCESS_SECRET || 'access-secret',
-        refreshTokenSecret: process.env.JWT_REFRESH_SECRET || 'refresh-secret',
-        accessTokenExpiresIn: '15m',
-        refreshTokenExpiresIn: '7d',
-    },
-    otp: {
-        expiresInSeconds: 300,
-        codeLength: 6,
-        maxAttempts: 3,
-    },
-};
-
 const notifications = [SendOtpNotification, SendResetPasswordNotification];
 
 @Module({})
 export class AuthModule {
     static forRoot(options: SecurityModuleOptions): DynamicModule {
-        const authConfig: AuthConfig = {
-            ...DEFAULT_AUTH_CONFIG,
-            ...options.auth,
-            jwt: {
-                ...DEFAULT_AUTH_CONFIG.jwt,
-                ...options.auth?.jwt,
-            },
-            otp: {
-                ...DEFAULT_AUTH_CONFIG.otp,
-                ...options.auth?.otp,
-            },
-        };
-
-        const authEnabled = authConfig.enabled !== false;
+        const authEnabled = options.auth?.enabled !== false;
 
         const codeStorageProvider: Provider = this.createCodeStorageProvider(options.codeStorage);
 
+        const authConfigProvider: Provider = {
+            provide: AUTH_CONFIG,
+            useFactory: (configService: ConfigService): AuthConfig => ({
+                enabled: options.auth?.enabled ?? true,
+                routePrefix: options.auth?.routePrefix ?? '/auth',
+                jwt: {
+                    accessTokenSecret: configService.get<string>('JWT_ACCESS_SECRET'),
+                    refreshTokenSecret: configService.get<string>('JWT_REFRESH_SECRET'),
+                    accessTokenExpiresIn:
+                        options.auth?.jwt?.accessTokenExpiresIn ??
+                        configService.get<string>('JWT_ACCESS_EXPIRE', '15m'),
+                    refreshTokenExpiresIn:
+                        options.auth?.jwt?.refreshTokenExpiresIn ??
+                        configService.get<string>('JWT_REFRESH_EXPIRE', '7d'),
+                },
+                otp: {
+                    expiresInSeconds: options.auth?.otp?.expiresInSeconds ?? 300,
+                    codeLength: options.auth?.otp?.codeLength ?? 6,
+                    maxAttempts: options.auth?.otp?.maxAttempts ?? 3,
+                },
+            }),
+            inject: [ConfigService],
+        };
+
         const authProviders: Provider[] = authEnabled
-            ? [{ provide: AUTH_CONFIG, useValue: authConfig }, codeStorageProvider, TokenService, TokenBlacklistService]
+            ? [authConfigProvider, codeStorageProvider, TokenService, TokenBlacklistService]
             : [codeStorageProvider];
 
         const imports: any[] = [
@@ -79,11 +75,13 @@ export class AuthModule {
             NotificationModule.forRoot({ events: authEnabled ? notifications : [] }),
         ];
 
-        if (authEnabled && authConfig.routePrefix) {
+        const routePrefix = options.auth?.routePrefix ?? '/auth';
+
+        if (authEnabled && routePrefix) {
             imports.push(
                 RouterModule.register([
                     {
-                        path: authConfig.routePrefix,
+                        path: routePrefix,
                         module: AuthModule,
                     },
                 ]),

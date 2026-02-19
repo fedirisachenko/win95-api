@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { TokenBlacklistService } from '../../token/token-blacklist.service';
-import { LogoutInput } from '../dto/input';
+import { LogoutInput } from '../dto/input/logout-input';
 
 @Injectable()
 export class LogoutActionService {

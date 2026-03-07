@@ -10,6 +10,24 @@
   "monorepo": true,
   "root": "apps/win95",
   "projects": {
+    "cha": {
+      "type": "application",
+      "root": "apps/cha",
+      "entryFile": "main",
+      "sourceRoot": "apps/cha/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/cha/tsconfig.app.json"
+      }
+    },
+    "chat": {
+      "type": "application",
+      "root": "apps/chat",
+      "entryFile": "main",
+      "sourceRoot": "apps/chat/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/chat/tsconfig.app.json"
+      }
+    },
     "client": {
       "type": "application",
       "root": "apps/client",
@@ -40,6 +58,15 @@
         "tsConfigPath": "apps/database/tsconfig.app.json"
       }
     },
+    "notification": {
+      "type": "library",
+      "root": "libs/notification",
+      "entryFile": "index",
+      "sourceRoot": "libs/notification/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/notification/tsconfig.lib.json"
+      }
+    },
     "orm": {
       "type": "library",
       "root": "libs/orm",
@@ -58,13 +85,13 @@
         "tsConfigPath": "libs/security/tsconfig.lib.json"
       }
     },
-    "notification": {
+    "ws": {
       "type": "library",
-      "root": "libs/notification",
+      "root": "libs/ws",
       "entryFile": "index",
-      "sourceRoot": "libs/notification/src",
+      "sourceRoot": "libs/ws/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/notification/tsconfig.lib.json"
+        "tsConfigPath": "libs/ws/tsconfig.lib.json"
       }
     }
   }

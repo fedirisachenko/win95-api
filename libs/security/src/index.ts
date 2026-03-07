@@ -1,24 +1,13 @@
 // module
 export * from './security.module';
-export * from './security.registry';
 
 // constants
 export * from './constant/di-token.constant';
 export * from './constant/security.constant';
 
-// interfaces
-export * from './strategy/interface/transport.interface';
-export * from './strategy/interface/auth-strategy.interface';
-
-// transports
-export * from './strategy/transport/http.transport';
-export * from './strategy/transport/ws.transport';
-
-// strategies
-export * from './strategy/auth/jwt.strategy';
-
 // guards
-export * from './guard/security.guard';
+export * from './guard/http-security.guard';
+export * from './guard/ws-security.guard';
 
 // decorators
 export * from './decorator/api-security.decorator';

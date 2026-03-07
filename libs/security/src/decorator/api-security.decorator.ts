@@ -1,23 +1,12 @@
-import { applyDecorators, CanActivate, SetMetadata, UseGuards } from '@nestjs/common';
+import { applyDecorators, CanActivate, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { SECURITY_METADATA } from '../constant/security.constant';
-import { SecurityGuard, SecurityMetadata } from '../guard/security.guard';
+import { HttpSecurityGuard } from '../guard/http-security.guard';
 
-export type ApiSecurityOptions = {
-    transport: string;
-    strategy: string;
-    guards?: (CanActivate | ((...args: any[]) => void) | any)[];
-};
+type ApiSecurityOptions = { guards?: CanActivate[] };
 
-export function ApiSecurity({ transport, strategy, guards = [] }: ApiSecurityOptions) {
-    const metadata: SecurityMetadata = {
-        transport,
-        strategy,
-    };
-
+export function ApiSecurity({ guards = [] }: ApiSecurityOptions) {
     return applyDecorators(
-        SetMetadata(SECURITY_METADATA, metadata),
-        UseGuards(SecurityGuard, ...guards),
+        UseGuards(HttpSecurityGuard, ...guards),
         ApiBearerAuth(),
         ApiUnauthorizedResponse({ description: 'Unauthorized' }),
     );

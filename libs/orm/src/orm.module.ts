@@ -11,10 +11,10 @@ export class OrmModule {
             providers: [
                 {
                     provide: MikroORM,
-                    useFactory: async (): Promise<MikroORM> => {
-                        return MikroORM.init(config);
-                    },
+                    useFactory: async (): Promise<MikroORM> => MikroORM.init(config),
                 },
+                // REQUEST-scoped fork for HTTP services (e.g. Paginator)
+                // WS action-services use MikroORM directly with @CreateRequestContext()
                 {
                     provide: EntityManager,
                     useFactory: (orm: MikroORM) => orm.em.fork(),

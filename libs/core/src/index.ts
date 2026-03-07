@@ -1,18 +1,21 @@
 export * from './core.module';
 
-// Service
+// service
 export * from './service/mapper';
 export * from './service/paginator';
 
-// Decorators
+// decorators
 export * from './decorator/map-class.decorator';
 export * from './decorator/map-field.decorator';
 
-// Exceptions
+// exceptions
 export * from './exception/mapper.exception';
 
-// Value Enum
+// value enum
 export * from './value-enum/abstract-value-enum';
 
-// DTO
+// pipes
+export * from './pipe/abstract-transform.pipe';
+
+// dto
 export * from './dto/json-output';

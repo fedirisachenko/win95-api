@@ -1,30 +1,28 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import { DynamicModule, Module, Scope } from '@nestjs/common';
 import { MikroOrmModuleSyncOptions } from '@mikro-orm/nestjs/typings';
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 
 @Module({})
 export class OrmModule {
-    static register(config: MikroOrmModuleSyncOptions | MikroOrmModuleSyncOptions[]): DynamicModule {
+    static register(config: MikroOrmModuleSyncOptions): DynamicModule {
         return {
             module: OrmModule,
             global: true,
             providers: [
                 {
                     provide: MikroORM,
-                    useFactory: async (): Promise<MikroORM[]> => {
-                        const ormOpts = config instanceof Array ? config : [config];
-
-                        const orms = await Promise.all(ormOpts.map(async (config) => await MikroORM.init(config)));
-                        return orms;
-                    },
+                    useFactory: async (): Promise<MikroORM> => MikroORM.init(config),
                 },
+                // REQUEST-scoped fork for HTTP services (e.g. Paginator)
+                // WS action-services use MikroORM directly with @CreateRequestContext()
                 {
                     provide: EntityManager,
-                    useFactory: (orm: MikroORM) => orm.em,
+                    useFactory: (orm: MikroORM) => orm.em.fork(),
                     inject: [MikroORM],
+                    scope: Scope.REQUEST,
                 },
             ],
-            exports: [MikroORM],
+            exports: [MikroORM, EntityManager],
         };
     }
 }

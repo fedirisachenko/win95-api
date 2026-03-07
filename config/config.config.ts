@@ -1,3 +1,5 @@
+import { validate } from './env.validation';
+
 const env = () => {
     switch (process.env.NODE_ENV) {
         case 'test':
@@ -10,4 +12,5 @@ const env = () => {
 export default {
     isGlobal: true,
     envFilePath: ['.env', ...env()],
+    validate,
 };

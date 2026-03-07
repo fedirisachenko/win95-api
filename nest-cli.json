@@ -10,6 +10,45 @@
   "monorepo": true,
   "root": "apps/win95",
   "projects": {
+    "cha": {
+      "type": "application",
+      "root": "apps/cha",
+      "entryFile": "main",
+      "sourceRoot": "apps/cha/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/cha/tsconfig.app.json"
+      }
+    },
+    "chat": {
+      "type": "application",
+      "root": "apps/chat",
+      "entryFile": "main",
+      "sourceRoot": "apps/chat/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/chat/tsconfig.app.json"
+      }
+    },
+    "client": {
+      "type": "application",
+      "root": "apps/client",
+      "entryFile": "main",
+      "sourceRoot": "apps/client/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/client/tsconfig.app.json"
+      }
+    },
+    "configs": {
+      "type": "config"
+    },
+    "core": {
+      "type": "library",
+      "root": "libs/core",
+      "entryFile": "index",
+      "sourceRoot": "libs/core/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/core/tsconfig.lib.json"
+      }
+    },
     "database": {
       "type": "application",
       "root": "apps/database",
@@ -17,6 +56,15 @@
       "sourceRoot": "apps/database/src",
       "compilerOptions": {
         "tsConfigPath": "apps/database/tsconfig.app.json"
+      }
+    },
+    "notification": {
+      "type": "library",
+      "root": "libs/notification",
+      "entryFile": "index",
+      "sourceRoot": "libs/notification/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/notification/tsconfig.lib.json"
       }
     },
     "orm": {
@@ -28,17 +76,23 @@
         "tsConfigPath": "libs/orm/tsconfig.lib.json"
       }
     },
-    "win95": {
-      "type": "application",
-      "root": "apps/win95",
-      "entryFile": "main",
-      "sourceRoot": "apps/win95/src",
+    "security": {
+      "type": "library",
+      "root": "libs/security",
+      "entryFile": "index",
+      "sourceRoot": "libs/security/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/win95/tsconfig.app.json"
+        "tsConfigPath": "libs/security/tsconfig.lib.json"
       }
     },
-    "configs": {
-      "type": "config"
+    "ws": {
+      "type": "library",
+      "root": "libs/ws",
+      "entryFile": "index",
+      "sourceRoot": "libs/ws/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/ws/tsconfig.lib.json"
+      }
     }
   }
 }

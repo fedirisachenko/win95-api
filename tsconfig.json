@@ -15,19 +15,39 @@
     "skipLibCheck": true,
     "strictBindCallApply": true,
     "paths": {
+      "@config/*": [
+        "config/*"
+      ],
+      "@libs/core": [
+        "libs/core/src"
+      ],
+      "@libs/core/*": [
+        "libs/core/src/*"
+      ],
+      "@libs/notification": [
+        "libs/notification/src"
+      ],
+      "@libs/notification/*": [
+        "libs/notification/src/*"
+      ],
       "@libs/orm": [
         "libs/orm/src"
       ],
       "@libs/orm/*": [
         "libs/orm/src/*"
       ],
-      "@app/database/*": [
-        "apps/database/src/*"
+      "@libs/security": [
+        "libs/security/src"
       ],
-      "@app/core": [
-        "apps/core/src/*"
+      "@libs/security/*": [
+        "libs/security/src/*"
       ],
-      "@config/*": ["config/*"]
+      "@libs/ws": [
+        "libs/ws/src"
+      ],
+      "@libs/ws/*": [
+        "libs/ws/src/*"
+      ]
     }
   }
 }

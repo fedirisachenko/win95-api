@@ -24,6 +24,12 @@
       "@libs/core/*": [
         "libs/core/src/*"
       ],
+      "@libs/notification": [
+        "libs/notification/src"
+      ],
+      "@libs/notification/*": [
+        "libs/notification/src/*"
+      ],
       "@libs/orm": [
         "libs/orm/src"
       ],
@@ -36,11 +42,11 @@
       "@libs/security/*": [
         "libs/security/src/*"
       ],
-      "@libs/notification": [
-        "libs/notification/src"
+      "@libs/ws": [
+        "libs/ws/src"
       ],
-      "@libs/notification/*": [
-        "libs/notification/src/*"
+      "@libs/ws/*": [
+        "libs/ws/src/*"
       ]
     }
   }

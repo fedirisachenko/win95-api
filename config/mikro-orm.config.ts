@@ -1,15 +1,17 @@
 import { FlushMode, LoadStrategy, PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { join } from 'path';
 import { MikroOrmModuleSyncOptions } from '@mikro-orm/nestjs/typings';
-import { InitEntity, UserEntity } from '@libs/orm';
+import { NotFoundException } from '@nestjs/common';
+import { SeedManager } from '@mikro-orm/seeder';
+import { ChatEntity, ChatUserEntity, InitEntity, MessageEntity, UserEntity } from '@libs/orm';
 
-const ENTITIES = [InitEntity, UserEntity];
+const ENTITIES = [InitEntity, UserEntity, ChatEntity, ChatUserEntity, MessageEntity];
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 
 const MIKRO_ORM_CONFIG: MikroOrmModuleSyncOptions = {
     entities: ENTITIES,
-    entitiesTs: [join(__dirname, '../libs/orm/src/entity/*.entity.ts')],
+    extensions: [SeedManager],
 
     clientUrl: process.env.DATABASE_URL_DEFAULT,
 
@@ -23,6 +25,10 @@ const MIKRO_ORM_CONFIG: MikroOrmModuleSyncOptions = {
             min: +(process.env.DB_POOL_MIN || 2),
             max: +(process.env.DB_POOL_MAX || 10),
         },
+    },
+
+    findOneOrFailHandler: () => {
+        throw new NotFoundException();
     },
 
     flushMode: FlushMode.COMMIT,

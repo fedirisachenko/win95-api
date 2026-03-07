@@ -2,7 +2,6 @@ import { IsString, IsNumber, IsOptional, validateSync } from 'class-validator';
 import { plainToInstance, Type } from 'class-transformer';
 
 export class EnvironmentVariables {
-    // Database
     @IsString()
     DATABASE_URL_DEFAULT: string;
 
@@ -20,12 +19,10 @@ export class EnvironmentVariables {
     @IsOptional()
     DB_POOL_MAX: number = 10;
 
-    // Redis
     @IsString()
     @IsOptional()
     REDIS_URL: string = 'redis://localhost:6379';
 
-    // Ports
     @Type(() => Number)
     @IsNumber()
     @IsOptional()
@@ -36,7 +33,6 @@ export class EnvironmentVariables {
     @IsOptional()
     DATABASE_APP_PORT: number = 3030;
 
-    // JWT
     @IsString()
     JWT_ACCESS_SECRET: string;
 

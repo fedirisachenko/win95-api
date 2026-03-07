@@ -1,7 +1,6 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AuthConfig } from '@libs/security/auth/interface/auth-config.interface';
-import { CodeStorageFactory, SecurityModuleOptions } from '@libs/security/security.module';
 import { AUTH_CONFIG, CODE_STORAGE } from '@libs/security/constant/di-token.constant';
 
 import { VerifyOtpAction } from './action/verify-otp-action';
@@ -33,11 +32,21 @@ import { TokenBlacklistService } from '@libs/security/token/token-blacklist.serv
 import { CodeStorageInterface } from '@libs/security/contract/code-storage.interface';
 import { LocalStorage } from '@libs/security/service/code-storage/local-storage';
 
+export type CodeStorageFactory = {
+    useFactory: (...args: any[]) => CodeStorageInterface | Promise<CodeStorageInterface>;
+    inject?: any[];
+};
+
+export type AuthModuleOptions = {
+    auth?: Partial<AuthConfig>;
+    codeStorage?: CodeStorageInterface | CodeStorageFactory;
+};
+
 const notifications = [SendOtpNotification, SendResetPasswordNotification];
 
 @Module({})
 export class AuthModule {
-    static forRoot(options: SecurityModuleOptions): DynamicModule {
+    static forRoot(options: AuthModuleOptions): DynamicModule {
         const authEnabled = options.auth?.enabled !== false;
 
         const codeStorageProvider: Provider = this.createCodeStorageProvider(options.codeStorage);

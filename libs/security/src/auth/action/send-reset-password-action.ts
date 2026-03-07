@@ -13,7 +13,7 @@ export class SendResetPasswordAction {
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Send reset password email' })
     @ApiResponse({ status: 200, description: 'Reset password email sent' })
-    @ApiSecurity({ strategy: 'jwt', transport: 'http' })
+    @ApiSecurity({})
     async invoke(@Body() data: SendResetPasswordInput): Promise<boolean> {
         await this.actionService.invoke(data);
         return true;

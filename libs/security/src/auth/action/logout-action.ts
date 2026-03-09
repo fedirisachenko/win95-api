@@ -13,7 +13,7 @@ export class LogoutAction {
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Logout and invalidate refresh token' })
     @ApiResponse({ status: 200, description: 'Logged out successfully' })
-    @ApiSecurity({})
+    @ApiSecurity()
     async invoke(@Body() data: LogoutInput): Promise<boolean> {
         await this.actionService.invoke(data);
         return true;

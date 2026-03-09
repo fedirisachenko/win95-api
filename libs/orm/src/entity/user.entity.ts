@@ -20,6 +20,9 @@ export class UserEntity {
     @Property({ fieldName: 'reset_password_token', type: 'string', nullable: true })
     resetPasswordToken?: string;
 
+    @Property({ fieldName: 'role', type: 'smallint' })
+    role: number = 1;
+
     @Property({ fieldName: 'email_verified', type: 'boolean', default: false })
     emailVerified: boolean = false;
 

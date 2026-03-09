@@ -10,3 +10,4 @@ export * from './entity/message.entity';
 // entity enums
 export * from './entity-enum/abstract-enum';
 export * from './entity-enum/chat-status.enum';
+export * from './entity-enum/user-role.enum';

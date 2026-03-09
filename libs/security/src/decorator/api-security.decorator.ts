@@ -4,7 +4,7 @@ import { HttpSecurityGuard } from '../guard/http-security.guard';
 
 type ApiSecurityOptions = { guards?: CanActivate[] };
 
-export function ApiSecurity({ guards = [] }: ApiSecurityOptions) {
+export function ApiSecurity({ guards = [] }: ApiSecurityOptions = {}) {
     return applyDecorators(
         UseGuards(HttpSecurityGuard, ...guards),
         ApiBearerAuth(),

@@ -66,3 +66,11 @@ export * from './service/code-storage/redis-storage';
 // pipes
 export * from './pipe/strict-validation.pipe';
 export * from './pipe/tolerant-validation.pipe';
+
+// rbac
+export * from './rbac/constant/permission.constant';
+export * from './rbac/constant/default-permissions.constant';
+export * from './rbac/voter/voter.interface';
+export * from './rbac/voter/permission.voter';
+export * from './rbac/service/permission-access-manager';
+export * from './rbac/service/security-manager';

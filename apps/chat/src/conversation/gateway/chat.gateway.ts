@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server } from 'socket.io';
-import { WsSecurityGuard } from '@libs/security';
+import { WsSecurityGuard, SecurityManager, Permissions } from '@libs/security';
 import { AbstractSecuredGateway, WsActionRegistry, AuthenticatedSocket } from '@libs/ws';
 
 @WebSocketGateway({ namespace: '/chat/conversation', cors: { origin: '*' } })
@@ -11,13 +11,17 @@ export class ChatGateway extends AbstractSecuredGateway {
     private readonly server: Server;
 
     protected readonly guard: WsSecurityGuard;
+    protected readonly securityManager: SecurityManager;
+    protected connectionPermission = Permissions.CHAT.JOIN;
 
     constructor(
         private readonly registry: WsActionRegistry,
         guard: WsSecurityGuard,
+        securityManager: SecurityManager,
     ) {
         super();
         this.guard = guard;
+        this.securityManager = securityManager;
     }
 
     handleConnection(client: AuthenticatedSocket): void {

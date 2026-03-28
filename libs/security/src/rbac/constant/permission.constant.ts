@@ -9,6 +9,9 @@ export const Permissions = {
         VIEW: 'USER_VIEW',
         BAN: 'USER_BAN',
     },
+    MATCHMAKING: {
+        SEARCH: 'MATCHMAKING_SEARCH',
+    },
     ACHIEVEMENT: {
         CREATE: 'ACHIEVEMENT_CREATE',
         UPDATE: 'ACHIEVEMENT_UPDATE',

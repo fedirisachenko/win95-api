@@ -14,7 +14,7 @@ export class ResetPasswordAction {
     @ApiOperation({ summary: 'Reset password with token' })
     @ApiResponse({ status: 200, description: 'Password reset successfully' })
     @ApiResponse({ status: 400, description: 'Invalid or expired token' })
-    @ApiSecurity({})
+    @ApiSecurity()
     async invoke(@Body() data: ResetPasswordInput): Promise<boolean> {
         await this.actionService.invoke(data);
         return true;

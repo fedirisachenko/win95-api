@@ -1,14 +1,13 @@
 import { CanActivate, ExecutionContext, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AUTH_CONFIG } from '../constant/di-token.constant';
-import { AuthConfig } from '../auth/interface/auth-config.interface';
+import { JWT_CONFIG, JwtConfig } from '@config/jwt.config';
 import { TokenPayload } from '../token/token.service';
 
 @Injectable()
 export class HttpSecurityGuard implements CanActivate {
     constructor(
         private readonly jwtService: JwtService,
-        @Inject(AUTH_CONFIG) private readonly config: AuthConfig,
+        @Inject(JWT_CONFIG) private readonly config: JwtConfig,
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -18,7 +17,7 @@ export class HttpSecurityGuard implements CanActivate {
 
         try {
             const payload = this.jwtService.verify<TokenPayload>(token, {
-                secret: this.config.jwt.accessTokenSecret,
+                secret: this.config.accessSecret,
             });
 
             if (payload.type !== 'access') throw new UnauthorizedException();

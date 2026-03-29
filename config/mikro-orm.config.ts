@@ -4,8 +4,17 @@ import { MikroOrmModuleSyncOptions } from '@mikro-orm/nestjs/typings';
 import { NotFoundException } from '@nestjs/common';
 import { SeedManager } from '@mikro-orm/seeder';
 import { ChatEntity, ChatUserEntity, InitEntity, MessageEntity, UserEntity, UserSocialEntity } from '@libs/orm';
+import { SearchSessionEntity } from '@libs/orm/entity/search-session.entity';
 
-const ENTITIES = [InitEntity, UserEntity, ChatEntity, ChatUserEntity, MessageEntity, UserSocialEntity];
+const ENTITIES = [
+    InitEntity,
+    UserEntity,
+    ChatEntity,
+    ChatUserEntity,
+    MessageEntity,
+    UserSocialEntity,
+    SearchSessionEntity,
+];
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 

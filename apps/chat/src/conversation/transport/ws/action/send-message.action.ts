@@ -1,17 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { Server } from 'socket.io';
 import { WsAction, AuthenticatedSocket } from '@libs/ws';
-import { SendMessageUseCase } from '../../../use-case/send-message.use-case';
-import { ChatRoom } from '../room/chat.room';
+import { SendMessageUseCase } from '../../../use-case';
+import { ChatConversationRoom } from '../room/chat-conversation.room';
 import { SendMessageInput, MessageNewOutput } from '../dto';
 
 @Injectable()
 export class SendMessageAction implements WsAction<SendMessageInput> {
-    event = 'message:send';
+    getEventName(): string {
+        return 'message:send';
+    }
 
     constructor(
         private readonly useCase: SendMessageUseCase,
-        private readonly room: ChatRoom,
+        private readonly room: ChatConversationRoom,
     ) {}
 
     async invoke(client: AuthenticatedSocket, data: SendMessageInput, server: Server): Promise<void> {

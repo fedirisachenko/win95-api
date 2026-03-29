@@ -19,10 +19,19 @@ services:
     networks:
       - network
 
+  redis-matchmaking:
+    image: redis:7-alpine
+    ports:
+      - "63792:6379"
+    volumes:
+      - redis_matchmaking_data:/data
+    networks:
+      - network
+
   rabbitmq:
     image: rabbitmq:3-management-alpine
     ports:
-      - "5672:5672"
+      - "56721:5672"
       - "15672:15672"
     networks:
       - network
@@ -30,6 +39,7 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  redis_matchmaking_data:
 
 networks:
   network:

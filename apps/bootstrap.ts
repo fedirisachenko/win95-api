@@ -23,7 +23,6 @@ export async function bootstrap(options: BootstrapOptions) {
     const app = await NestFactory.create(options.module);
     const configService = app.get(ConfigService);
     const port = configService.get<number>(options.portEnvKey, options.defaultPort);
-
     app.useGlobalPipes(TolerantValidationPipe);
 
     if (options.ws) {
@@ -37,9 +36,6 @@ export async function bootstrap(options: BootstrapOptions) {
             options: {
                 urls: config.urls,
                 queue: options.amqp.queue,
-                // queueOptions: {
-                //     durable: false,
-                // },
                 exchange: config.exchange,
             },
         });

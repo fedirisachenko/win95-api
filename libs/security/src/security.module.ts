@@ -69,9 +69,7 @@ export class SecurityModule {
         return storage !== undefined && 'useFactory' in storage;
     }
 
-    private static createCodeStorageProvider(
-        storage: CodeStorageInterface | CodeStorageFactory | undefined,
-    ): Provider {
+    private static createCodeStorageProvider(storage: CodeStorageInterface | CodeStorageFactory | undefined): Provider {
         if (!storage) {
             return { provide: CODE_STORAGE, useValue: new LocalStorage() };
         }

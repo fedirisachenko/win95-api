@@ -7,7 +7,8 @@ export interface WsModuleOptions {
     namespace: string;
     connectionPermission?: string;
     cors?: object;
-    actions: Type<WsAction>[];
+    imports?: Array<Type<any> | DynamicModule>;
+    actions?: Type<WsAction>[];
     providers?: Provider[];
 }
 
@@ -22,9 +23,10 @@ export class WsModule {
 
         return {
             module: WsModule,
+            imports: [...(options.imports ?? [])],
             providers: [
                 GatewayClass,
-                ...options.actions,
+                ...(options.actions ?? []),
                 ...(options.providers ?? []),
                 {
                     provide: WsActionRegistry,

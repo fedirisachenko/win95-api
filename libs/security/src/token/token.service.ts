@@ -1,8 +1,7 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AUTH_CONFIG } from '../constant/di-token.constant';
-import { AuthConfig } from '../auth/interface/auth-config.interface';
-import { TokenPair } from '../auth/interface/token-pair.interface';
+import { JWT_CONFIG, JwtConfig } from '@config/jwt.config';
+import { TokenPair } from '../interface/token-pair.interface';
 
 export type TokenPayload = {
     sub: string;
@@ -13,7 +12,7 @@ export type TokenPayload = {
 export class TokenService {
     constructor(
         private readonly jwtService: JwtService,
-        @Inject(AUTH_CONFIG) private readonly config: AuthConfig,
+        @Inject(JWT_CONFIG) private readonly config: JwtConfig,
     ) {}
 
     async generateTokenPair(userId: string): Promise<TokenPair> {
@@ -26,40 +25,30 @@ export class TokenService {
     }
 
     async generateAccessToken(userId: string): Promise<string> {
-        const payload: TokenPayload = {
-            sub: userId,
-            type: 'access',
-        };
+        const payload: TokenPayload = { sub: userId, type: 'access' };
 
         return this.jwtService.signAsync(payload, {
-            secret: this.config.jwt.accessTokenSecret,
-            expiresIn: this.config.jwt.accessTokenExpiresIn,
+            secret: this.config.accessSecret,
+            expiresIn: this.config.accessExpiresIn,
         });
     }
 
     async generateRefreshToken(userId: string): Promise<string> {
-        const payload: TokenPayload = {
-            sub: userId,
-            type: 'refresh',
-        };
+        const payload: TokenPayload = { sub: userId, type: 'refresh' };
 
         return this.jwtService.signAsync(payload, {
-            secret: this.config.jwt.refreshTokenSecret,
-            expiresIn: this.config.jwt.refreshTokenExpiresIn,
+            secret: this.config.refreshSecret,
+            expiresIn: this.config.refreshExpiresIn,
         });
     }
 
     async verifyAccessToken(token: string): Promise<TokenPayload | null> {
         try {
             const payload = await this.jwtService.verifyAsync<TokenPayload>(token, {
-                secret: this.config.jwt.accessTokenSecret,
+                secret: this.config.accessSecret,
             });
 
-            if (payload.type !== 'access') {
-                return null;
-            }
-
-            return payload;
+            return payload.type === 'access' ? payload : null;
         } catch {
             return null;
         }
@@ -68,41 +57,29 @@ export class TokenService {
     async verifyRefreshToken(token: string): Promise<TokenPayload | null> {
         try {
             const payload = await this.jwtService.verifyAsync<TokenPayload>(token, {
-                secret: this.config.jwt.refreshTokenSecret,
+                secret: this.config.refreshSecret,
             });
 
-            if (payload.type !== 'refresh') {
-                return null;
-            }
-
-            return payload;
+            return payload.type === 'refresh' ? payload : null;
         } catch {
             return null;
         }
     }
 
     async generateResetPasswordToken(userId: string, email: string): Promise<string> {
-        const payload = {
-            sub: userId,
-            email,
-            type: 'reset_password',
-        };
-
-        return this.jwtService.signAsync(payload, {
-            secret: this.config.jwt.accessTokenSecret,
-            expiresIn: '1h',
-        });
+        return this.jwtService.signAsync(
+            { sub: userId, email, type: 'reset_password' },
+            { secret: this.config.accessSecret, expiresIn: '1h' },
+        );
     }
 
     async verifyResetPasswordToken(token: string): Promise<{ sub: string; email: string } | null> {
         try {
             const payload = await this.jwtService.verifyAsync(token, {
-                secret: this.config.jwt.accessTokenSecret,
+                secret: this.config.accessSecret,
             });
 
-            if (payload.type !== 'reset_password') {
-                return null;
-            }
+            if (payload.type !== 'reset_password') return null;
 
             return { sub: payload.sub, email: payload.email };
         } catch {

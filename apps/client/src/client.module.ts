@@ -6,6 +6,7 @@ import { SecurityModule, RedisStorage } from '@libs/security';
 import { RedisModule, RedisService } from '@songkeys/nestjs-redis';
 import mikroOrmConfig from '@config/mikro-orm.config';
 import redisConfig from '@config/redis.config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
     imports: [
@@ -13,15 +14,12 @@ import redisConfig from '@config/redis.config';
         CoreModule.register(),
         RedisModule.forRoot(redisConfig),
         SecurityModule.forRoot({
-            auth: {
-                enabled: true,
-                routePrefix: '/auth',
-            },
             codeStorage: {
                 useFactory: (redisService: RedisService) => new RedisStorage(redisService),
                 inject: [RedisService],
             },
         }),
+        AuthModule,
     ],
 })
 export class ClientModule {}

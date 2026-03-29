@@ -1,7 +1,8 @@
 export * from './ws.module';
-// abstracts
+// gateway
+export * from './gateway/create-secured-gateway';
+// abstract
 export * from './abstract/abstract-ws-room';
-export * from './gateway/abstract-secured-gateway';
 // interface
 export * from './interface/ws-action.interface';
 // registry

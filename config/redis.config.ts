@@ -1,6 +1,6 @@
 export default {
     config: {
-        url: process.env.REDIS_URL || 'redis://localhost:6379',
+        url: process.env.REDIS_URL || 'redis://localhost:63791',
         retryStrategy: (times: number) => Math.min(times * 30, 1000),
         reconnectOnError: () => false,
     },

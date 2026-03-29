@@ -7,7 +7,7 @@ import { AsyncApiDocumentBuilder, AsyncApiModule } from 'nestjs-asyncapi';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { TolerantValidationPipe } from '@libs/security';
 import { AMQP_CONFIG, AmqpConfig } from '@config/amqp.config';
-import { connectAmqpMicroservice } from '@libs/microservice-event';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 export interface BootstrapOptions {
     module: Type<any>;
@@ -32,7 +32,17 @@ export async function bootstrap(options: BootstrapOptions) {
 
     if (options.amqp) {
         const config = app.get<AmqpConfig>(AMQP_CONFIG);
-        connectAmqpMicroservice(app, options.amqp.queue, config);
+        app.connectMicroservice<MicroserviceOptions>({
+            transport: Transport.RMQ,
+            options: {
+                urls: config.urls,
+                queue: options.amqp.queue,
+                // queueOptions: {
+                //     durable: false,
+                // },
+                exchange: config.exchange,
+            },
+        });
         await app.startAllMicroservices();
     }
 

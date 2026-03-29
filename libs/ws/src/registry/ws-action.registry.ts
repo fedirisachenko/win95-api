@@ -7,7 +7,8 @@ export class WsActionRegistry {
 
     constructor(actions: WsAction[]) {
         for (const action of actions) {
-            this.map.set(action.event, action);
+            const eventName = action.getEventName();
+            this.map.set(eventName, action);
         }
     }
 

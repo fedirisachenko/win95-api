@@ -19,3 +19,6 @@ export * from './pipe/abstract-transform.pipe';
 
 // dto
 export * from './dto/json-output';
+
+// registry
+export * from './registry/socket.registry';

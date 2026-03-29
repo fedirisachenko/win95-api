@@ -1,4 +1,39 @@
-import { Module } from '@nestjs/common';
+import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
+import { WsAction } from './interface/ws-action.interface';
+import { WsActionRegistry } from './registry/ws-action.registry';
+import { createSecuredGateway } from './gateway/create-secured-gateway';
+
+export interface WsModuleOptions {
+    namespace: string;
+    connectionPermission?: string;
+    cors?: object;
+    imports?: Array<Type<any> | DynamicModule>;
+    actions?: Type<WsAction>[];
+    providers?: Provider[];
+}
 
 @Module({})
-export class WsModule {}
+export class WsModule {
+    static forFeature(options: WsModuleOptions): DynamicModule {
+        const GatewayClass = createSecuredGateway({
+            namespace: options.namespace,
+            connectionPermission: options.connectionPermission,
+            cors: options.cors,
+        });
+
+        return {
+            module: WsModule,
+            imports: [...(options.imports ?? [])],
+            providers: [
+                GatewayClass,
+                ...(options.actions ?? []),
+                ...(options.providers ?? []),
+                {
+                    provide: WsActionRegistry,
+                    useFactory: (...acts: WsAction[]) => new WsActionRegistry(acts),
+                    inject: options.actions,
+                },
+            ],
+        };
+    }
+}

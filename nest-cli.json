@@ -1,98 +1,107 @@
 {
-  "$schema": "https://json.schemastore.org/nest-cli",
-  "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/win95/src",
-  "compilerOptions": {
-    "deleteOutDir": true,
-    "webpack": true,
-    "tsConfigPath": "apps/win95/tsconfig.app.json"
-  },
-  "monorepo": true,
-  "root": "apps/win95",
-  "projects": {
-    "cha": {
-      "type": "application",
-      "root": "apps/cha",
-      "entryFile": "main",
-      "sourceRoot": "apps/cha/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/cha/tsconfig.app.json"
-      }
+    "$schema": "https://json.schemastore.org/nest-cli",
+    "collection": "@nestjs/schematics",
+    "sourceRoot": "apps/win95/src",
+    "compilerOptions": {
+        "deleteOutDir": true,
+        "webpack": true,
+        "tsConfigPath": "apps/win95/tsconfig.app.json"
     },
-    "chat": {
-      "type": "application",
-      "root": "apps/chat",
-      "entryFile": "main",
-      "sourceRoot": "apps/chat/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/chat/tsconfig.app.json"
-      }
-    },
-    "client": {
-      "type": "application",
-      "root": "apps/client",
-      "entryFile": "main",
-      "sourceRoot": "apps/client/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/client/tsconfig.app.json"
-      }
-    },
-    "configs": {
-      "type": "config"
-    },
-    "core": {
-      "type": "library",
-      "root": "libs/core",
-      "entryFile": "index",
-      "sourceRoot": "libs/core/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/core/tsconfig.lib.json"
-      }
-    },
-    "database": {
-      "type": "application",
-      "root": "apps/database",
-      "entryFile": "main",
-      "sourceRoot": "apps/database/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/database/tsconfig.app.json"
-      }
-    },
-    "notification": {
-      "type": "library",
-      "root": "libs/notification",
-      "entryFile": "index",
-      "sourceRoot": "libs/notification/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/notification/tsconfig.lib.json"
-      }
-    },
-    "orm": {
-      "type": "library",
-      "root": "libs/orm",
-      "entryFile": "index",
-      "sourceRoot": "libs/orm/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/orm/tsconfig.lib.json"
-      }
-    },
-    "security": {
-      "type": "library",
-      "root": "libs/security",
-      "entryFile": "index",
-      "sourceRoot": "libs/security/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/security/tsconfig.lib.json"
-      }
-    },
-    "ws": {
-      "type": "library",
-      "root": "libs/ws",
-      "entryFile": "index",
-      "sourceRoot": "libs/ws/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/ws/tsconfig.lib.json"
-      }
+    "monorepo": true,
+    "root": "apps/win95",
+    "projects": {
+        "cha": {
+            "type": "application",
+            "root": "apps/cha",
+            "entryFile": "main",
+            "sourceRoot": "apps/cha/src",
+            "compilerOptions": {
+                "tsConfigPath": "apps/cha/tsconfig.app.json"
+            }
+        },
+        "chat": {
+            "type": "application",
+            "root": "apps/chat",
+            "entryFile": "main",
+            "sourceRoot": "apps/chat/src",
+            "compilerOptions": {
+                "tsConfigPath": "apps/chat/tsconfig.app.json"
+            }
+        },
+        "client": {
+            "type": "application",
+            "root": "apps/client",
+            "entryFile": "main",
+            "sourceRoot": "apps/client/src",
+            "compilerOptions": {
+                "tsConfigPath": "apps/client/tsconfig.app.json"
+            }
+        },
+        "configs": {
+            "type": "config"
+        },
+        "core": {
+            "type": "library",
+            "root": "libs/core",
+            "entryFile": "index",
+            "sourceRoot": "libs/core/src",
+            "compilerOptions": {
+                "tsConfigPath": "libs/core/tsconfig.lib.json"
+            }
+        },
+        "database": {
+            "type": "application",
+            "root": "apps/database",
+            "entryFile": "main",
+            "sourceRoot": "apps/database/src",
+            "compilerOptions": {
+                "tsConfigPath": "apps/database/tsconfig.app.json"
+            }
+        },
+        "matchmaking": {
+            "type": "application",
+            "root": "apps/matchmaking",
+            "entryFile": "main",
+            "sourceRoot": "apps/matchmaking/src",
+            "compilerOptions": {
+                "tsConfigPath": "apps/matchmaking/tsconfig.app.json"
+            }
+        },
+        "notification": {
+            "type": "library",
+            "root": "libs/notification",
+            "entryFile": "index",
+            "sourceRoot": "libs/notification/src",
+            "compilerOptions": {
+                "tsConfigPath": "libs/notification/tsconfig.lib.json"
+            }
+        },
+        "orm": {
+            "type": "library",
+            "root": "libs/orm",
+            "entryFile": "index",
+            "sourceRoot": "libs/orm/src",
+            "compilerOptions": {
+                "tsConfigPath": "libs/orm/tsconfig.lib.json"
+            }
+        },
+        "security": {
+            "type": "library",
+            "root": "libs/security",
+            "entryFile": "index",
+            "sourceRoot": "libs/security/src",
+            "compilerOptions": {
+                "tsConfigPath": "libs/security/tsconfig.lib.json"
+            }
+        },
+        "ws": {
+            "type": "library",
+            "root": "libs/ws",
+            "entryFile": "index",
+            "sourceRoot": "libs/ws/src",
+            "compilerOptions": {
+                "tsConfigPath": "libs/ws/tsconfig.lib.json"
+            }
+        }
     }
-  }
 }

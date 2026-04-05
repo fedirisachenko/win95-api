@@ -8,6 +8,7 @@ export * from './entity/chat-user.entity';
 export * from './entity/message.entity';
 export * from './entity/user-social.entity';
 export * from './entity/search-session.entity';
+export * from './entity/search-match.entity';
 
 // entity enums
 export * from './entity-enum/abstract-enum';
@@ -15,3 +16,4 @@ export * from './entity-enum/chat-status.enum';
 export * from './entity-enum/user-role.enum';
 export * from './entity-enum/social-provider.enum';
 export * from './entity-enum/search-status.enum';
+export * from './entity-enum/search-match-status.enum';

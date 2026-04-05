@@ -1,11 +1,16 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, ManyToOne, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';
 import { v4 } from 'uuid';
 import { ChatStatus } from '../entity-enum/chat-status.enum';
+import { SearchMatchEntity } from './search-match.entity';
 
 @Entity({ tableName: 'chat' })
 export class ChatEntity {
     @PrimaryKey({ fieldName: 'id', type: 'uuid' })
     readonly id: string = v4();
+
+    @ManyToOne(() => SearchMatchEntity, { fieldName: 'search_match_id', ref: true, nullable: true })
+    @Unique()
+    searchMatch?: Ref<SearchMatchEntity>;
 
     @Property({ fieldName: 'status', type: 'smallint' })
     status: number = ChatStatus.STARTING;

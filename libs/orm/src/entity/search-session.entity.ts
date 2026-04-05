@@ -1,6 +1,7 @@
 import { Entity, Index, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { v4 } from 'uuid';
 import { UserEntity } from './user.entity';
+import { SearchMatchEntity } from './search-match.entity';
 import { SearchStatus } from '@libs/orm/entity-enum/search-status.enum';
 
 @Entity({ tableName: 'search_session' })
@@ -11,6 +12,9 @@ export class SearchSessionEntity {
 
     @ManyToOne(() => UserEntity, { fieldName: 'user_id', ref: true })
     user: Ref<UserEntity>;
+
+    @ManyToOne(() => SearchMatchEntity, { fieldName: 'search_match_id', ref: true, nullable: true })
+    searchMatch?: Ref<SearchMatchEntity>;
 
     @Property({ fieldName: 'desired_duration', type: 'int' })
     desiredDuration: number;

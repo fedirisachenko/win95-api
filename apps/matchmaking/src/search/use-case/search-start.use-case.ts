@@ -15,7 +15,6 @@ export class SearchStartUseCase {
 
     @CreateRequestContext()
     async invoke(userId: string, data: SearchStartInput): Promise<void> {
-        console.log({ data, userId });
         const existingSearchSession = await this.orm.em.findOne(SearchSessionEntity, {
             user: { id: userId },
             status: SearchStatus.ACTIVE,

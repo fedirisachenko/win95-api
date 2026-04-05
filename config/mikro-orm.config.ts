@@ -3,8 +3,16 @@ import { join } from 'path';
 import { MikroOrmModuleSyncOptions } from '@mikro-orm/nestjs/typings';
 import { NotFoundException } from '@nestjs/common';
 import { SeedManager } from '@mikro-orm/seeder';
-import { ChatEntity, ChatUserEntity, InitEntity, MessageEntity, UserEntity, UserSocialEntity } from '@libs/orm';
-import { SearchSessionEntity } from '@libs/orm/entity/search-session.entity';
+import {
+    ChatEntity,
+    ChatUserEntity,
+    InitEntity,
+    MessageEntity,
+    UserEntity,
+    UserSocialEntity,
+    SearchSessionEntity,
+    SearchMatchEntity,
+} from '@libs/orm';
 
 const ENTITIES = [
     InitEntity,
@@ -14,6 +22,7 @@ const ENTITIES = [
     MessageEntity,
     UserSocialEntity,
     SearchSessionEntity,
+    SearchMatchEntity,
 ];
 
 const IS_PROD = process.env.NODE_ENV === 'production';

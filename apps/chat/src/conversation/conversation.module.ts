@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { WsModule } from '@libs/ws';
+import { WsModule, WsNamespace } from '@libs/ws';
 import { Permissions } from '@libs/security';
 import { ChatJoinAction } from './transport/ws/action/chat-join.action';
 import { ChatLeaveAction } from './transport/ws/action/chat-leave.action';
@@ -14,7 +14,7 @@ const rooms = [ChatConversationRoom];
 @Module({
     imports: [
         WsModule.forFeature({
-            namespace: '/chat/conversation',
+            namespace: WsNamespace.CHAT_CONVERSATION,
             connectionPermission: Permissions.CHAT.JOIN,
             actions,
             providers: [...useCases, ...rooms],

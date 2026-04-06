@@ -16,20 +16,16 @@ export class SearchCancelUseCase {
         const searchSession = await this.orm.em.findOne(SearchSessionEntity, {
             id: data.searchId,
             user: { id: userId },
-            status: { $in: [SearchStatus.ACTIVE, SearchStatus.PENDING] },
+            status: SearchStatus.ACTIVE,
         });
 
         if (!searchSession) {
             return;
         }
 
-        const wasActive = searchSession.status === SearchStatus.ACTIVE;
-
         searchSession.status = SearchStatus.CANCELLED;
         await this.orm.em.flush();
 
-        if (wasActive) {
-            await this.matchmakingService.dequeue(userId);
-        }
+        await this.matchmakingService.dequeue(userId);
     }
 }

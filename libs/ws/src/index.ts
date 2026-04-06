@@ -9,3 +9,5 @@ export * from './interface/ws-action.interface';
 export * from './registry/ws-action.registry';
 // types
 export type * from './type/authenticated-socket';
+// constants
+export * from './constant/namespace.constant';

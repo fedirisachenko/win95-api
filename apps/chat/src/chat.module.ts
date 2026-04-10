@@ -5,10 +5,15 @@ import { CoreModule } from '@libs/core';
 import { SecurityModule } from '@libs/security';
 import mikroOrmConfig from '@config/mikro-orm.config';
 import { ConversationModule } from './conversation/conversation.module';
-import { amqpConfigProvider } from '@config/amqp.config';
+import { ManagementModule } from './management/management.module';
 
 @Module({
-    imports: [ConversationModule, OrmModule.register(mikroOrmConfig), CoreModule.register(), SecurityModule.forRoot()],
-    providers: [amqpConfigProvider],
+    imports: [
+        OrmModule.register(mikroOrmConfig),
+        CoreModule.register(),
+        SecurityModule.forRoot(),
+        ConversationModule,
+        ManagementModule,
+    ],
 })
 export class ChatModule {}

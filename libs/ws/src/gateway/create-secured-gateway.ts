@@ -56,7 +56,7 @@ export function createSecuredGateway(options: WsGatewayOptions): Type<any> {
                     client.emit('error', { message: `Unknown event: ${event}` });
                     return;
                 }
-                this.socketRegistry.set(client.data.user.sub, client);
+                this.socketRegistry.of(options.namespace).set(client.data.user.sub, client);
 
                 try {
                     await action.invoke(client, data, this.server);
@@ -67,7 +67,7 @@ export function createSecuredGateway(options: WsGatewayOptions): Type<any> {
         }
 
         handleDisconnect(client: AuthenticatedSocket): void {
-            this.socketRegistry.remove(client.data.user.sub);
+            this.socketRegistry.of(options.namespace).remove(client.data.user.sub);
         }
     }
 

@@ -1,0 +1,1 @@
+export const MATCHMAKING_SERVICE = Symbol('MATCHMAKING_SERVICE');

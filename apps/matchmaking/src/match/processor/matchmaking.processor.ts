@@ -1,19 +1,22 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Processor, WorkerHost, OnWorkerEvent, InjectQueue } from '@nestjs/bullmq';
 import { Job, Queue } from 'bullmq';
-import { MikroORM, CreateRequestContext } from '@mikro-orm/core';
+import { MikroORM, CreateRequestContext, ref } from '@mikro-orm/core';
 import { RedisService } from '@songkeys/nestjs-redis';
 import { SocketRegistry } from '@libs/core';
-import { SearchSessionEntity, SearchStatus } from '@libs/orm';
+import { SearchSessionEntity, SearchMatchEntity, SearchMatchStatus } from '@libs/orm';
+import { WsNamespace } from '@libs/ws';
 import { MatchmakingService } from '../service/matchmaking.service';
-import { MATCHMAKING_QUEUE } from '../constant/queue.constant';
+import { BULLMQ_MATCHMAKING_QUEUE, BULLMQ_ACCEPT_TIMEOUT_QUEUE } from '../constant/queue.constant';
+import { ACCEPT_TIMEOUT_SECONDS } from '../../constant/matchmaking.constant';
+import { AcceptTimeoutJobData } from './accept-timeout.processor';
 
 export type MatchAttemptJobData = {
     duration: number;
     language: string;
 };
 
-@Processor(MATCHMAKING_QUEUE)
+@Processor(BULLMQ_MATCHMAKING_QUEUE)
 @Injectable()
 export class MatchmakingProcessor extends WorkerHost {
     private readonly logger = new Logger(MatchmakingProcessor.name);
@@ -23,7 +26,8 @@ export class MatchmakingProcessor extends WorkerHost {
         private readonly redis: RedisService,
         private readonly socketRegistry: SocketRegistry,
         private readonly matchmakingService: MatchmakingService,
-        @InjectQueue(MATCHMAKING_QUEUE) private readonly matchmakingQueue: Queue,
+        @InjectQueue(BULLMQ_MATCHMAKING_QUEUE) private readonly matchmakingQueue: Queue,
+        @InjectQueue(BULLMQ_ACCEPT_TIMEOUT_QUEUE) private readonly acceptTimeoutQueue: Queue,
     ) {
         super();
     }
@@ -82,15 +86,32 @@ return users
             { populate: ['user'] },
         );
 
+        let searchMatchId: string;
+
         await this.orm.em.transactional(async (em) => {
+            const searchMatch = em.create(SearchMatchEntity, { status: SearchMatchStatus.PENDING });
+            searchMatchId = searchMatch.id;
+
             searchSessions.forEach((session) => {
-                session.status = SearchStatus.PENDING;
+                session.searchMatch = ref(searchMatch);
             });
             await em.flush();
         });
 
+        const acceptTimeoutJobData: AcceptTimeoutJobData = {
+            searchMatchId,
+            userIds,
+        };
+
+        await this.acceptTimeoutQueue.add('accept-timeout', acceptTimeoutJobData, {
+            delay: ACCEPT_TIMEOUT_SECONDS * 1000,
+        });
+
         searchSessions.forEach((session) => {
-            this.socketRegistry.get(session.user.id)?.emit('search:found', { searchId: session.id });
+            this.socketRegistry
+                .of(WsNamespace.MATCHMAKING_SEARCH)
+                .get(session.user.id)
+                ?.emit('search:found', { searchId: session.id, acceptTime: ACCEPT_TIMEOUT_SECONDS });
         });
     }
 

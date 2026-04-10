@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { RedisService } from '@songkeys/nestjs-redis';
-import { MATCHMAKING_QUEUE } from '../constant/queue.constant';
+import { BULLMQ_MATCHMAKING_QUEUE } from '../constant/queue.constant';
 import { MatchAttemptJobData } from '../processor/matchmaking.processor';
 
 const USER_TTL = 300;
@@ -18,7 +18,7 @@ type EnqueueInput = {
 export class MatchmakingService {
     constructor(
         private readonly redis: RedisService,
-        @InjectQueue(MATCHMAKING_QUEUE) private readonly matchmakingQueue: Queue,
+        @InjectQueue(BULLMQ_MATCHMAKING_QUEUE) private readonly matchmakingQueue: Queue,
     ) {}
 
     private getQueueKey(duration: number, language: string = 'en') {

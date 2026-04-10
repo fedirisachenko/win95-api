@@ -24,6 +24,8 @@ export class CreateChatUseCase {
 
         const searchMatch = await this.orm.em.findOneOrFail(SearchMatchEntity, { id: data.searchMatchId });
 
+        let chatId: string;
+
         await this.orm.em.transactional(async (em) => {
             const chat = em.create(ChatEntity, {
                 searchMatch: ref(searchMatch),
@@ -45,10 +47,11 @@ export class CreateChatUseCase {
 
             await em.flush();
 
-            this.matchmakingClient.emit('chat:ready', {
-                chatId: chat.id,
-                userIds: data.userIds,
-            });
+            chatId = chat.id;
+        });
+        this.matchmakingClient.emit('chat:ready', {
+            chatId,
+            userIds: data.userIds,
         });
     }
 }

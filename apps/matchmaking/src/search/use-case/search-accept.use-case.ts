@@ -10,7 +10,7 @@ import { SearchSessionEntity, SearchMatchStatus } from '@libs/orm';
 import { SearchAcceptInput } from '../transport/ws/dto';
 import { CHAT_SERVICE } from '../../constant/di-token.constant';
 import { ACCEPT_TTL_SECONDS, CHAT_READY_TIMEOUT_SECONDS } from '../../constant/matchmaking.constant';
-import { CHAT_READY_TIMEOUT_QUEUE } from '../../match/constant/queue.constant';
+import { BULLMQ_CHAT_READY_TIMEOUT_QUEUE } from '../../match/constant/queue.constant';
 import { ChatReadyTimeoutJobData } from '../../match/processor/chat-ready-timeout.processor';
 
 @Injectable()
@@ -20,7 +20,7 @@ export class SearchAcceptUseCase {
         private readonly redis: RedisService,
         private readonly socketRegistry: SocketRegistry,
         @Inject(CHAT_SERVICE) private readonly chatClient: ClientProxy,
-        @InjectQueue(CHAT_READY_TIMEOUT_QUEUE) private readonly chatReadyTimeoutQueue: Queue,
+        @InjectQueue(BULLMQ_CHAT_READY_TIMEOUT_QUEUE) private readonly chatReadyTimeoutQueue: Queue,
     ) {}
 
     @CreateRequestContext()

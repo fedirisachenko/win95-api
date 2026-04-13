@@ -10,6 +10,7 @@ import { MatchmakingService } from '../service/matchmaking.service';
 import { BULLMQ_MATCHMAKING_QUEUE, BULLMQ_ACCEPT_TIMEOUT_QUEUE } from '../constant/queue.constant';
 import { ACCEPT_TIMEOUT_SECONDS } from '../../constant/matchmaking.constant';
 import { AcceptTimeoutJobData } from './accept-timeout.processor';
+import { RedisKey } from '../../constant/redis-key.constant';
 
 export type MatchAttemptJobData = {
     duration: number;
@@ -35,7 +36,7 @@ export class MatchmakingProcessor extends WorkerHost {
     async process(job: Job<MatchAttemptJobData>) {
         const { duration, language } = job.data;
         const client = this.redis.getClient();
-        const key = `mm:queue:${duration}:${language}`;
+        const key = RedisKey.matchmakingQueue(duration, language);
 
         const MATCH_LUA = `
 local users = redis.call('ZRANGE', KEYS[1], 0, 1)
@@ -69,7 +70,7 @@ return users
     private async onMatch(userIds: string[]) {
         const client = this.redis.getClient();
 
-        const userKeys = userIds.map((userId) => `mm:user:${userId}`);
+        const userKeys = userIds.map((userId) => RedisKey.matchmakingUser(userId));
         const rawSearchData = await client.mget(...userKeys);
 
         await Promise.all(userIds.map((userId) => this.matchmakingService.dequeue(userId)));

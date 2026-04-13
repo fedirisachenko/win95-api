@@ -7,6 +7,7 @@ import { SocketRegistry } from '@libs/core';
 import { WsNamespace } from '@libs/ws';
 import { SearchMatchEntity, SearchMatchStatus, SearchSessionEntity, SearchStatus } from '@libs/orm';
 import { BULLMQ_ACCEPT_TIMEOUT_QUEUE } from '../constant/queue.constant';
+import { RedisKey } from '../../constant/redis-key.constant';
 
 export type AcceptTimeoutJobData = {
     searchMatchId: string;
@@ -31,7 +32,7 @@ export class AcceptTimeoutProcessor extends WorkerHost {
         const { searchMatchId, userIds } = job.data;
         const client = this.redis.getClient();
 
-        const acceptKey = `mm:accept:${searchMatchId}`;
+        const acceptKey = RedisKey.matchmakingAccept(searchMatchId);
         const acceptedUserCount = Number(await client.get(acceptKey)) || 0;
 
         if (acceptedUserCount >= 2) {

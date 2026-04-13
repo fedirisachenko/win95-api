@@ -9,6 +9,7 @@ import { WsNamespace } from '@libs/ws';
 import { SearchSessionEntity, SearchMatchStatus } from '@libs/orm';
 import { SearchAcceptInput } from '../transport/ws/dto';
 import { CHAT_SERVICE } from '../../constant/di-token.constant';
+import { RedisKey } from '../../constant/redis-key.constant';
 import { ACCEPT_TTL_SECONDS, CHAT_READY_TIMEOUT_SECONDS } from '../../constant/matchmaking.constant';
 import { BULLMQ_CHAT_READY_TIMEOUT_QUEUE } from '../../match/constant/queue.constant';
 import { ChatReadyTimeoutJobData } from '../../match/processor/chat-ready-timeout.processor';
@@ -41,7 +42,7 @@ export class SearchAcceptUseCase {
             return;
         }
 
-        const acceptKey = `mm:accept:${searchMatch.id}`;
+        const acceptKey = RedisKey.matchmakingAccept(searchMatch.id);
 
         const client = this.redis.getClient();
         const acceptedUserCount = await client.incr(acceptKey);

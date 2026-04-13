@@ -4,6 +4,7 @@ import { Queue } from 'bullmq';
 import { RedisService } from '@songkeys/nestjs-redis';
 import { BULLMQ_MATCHMAKING_QUEUE } from '../constant/queue.constant';
 import { MatchAttemptJobData } from '../processor/matchmaking.processor';
+import { RedisKey } from '../../constant/redis-key.constant';
 
 const USER_TTL = 300;
 
@@ -21,31 +22,23 @@ export class MatchmakingService {
         @InjectQueue(BULLMQ_MATCHMAKING_QUEUE) private readonly matchmakingQueue: Queue,
     ) {}
 
-    private getQueueKey(duration: number, language: string = 'en') {
-        return `mm:queue:${duration}:${language}`;
-    }
-
-    private getUserKey(userId: string) {
-        return `mm:user:${userId}`;
-    }
-
     async enqueue(input: EnqueueInput) {
         const { userId, searchId, duration, language = 'en' } = input;
 
         const client = this.redis.getClient();
 
-        const existing = await client.get(this.getUserKey(userId));
+        const existing = await client.get(RedisKey.matchmakingUser(userId));
         if (existing) {
             return;
         }
 
-        const key = this.getQueueKey(duration, language);
+        const key = RedisKey.matchmakingQueue(duration, language);
         const now = Date.now();
 
         await client
             .multi()
             .zadd(key, now, userId)
-            .set(this.getUserKey(userId), JSON.stringify({ searchId, language, duration }), 'EX', USER_TTL)
+            .set(RedisKey.matchmakingUser(userId), JSON.stringify({ searchId, language, duration }), 'EX', USER_TTL)
             .exec();
 
         const matchAttemptJobData: MatchAttemptJobData = {
@@ -61,13 +54,13 @@ export class MatchmakingService {
     async dequeue(userId: string) {
         const client = this.redis.getClient();
 
-        const raw = await client.get(this.getUserKey(userId));
+        const raw = await client.get(RedisKey.matchmakingUser(userId));
         if (!raw) return;
 
         const data = JSON.parse(raw);
 
-        const key = this.getQueueKey(data.duration, data.language);
+        const key = RedisKey.matchmakingQueue(data.duration, data.language);
 
-        await client.multi().zrem(key, userId).del(this.getUserKey(userId)).exec();
+        await client.multi().zrem(key, userId).del(RedisKey.matchmakingUser(userId)).exec();
     }
 }

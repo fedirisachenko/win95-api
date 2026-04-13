@@ -33,11 +33,11 @@ export class EnvironmentVariables {
     // RabbitMQ
     @IsString()
     @IsOptional()
-    AMQP_URLS: string = 'amqp://localhost:5672';
+    AMQP_URLS: string = 'amqp://localhost:56721';
 
     @IsString()
     @IsOptional()
-    AMQP_EXCHANGE_NAME: string = 'win95';
+    AMQP_EXCHANGE_NAME: string = 'broadcast';
 
     // App ports
     @Type(() => Number)

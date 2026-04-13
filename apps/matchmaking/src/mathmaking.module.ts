@@ -28,8 +28,8 @@ import { MatchModule } from './match/match.module';
         }),
         RmqModule.forRootAsync({
             useFactory: (configService: ConfigService) => ({
-                urls: configService.get<string>('AMQP_URLS', 'amqp://localhost:5672').split(','),
-                exchange: configService.get<string>('AMQP_EXCHANGE_NAME', 'win95'),
+                urls: configService.get<string>('AMQP_URLS', 'amqp://localhost:56721').split(','),
+                exchange: configService.get<string>('AMQP_EXCHANGE_NAME', 'broadcast'),
                 exchangeType: 'direct',
             }),
             inject: [ConfigService],

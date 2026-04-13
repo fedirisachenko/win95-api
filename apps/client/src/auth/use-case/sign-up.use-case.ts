@@ -1,4 +1,4 @@
-import { Injectable, HttpException } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/core';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from '@libs/orm';
@@ -16,7 +16,7 @@ export class SignUpUseCase {
         const existingUser = await this.em.findOne(UserEntity, { email: data.email });
 
         if (existingUser) {
-            throw new HttpException('User with this email already exists', 409);
+            throw new HttpException('User with this email already exists', HttpStatus.CONFLICT);
         }
 
         const password = await bcrypt.hash(data.password, 10);

@@ -1,10 +1,10 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { HttpSecurityGuard } from './guard/http-security.guard';
 import { WsSecurityGuard } from './guard/ws-security.guard';
 import { HttpExceptionFilter } from './exception/http-exception-filter';
-import { jwtConfigProvider, JWT_CONFIG } from '@config/jwt.config';
 import { PermissionAccessManager } from './rbac/service/permission-access-manager';
 import { PermissionVoter } from './rbac/voter/permission.voter';
 import { SecurityManager } from './rbac/service/security-manager';
@@ -12,7 +12,8 @@ import { VoterInterface } from './rbac/voter/voter.interface';
 import { TokenService } from './token/token.service';
 import { TokenBlacklistService } from './token/token-blacklist.service';
 import { CodeStorageInterface } from './contract/code-storage.interface';
-import { CODE_STORAGE } from './constant/di-token.constant';
+import { CODE_STORAGE, JWT_CONFIG } from './constant/di-token.constant';
+import { JwtConfig } from './interface/jwt-config.interface';
 import { LocalStorage } from './service/code-storage/local-storage';
 
 export type CodeStorageFactory = {
@@ -34,7 +35,16 @@ export class SecurityModule {
             global: true,
             imports: [JwtModule.register({})],
             providers: [
-                jwtConfigProvider,
+                {
+                    provide: JWT_CONFIG,
+                    useFactory: (configService: ConfigService): JwtConfig => ({
+                        accessSecret: configService.get<string>('JWT_ACCESS_SECRET'),
+                        refreshSecret: configService.get<string>('JWT_REFRESH_SECRET'),
+                        accessExpiresIn: configService.get<string>('JWT_ACCESS_EXPIRE', '15m'),
+                        refreshExpiresIn: configService.get<string>('JWT_REFRESH_EXPIRE', '7d'),
+                    }),
+                    inject: [ConfigService],
+                },
                 codeStorageProvider,
                 HttpSecurityGuard,
                 WsSecurityGuard,

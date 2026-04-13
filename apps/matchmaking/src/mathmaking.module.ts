@@ -11,7 +11,7 @@ import { RmqModule } from '@libs/rmq';
 import { RedisModule } from '@songkeys/nestjs-redis';
 import mikroOrmConfig from '@config/mikro-orm.config';
 import redisConfig from '@config/redis.config';
-import matchmakingQueueConfig from '@config/matchmaking-queue.config';
+import bullmqConfig from '@config/bullmq.config';
 import { SearchModule } from './search/search.module';
 import { MatchModule } from './match/match.module';
 
@@ -21,7 +21,7 @@ import { MatchModule } from './match/match.module';
         CoreModule.register(),
         SecurityModule.forRoot(),
         RedisModule.forRoot(redisConfig),
-        BullModule.forRoot(matchmakingQueueConfig),
+        BullModule.forRoot(bullmqConfig),
         BullBoardModule.forRoot({
             route: '/queues',
             adapter: ExpressAdapter,

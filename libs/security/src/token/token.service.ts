@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { JWT_CONFIG, JwtConfig } from '@config/jwt.config';
+import { JWT_CONFIG } from '../constant/di-token.constant';
+import { JwtConfig } from '../interface/jwt-config.interface';
 import { TokenPair } from '../interface/token-pair.interface';
 
 export type TokenPayload = {

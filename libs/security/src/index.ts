@@ -3,7 +3,6 @@ export * from './security.module';
 
 // constants
 export * from './constant/di-token.constant';
-export * from './constant/security.constant';
 
 // guards
 export * from './guard/http-security.guard';
@@ -19,6 +18,7 @@ export * from './token/token-blacklist.service';
 // interfaces
 export * from './interface/token-pair.interface';
 export * from './interface/auth-config.interface';
+export * from './interface/jwt-config.interface';
 
 // code storage
 export * from './contract/code-storage.interface';

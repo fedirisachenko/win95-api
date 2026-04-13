@@ -2,6 +2,7 @@ import { IsString, IsNumber, IsOptional, validateSync } from 'class-validator';
 import { plainToInstance, Type } from 'class-transformer';
 
 export class EnvironmentVariables {
+    // Database
     @IsString()
     DATABASE_URL_DEFAULT: string;
 
@@ -19,10 +20,26 @@ export class EnvironmentVariables {
     @IsOptional()
     DB_POOL_MAX: number = 10;
 
+    // Redis
     @IsString()
     @IsOptional()
-    REDIS_URL: string = 'redis://localhost:6379';
+    REDIS_URL: string = 'redis://localhost:63791';
 
+    // BullMQ
+    @IsString()
+    @IsOptional()
+    BULLMQ_REDIS_URL: string = 'redis://localhost:63792';
+
+    // RabbitMQ
+    @IsString()
+    @IsOptional()
+    AMQP_URLS: string = 'amqp://localhost:5672';
+
+    @IsString()
+    @IsOptional()
+    AMQP_EXCHANGE_NAME: string = 'win95';
+
+    // App ports
     @Type(() => Number)
     @IsNumber()
     @IsOptional()
@@ -33,6 +50,17 @@ export class EnvironmentVariables {
     @IsOptional()
     DATABASE_APP_PORT: number = 3030;
 
+    @Type(() => Number)
+    @IsNumber()
+    @IsOptional()
+    CHAT_APP_PORT: number = 3032;
+
+    @Type(() => Number)
+    @IsNumber()
+    @IsOptional()
+    MATCHMAKING_APP_PORT: number = 3033;
+
+    // JWT
     @IsString()
     JWT_ACCESS_SECRET: string;
 

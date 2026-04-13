@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import { ServerExchangeRmq, ServerExchangeRmqOptions } from '../transport/server-exchange-rmq';
-import { RMQ_OPTIONS } from '../constant/rmq.constant';
+import { RMQ_OPTIONS } from '../constant/di-token.constant';
 import { RmqModuleOptions } from '../interface/rmq-module-options.interface';
 
 export async function connectRmqConsumer(

@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
 import { ClientExchangeRmq } from '../transport/client-exchange-rmq';
-import { RMQ_CLIENT } from '../constant/rmq.constant';
+import { RMQ_CLIENT } from '../constant/di-token.constant';
 
 @Injectable()
 export class RmqService implements OnModuleInit {

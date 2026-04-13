@@ -5,14 +5,14 @@ import { MikroORM, CreateRequestContext } from '@mikro-orm/core';
 import { SocketRegistry } from '@libs/core';
 import { WsNamespace } from '@libs/ws';
 import { ChatEntity, SearchMatchEntity, SearchMatchStatus, SearchSessionEntity, SearchStatus } from '@libs/orm';
-import { BULLMQ_CHAT_READY_TIMEOUT_QUEUE } from '../constant/queue.constant';
+import { CHAT_READY_TIMEOUT_QUEUE } from '../constant/queue.constant';
 
 export type ChatReadyTimeoutJobData = {
     searchMatchId: string;
     userIds: string[];
 };
 
-@Processor(BULLMQ_CHAT_READY_TIMEOUT_QUEUE)
+@Processor(CHAT_READY_TIMEOUT_QUEUE)
 @Injectable()
 export class ChatReadyTimeoutProcessor extends WorkerHost {
     private readonly logger = new Logger(ChatReadyTimeoutProcessor.name);

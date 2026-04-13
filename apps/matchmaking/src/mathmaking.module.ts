@@ -1,11 +1,13 @@
 import 'dotenv/config';
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { BullModule } from '@nestjs/bullmq';
 import { BullBoardModule } from '@bull-board/nestjs';
 import { ExpressAdapter } from '@bull-board/express';
 import { OrmModule } from '@libs/orm';
 import { CoreModule } from '@libs/core';
 import { SecurityModule } from '@libs/security';
+import { RmqModule } from '@libs/rmq';
 import { RedisModule } from '@songkeys/nestjs-redis';
 import mikroOrmConfig from '@config/mikro-orm.config';
 import redisConfig from '@config/redis.config';
@@ -23,6 +25,14 @@ import { MatchModule } from './match/match.module';
         BullBoardModule.forRoot({
             route: '/queues',
             adapter: ExpressAdapter,
+        }),
+        RmqModule.forRootAsync({
+            useFactory: (configService: ConfigService) => ({
+                urls: configService.get<string>('AMQP_URLS', 'amqp://localhost:5672').split(','),
+                exchange: configService.get<string>('AMQP_EXCHANGE_NAME', 'win95'),
+                exchangeType: 'direct',
+            }),
+            inject: [ConfigService],
         }),
         SearchModule,
         MatchModule,

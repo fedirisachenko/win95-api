@@ -1,17 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { MikroORM, CreateRequestContext } from '@mikro-orm/core';
-import { ClientProxy } from '@nestjs/microservices';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { RedisService } from '@songkeys/nestjs-redis';
 import { SocketRegistry } from '@libs/core';
+import { RmqService } from '@libs/rmq';
 import { WsNamespace } from '@libs/ws';
 import { SearchSessionEntity, SearchMatchStatus } from '@libs/orm';
 import { SearchAcceptInput } from '../transport/ws/dto';
-import { CHAT_SERVICE } from '../../constant/di-token.constant';
 import { RedisKey } from '../../constant/redis-key.constant';
 import { ACCEPT_TTL_SECONDS, CHAT_READY_TIMEOUT_SECONDS } from '../../constant/matchmaking.constant';
-import { BULLMQ_CHAT_READY_TIMEOUT_QUEUE } from '../../match/constant/queue.constant';
+import { CHAT_READY_TIMEOUT_QUEUE } from '../../match/constant/queue.constant';
 import { ChatReadyTimeoutJobData } from '../../match/processor/chat-ready-timeout.processor';
 
 @Injectable()
@@ -20,8 +19,8 @@ export class SearchAcceptUseCase {
         private readonly orm: MikroORM,
         private readonly redis: RedisService,
         private readonly socketRegistry: SocketRegistry,
-        @Inject(CHAT_SERVICE) private readonly chatClient: ClientProxy,
-        @InjectQueue(BULLMQ_CHAT_READY_TIMEOUT_QUEUE) private readonly chatReadyTimeoutQueue: Queue,
+        private readonly rmq: RmqService,
+        @InjectQueue(CHAT_READY_TIMEOUT_QUEUE) private readonly chatReadyTimeoutQueue: Queue,
     ) {}
 
     @CreateRequestContext()
@@ -66,7 +65,7 @@ export class SearchAcceptUseCase {
 
         const userIds = allSessions.map((s) => s.user.id);
 
-        this.chatClient.emit('chat:create', {
+        await this.rmq.emit('chat:create', {
             searchMatchId: searchMatch.id,
             userIds,
             duration: allSessions[0].desiredDuration,

@@ -6,7 +6,7 @@ bootstrap({
     portEnvKey: 'CHAT_APP_PORT',
     defaultPort: 3032,
     ws: true,
-    amqp: { queue: 'chat_queue' },
+    rmq: { queue: 'chat' },
     swagger: { title: 'Win95 Chat API', path: 'api-chat/api' },
     asyncApi: { title: 'Win95 Chat WS API', path: 'api-chat/api-ws' },
 });

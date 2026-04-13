@@ -6,7 +6,7 @@ import { RedisService } from '@songkeys/nestjs-redis';
 import { SocketRegistry } from '@libs/core';
 import { WsNamespace } from '@libs/ws';
 import { SearchMatchEntity, SearchMatchStatus, SearchSessionEntity, SearchStatus } from '@libs/orm';
-import { BULLMQ_ACCEPT_TIMEOUT_QUEUE } from '../constant/queue.constant';
+import { ACCEPT_TIMEOUT_QUEUE } from '../constant/queue.constant';
 import { RedisKey } from '../../constant/redis-key.constant';
 
 export type AcceptTimeoutJobData = {
@@ -14,7 +14,7 @@ export type AcceptTimeoutJobData = {
     userIds: string[];
 };
 
-@Processor(BULLMQ_ACCEPT_TIMEOUT_QUEUE)
+@Processor(ACCEPT_TIMEOUT_QUEUE)
 @Injectable()
 export class AcceptTimeoutProcessor extends WorkerHost {
     private readonly logger = new Logger(AcceptTimeoutProcessor.name);

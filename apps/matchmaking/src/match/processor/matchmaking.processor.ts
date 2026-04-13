@@ -7,7 +7,7 @@ import { SocketRegistry } from '@libs/core';
 import { SearchSessionEntity, SearchMatchEntity, SearchMatchStatus } from '@libs/orm';
 import { WsNamespace } from '@libs/ws';
 import { MatchmakingService } from '../service/matchmaking.service';
-import { BULLMQ_MATCHMAKING_QUEUE, BULLMQ_ACCEPT_TIMEOUT_QUEUE } from '../constant/queue.constant';
+import { MATCHMAKING_QUEUE, ACCEPT_TIMEOUT_QUEUE } from '../constant/queue.constant';
 import { ACCEPT_TIMEOUT_SECONDS } from '../../constant/matchmaking.constant';
 import { AcceptTimeoutJobData } from './accept-timeout.processor';
 import { RedisKey } from '../../constant/redis-key.constant';
@@ -17,7 +17,7 @@ export type MatchAttemptJobData = {
     language: string;
 };
 
-@Processor(BULLMQ_MATCHMAKING_QUEUE)
+@Processor(MATCHMAKING_QUEUE)
 @Injectable()
 export class MatchmakingProcessor extends WorkerHost {
     private readonly logger = new Logger(MatchmakingProcessor.name);
@@ -27,8 +27,8 @@ export class MatchmakingProcessor extends WorkerHost {
         private readonly redis: RedisService,
         private readonly socketRegistry: SocketRegistry,
         private readonly matchmakingService: MatchmakingService,
-        @InjectQueue(BULLMQ_MATCHMAKING_QUEUE) private readonly matchmakingQueue: Queue,
-        @InjectQueue(BULLMQ_ACCEPT_TIMEOUT_QUEUE) private readonly acceptTimeoutQueue: Queue,
+        @InjectQueue(MATCHMAKING_QUEUE) private readonly matchmakingQueue: Queue,
+        @InjectQueue(ACCEPT_TIMEOUT_QUEUE) private readonly acceptTimeoutQueue: Queue,
     ) {
         super();
     }

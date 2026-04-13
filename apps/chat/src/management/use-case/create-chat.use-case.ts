@@ -1,15 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { MikroORM, CreateRequestContext, ref } from '@mikro-orm/core';
-import { ClientProxy } from '@nestjs/microservices';
+import { RmqService } from '@libs/rmq';
 import { ChatEntity, ChatUserEntity, ChatStatus, UserEntity, SearchMatchEntity } from '@libs/orm';
 import { CreateChatInput } from '../transport/rmq/dto/input/create-chat.input';
-import { MATCHMAKING_SERVICE } from '../../constant/di-token.constant';
 
 @Injectable()
 export class CreateChatUseCase {
     constructor(
         private readonly orm: MikroORM,
-        @Inject(MATCHMAKING_SERVICE) private readonly matchmakingClient: ClientProxy,
+        private readonly rmq: RmqService,
     ) {}
 
     @CreateRequestContext()
@@ -49,7 +48,7 @@ export class CreateChatUseCase {
 
             chatId = chat.id;
         });
-        this.matchmakingClient.emit('chat:ready', {
+        await this.rmq.emit('chat:ready', {
             chatId,
             userIds: data.userIds,
         });

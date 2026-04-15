@@ -1,22 +1,16 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq';
+import { Injectable } from '@nestjs/common';
+import { Processor } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import { MikroORM, CreateRequestContext } from '@mikro-orm/core';
-import { SocketRegistry } from '@libs/core';
+import { AbstractProcessor, SocketRegistry } from '@libs/core';
 import { WsNamespace } from '@libs/ws';
 import { ChatEntity, SearchMatchEntity, SearchMatchStatus, SearchSessionEntity, SearchStatus } from '@libs/orm';
-import { BULLMQ_CHAT_READY_TIMEOUT_QUEUE } from '../constant/queue.constant';
+import { CHAT_READY_TIMEOUT_QUEUE } from '../constant/queue.constant';
+import { ChatReadyTimeoutJobData } from '../dto/job-data/chat-ready-timeout.job-data';
 
-export type ChatReadyTimeoutJobData = {
-    searchMatchId: string;
-    userIds: string[];
-};
-
-@Processor(BULLMQ_CHAT_READY_TIMEOUT_QUEUE)
+@Processor(CHAT_READY_TIMEOUT_QUEUE)
 @Injectable()
-export class ChatReadyTimeoutProcessor extends WorkerHost {
-    private readonly logger = new Logger(ChatReadyTimeoutProcessor.name);
-
+export class ChatReadyTimeoutProcessor extends AbstractProcessor<ChatReadyTimeoutJobData, void> {
     constructor(
         private readonly orm: MikroORM,
         private readonly socketRegistry: SocketRegistry,
@@ -25,7 +19,7 @@ export class ChatReadyTimeoutProcessor extends WorkerHost {
     }
 
     @CreateRequestContext()
-    async process(job: Job<ChatReadyTimeoutJobData>) {
+    async process(job: Job<ChatReadyTimeoutJobData>): Promise<void> {
         const { searchMatchId, userIds } = job.data;
 
         const chat = await this.orm.em.findOne(ChatEntity, {
@@ -62,15 +56,5 @@ export class ChatReadyTimeoutProcessor extends WorkerHost {
                 .get(userId)
                 ?.emit('search:error', { message: 'Chat creation timeout' });
         }
-    }
-
-    @OnWorkerEvent('error')
-    onError(error: Error) {
-        this.logger.error('Worker error', error.stack);
-    }
-
-    @OnWorkerEvent('failed')
-    onFailed(job: Job, error: Error) {
-        this.logger.error(`Job ${job.id} failed`, error.stack);
     }
 }

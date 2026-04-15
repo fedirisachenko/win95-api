@@ -6,15 +6,14 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AsyncApiDocumentBuilder, AsyncApiModule } from 'nestjs-asyncapi';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { TolerantValidationPipe } from '@libs/security';
-import { AMQP_CONFIG, AmqpConfig } from '@config/amqp.config';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { connectRmqConsumer } from '@libs/rmq';
 
 export interface BootstrapOptions {
     module: Type<any>;
     portEnvKey: string;
     defaultPort: number;
     ws?: boolean;
-    amqp?: { queue: string };
+    rmq?: { queue: string };
     swagger?: { title: string; path: string };
     asyncApi?: { title: string; path: string };
 }
@@ -29,17 +28,8 @@ export async function bootstrap(options: BootstrapOptions) {
         app.useWebSocketAdapter(new IoAdapter(app));
     }
 
-    if (options.amqp) {
-        const config = app.get<AmqpConfig>(AMQP_CONFIG);
-        app.connectMicroservice<MicroserviceOptions>({
-            transport: Transport.RMQ,
-            options: {
-                urls: config.urls,
-                queue: options.amqp.queue,
-                exchange: config.exchange,
-            },
-        });
-        await app.startAllMicroservices();
+    if (options.rmq) {
+        await connectRmqConsumer(app, options.rmq.queue);
     }
 
     if (options.swagger) {

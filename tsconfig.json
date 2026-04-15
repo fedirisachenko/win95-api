@@ -47,6 +47,12 @@
       ],
       "@libs/ws/*": [
         "libs/ws/src/*"
+      ],
+      "@libs/rmq": [
+        "libs/rmq/src"
+      ],
+      "@libs/rmq/*": [
+        "libs/rmq/src/*"
       ]
     }
   }

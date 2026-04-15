@@ -2,7 +2,7 @@ import { Entity, Index, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/
 import { v4 } from 'uuid';
 import { UserEntity } from './user.entity';
 import { SearchMatchEntity } from './search-match.entity';
-import { SearchStatus } from '@libs/orm/entity-enum/search-status.enum';
+import { SearchStatus } from '../entity-enum/search-status.enum';
 
 @Entity({ tableName: 'search_session' })
 @Index({ properties: ['user', 'status'] })

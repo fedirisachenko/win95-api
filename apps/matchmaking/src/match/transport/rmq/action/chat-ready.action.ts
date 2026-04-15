@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
-import { ChatReadyUseCase } from '../../../use-case/chat-ready.use-case';
+import { ChatReadyUseCase } from '../use-case/chat-ready.use-case';
 import { ChatReadyInput } from '../dto/input/chat-ready.input';
 
 @Controller()

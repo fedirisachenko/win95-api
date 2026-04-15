@@ -6,7 +6,7 @@ bootstrap({
     portEnvKey: 'MATCHMAKING_APP_PORT',
     defaultPort: 3033,
     ws: true,
-    amqp: { queue: 'matchmaking_queue' },
+    rmq: { queue: 'matchmaking' },
     swagger: { title: 'Win95 Matchmaking API', path: 'api-matchmaking/api' },
     asyncApi: { title: 'Win95 Matchmaking WS API', path: 'api-matchmaking/api-ws' },
 });

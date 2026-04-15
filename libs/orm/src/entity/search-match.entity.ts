@@ -1,6 +1,6 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 import { v4 } from 'uuid';
-import { SearchMatchStatus } from '@libs/orm/entity-enum/search-match-status.enum';
+import { SearchMatchStatus } from '../entity-enum/search-match-status.enum';
 
 @Entity({ tableName: 'search_match' })
 export class SearchMatchEntity {

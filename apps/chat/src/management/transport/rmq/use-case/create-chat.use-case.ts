@@ -3,12 +3,14 @@ import { MikroORM, CreateRequestContext, ref } from '@mikro-orm/core';
 import { RmqService } from '@libs/rmq';
 import { ChatEntity, ChatUserEntity, ChatStatus, UserEntity, SearchMatchEntity } from '@libs/orm';
 import { CreateChatInput } from '../dto/input/create-chat.input';
+import { ChatLifecycleService } from '../../../service/chat-lifecycle.service';
 
 @Injectable()
 export class CreateChatUseCase {
     constructor(
         private readonly orm: MikroORM,
         private readonly rmq: RmqService,
+        private readonly chatLifecycle: ChatLifecycleService,
     ) {}
 
     @CreateRequestContext()
@@ -47,6 +49,9 @@ export class CreateChatUseCase {
 
             chatId = chat.id;
         });
+
+        await this.chatLifecycle.scheduleFinalization(chatId, data.duration);
+
         await this.rmq.emit('chat:ready', {
             chatId,
             userIds: data.userIds,

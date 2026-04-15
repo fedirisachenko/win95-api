@@ -1,11 +1,11 @@
-export interface OtpConfig {
+export type OtpConfig = {
     expiresInSeconds: number;
     codeLength: number;
     maxAttempts: number;
-}
+};
 
-export interface AuthConfig {
+export type AuthConfig = {
     enabled: boolean;
     routePrefix: string;
     otp: OtpConfig;
-}
+};

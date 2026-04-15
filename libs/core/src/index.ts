@@ -22,3 +22,6 @@ export * from './dto/json-output';
 
 // registry
 export * from './registry/socket.registry';
+
+// abstract
+export * from './abstract/abstract-processor';

@@ -2,7 +2,7 @@ import { DynamicModule, Global, Module } from '@nestjs/common';
 import { ClientExchangeRmq } from './transport/client-exchange-rmq';
 import { RmqService } from './service/rmq.service';
 import { RMQ_CLIENT, RMQ_OPTIONS } from './constant/di-token.constant';
-import { RmqModuleAsyncOptions, RmqModuleOptions } from './interface/rmq-module-options.interface';
+import { RmqModuleAsyncOptions, RmqModuleOptions } from './type/rmq-module-options.type';
 
 @Global()
 @Module({})

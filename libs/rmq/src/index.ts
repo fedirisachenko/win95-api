@@ -10,5 +10,5 @@ export * from './helper/connect-rmq-consumer';
 // constant
 export * from './constant/rmq.constant';
 export * from './constant/di-token.constant';
-// interface
-export * from './interface/rmq-module-options.interface';
+// type
+export * from './type/rmq-module-options.type';

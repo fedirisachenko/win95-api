@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { WsAction } from '../interface/ws-action.interface';
+import { WsAction } from '../type/ws-action.interface';
 
 @Injectable()
 export class WsActionRegistry {

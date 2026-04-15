@@ -1,24 +1,18 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq';
+import { Injectable } from '@nestjs/common';
+import { Processor } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import { MikroORM, CreateRequestContext } from '@mikro-orm/core';
 import { RedisService } from '@songkeys/nestjs-redis';
-import { SocketRegistry } from '@libs/core';
+import { AbstractProcessor, SocketRegistry } from '@libs/core';
 import { WsNamespace } from '@libs/ws';
 import { SearchMatchEntity, SearchMatchStatus, SearchSessionEntity, SearchStatus } from '@libs/orm';
 import { ACCEPT_TIMEOUT_QUEUE } from '../constant/queue.constant';
+import { AcceptTimeoutJobData } from '../dto/job-data/accept-timeout.job-data';
 import { RedisKey } from '../../constant/redis-key.constant';
-
-export type AcceptTimeoutJobData = {
-    searchMatchId: string;
-    userIds: string[];
-};
 
 @Processor(ACCEPT_TIMEOUT_QUEUE)
 @Injectable()
-export class AcceptTimeoutProcessor extends WorkerHost {
-    private readonly logger = new Logger(AcceptTimeoutProcessor.name);
-
+export class AcceptTimeoutProcessor extends AbstractProcessor<AcceptTimeoutJobData, void> {
     constructor(
         private readonly orm: MikroORM,
         private readonly redis: RedisService,
@@ -28,7 +22,7 @@ export class AcceptTimeoutProcessor extends WorkerHost {
     }
 
     @CreateRequestContext()
-    async process(job: Job<AcceptTimeoutJobData>) {
+    async process(job: Job<AcceptTimeoutJobData>): Promise<void> {
         const { searchMatchId, userIds } = job.data;
         const client = this.redis.getClient();
 
@@ -63,15 +57,5 @@ export class AcceptTimeoutProcessor extends WorkerHost {
         for (const userId of userIds) {
             this.socketRegistry.of(WsNamespace.MATCHMAKING_SEARCH).get(userId)?.emit('search:timeout', {});
         }
-    }
-
-    @OnWorkerEvent('error')
-    onError(error: Error) {
-        this.logger.error('Worker error', error.stack);
-    }
-
-    @OnWorkerEvent('failed')
-    onFailed(job: Job, error: Error) {
-        this.logger.error(`Job ${job.id} failed`, error.stack);
     }
 }

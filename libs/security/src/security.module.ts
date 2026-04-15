@@ -13,7 +13,7 @@ import { TokenService } from './token/token.service';
 import { TokenBlacklistService } from './token/token-blacklist.service';
 import { CodeStorageInterface } from './contract/code-storage.interface';
 import { CODE_STORAGE, JWT_CONFIG } from './constant/di-token.constant';
-import { JwtConfig } from './interface/jwt-config.interface';
+import { JwtConfig } from './type/jwt-config.type';
 import { LocalStorage } from './service/code-storage/local-storage';
 
 export type CodeStorageFactory = {

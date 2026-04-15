@@ -3,17 +3,10 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { RedisService } from '@songkeys/nestjs-redis';
 import { MATCHMAKING_QUEUE } from '../constant/queue.constant';
-import { MatchAttemptJobData } from '../processor/matchmaking.processor';
+import { MatchAttemptJobData } from '../dto/job-data/match-attempt.job-data';
+import { EnqueueInput } from '../type/mathmaking-service.type';
 import { RedisKey } from '../../constant/redis-key.constant';
-
-const USER_TTL = 300;
-
-type EnqueueInput = {
-    userId: string;
-    searchId: string;
-    duration: number;
-    language?: string;
-};
+import { USER_TTL_SECONDS } from '../../constant/matchmaking.constant';
 
 @Injectable()
 export class MatchmakingService {
@@ -38,7 +31,12 @@ export class MatchmakingService {
         await client
             .multi()
             .zadd(key, now, userId)
-            .set(RedisKey.matchmakingUser(userId), JSON.stringify({ searchId, language, duration }), 'EX', USER_TTL)
+            .set(
+                RedisKey.matchmakingUser(userId),
+                JSON.stringify({ searchId, language, duration }),
+                'EX',
+                USER_TTL_SECONDS,
+            )
             .exec();
 
         const matchAttemptJobData: MatchAttemptJobData = {

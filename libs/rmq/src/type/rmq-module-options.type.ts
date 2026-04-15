@@ -1,10 +1,10 @@
-export interface RmqModuleOptions {
+export type RmqModuleOptions = {
     urls: string[];
     exchange?: string;
     exchangeType?: string;
-}
+};
 
-export interface RmqModuleAsyncOptions {
+export type RmqModuleAsyncOptions = {
     useFactory: (...args: any[]) => RmqModuleOptions | Promise<RmqModuleOptions>;
     inject?: any[];
-}
+};

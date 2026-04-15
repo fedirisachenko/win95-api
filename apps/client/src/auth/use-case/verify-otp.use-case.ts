@@ -1,9 +1,8 @@
 import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { AUTH_CONFIG, CODE_STORAGE, CodeStorageInterface, AuthConfig } from '@libs/security';
 import { VerifyOtpInput } from '../transport/http/dto';
-import { OtpStorageData } from './send-otp.use-case';
-
-const OTP_PREFIX = 'otp:';
+import { otpKey } from '../constant/otp.constant';
+import { OtpStorageData } from '../type/otp-storage-data.type';
 
 @Injectable()
 export class VerifyOtpUseCase {
@@ -13,7 +12,7 @@ export class VerifyOtpUseCase {
     ) {}
 
     async invoke(data: VerifyOtpInput): Promise<void> {
-        const key = this.getOtpKey(data.email);
+        const key = otpKey(data.email);
         const otpData = (await this.codeStorage.get(key, true)) as OtpStorageData | null;
 
         if (!otpData) {
@@ -33,9 +32,5 @@ export class VerifyOtpUseCase {
         }
 
         await this.codeStorage.del(key);
-    }
-
-    private getOtpKey(email: string): string {
-        return `${OTP_PREFIX}${email}`;
     }
 }

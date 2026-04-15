@@ -15,10 +15,10 @@ export * from './decorator/api-security.decorator';
 export * from './token/token.service';
 export * from './token/token-blacklist.service';
 
-// interfaces
-export * from './interface/token-pair.interface';
-export * from './interface/auth-config.interface';
-export * from './interface/jwt-config.interface';
+// types
+export * from './type/token.type';
+export * from './type/auth-config.type';
+export * from './type/jwt-config.type';
 
 // code storage
 export * from './contract/code-storage.interface';

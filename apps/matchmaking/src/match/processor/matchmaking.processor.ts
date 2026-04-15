@@ -1,27 +1,22 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Processor, WorkerHost, OnWorkerEvent, InjectQueue } from '@nestjs/bullmq';
+import { Injectable } from '@nestjs/common';
+import { Processor, InjectQueue } from '@nestjs/bullmq';
 import { Job, Queue } from 'bullmq';
 import { MikroORM, CreateRequestContext, ref } from '@mikro-orm/core';
 import { RedisService } from '@songkeys/nestjs-redis';
-import { SocketRegistry } from '@libs/core';
+import { AbstractProcessor, SocketRegistry } from '@libs/core';
 import { SearchSessionEntity, SearchMatchEntity, SearchMatchStatus } from '@libs/orm';
 import { WsNamespace } from '@libs/ws';
 import { MatchmakingService } from '../service/matchmaking.service';
 import { MATCHMAKING_QUEUE, ACCEPT_TIMEOUT_QUEUE } from '../constant/queue.constant';
+import { MATCH_LUA } from '../constant/lua.constant';
 import { ACCEPT_TIMEOUT_SECONDS } from '../../constant/matchmaking.constant';
-import { AcceptTimeoutJobData } from './accept-timeout.processor';
+import { AcceptTimeoutJobData } from '../dto/job-data/accept-timeout.job-data';
+import { MatchAttemptJobData } from '../dto/job-data/match-attempt.job-data';
 import { RedisKey } from '../../constant/redis-key.constant';
-
-export type MatchAttemptJobData = {
-    duration: number;
-    language: string;
-};
 
 @Processor(MATCHMAKING_QUEUE)
 @Injectable()
-export class MatchmakingProcessor extends WorkerHost {
-    private readonly logger = new Logger(MatchmakingProcessor.name);
-
+export class MatchmakingProcessor extends AbstractProcessor<MatchAttemptJobData, void> {
     constructor(
         private readonly orm: MikroORM,
         private readonly redis: RedisService,
@@ -33,17 +28,10 @@ export class MatchmakingProcessor extends WorkerHost {
         super();
     }
 
-    async process(job: Job<MatchAttemptJobData>) {
+    async process(job: Job<MatchAttemptJobData>): Promise<void> {
         const { duration, language } = job.data;
         const client = this.redis.getClient();
         const key = RedisKey.matchmakingQueue(duration, language);
-
-        const MATCH_LUA = `
-local users = redis.call('ZRANGE', KEYS[1], 0, 1)
-if #users < 2 then return nil end
-redis.call('ZREM', KEYS[1], users[1], users[2])
-return users
-`;
 
         const result = await client.eval(MATCH_LUA, 1, key);
 
@@ -114,15 +102,5 @@ return users
                 .get(session.user.id)
                 ?.emit('search:found', { searchId: session.id, acceptTime: ACCEPT_TIMEOUT_SECONDS });
         });
-    }
-
-    @OnWorkerEvent('error')
-    onError(error: Error) {
-        this.logger.error('Worker error', error.stack);
-    }
-
-    @OnWorkerEvent('failed')
-    onFailed(job: Job, error: Error) {
-        this.logger.error(`Job ${job.id} failed`, error.stack);
     }
 }

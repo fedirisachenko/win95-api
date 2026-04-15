@@ -12,14 +12,12 @@ export class ChatSeeder extends Seeder {
         ]);
 
         const startsAt = new Date();
-        const expiresAt = new Date(startsAt.getTime() + DURATION * 1000);
 
         const chat = em.create(ChatEntity, {
             status: ChatStatus.ACTIVE,
             duration: DURATION,
             maxParticipants: 2,
             startsAt,
-            expiresAt,
         });
 
         em.create(ChatUserEntity, { chat, user: user1 });

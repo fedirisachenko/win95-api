@@ -32,7 +32,6 @@ export class CreateChatUseCase {
                 duration: data.duration,
                 maxParticipants: data.userIds.length,
                 startsAt: new Date(),
-                expiresAt: new Date(Date.now() + data.duration * 1000),
             });
 
             await Promise.all(

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MikroORM, CreateRequestContext, ref } from '@mikro-orm/core';
 import { RmqService } from '@libs/rmq';
 import { ChatEntity, ChatUserEntity, ChatStatus, UserEntity, SearchMatchEntity } from '@libs/orm';
-import { CreateChatInput } from '../transport/rmq/dto/input/create-chat.input';
+import { CreateChatInput } from '../dto/input/create-chat.input';
 
 @Injectable()
 export class CreateChatUseCase {

@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { UserEntity, UserSocialEntity } from '@libs/orm';
 import { TokenService, TokenPair, SocialProviderInterface, SOCIAL_PROVIDERS } from '@libs/security';
-import { SocialAuthInput } from '../transport/http/dto';
+import { SocialAuthInput } from '../dto';
 
 @Injectable()
 export class SocialAuthUseCase {

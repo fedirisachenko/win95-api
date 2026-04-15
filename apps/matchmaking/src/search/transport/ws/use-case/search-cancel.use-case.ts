@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { MikroORM, CreateRequestContext } from '@mikro-orm/core';
 import { SearchSessionEntity, SearchStatus } from '@libs/orm';
-import { MatchmakingService } from '../../match/service/matchmaking.service';
-import { SearchCancelInput } from '../transport/ws/dto';
+import { MatchmakingService } from '../../../../match/service/matchmaking.service';
+import { SearchCancelInput } from '../dto/input/search-cancel.input';
 
 @Injectable()
 export class SearchCancelUseCase {

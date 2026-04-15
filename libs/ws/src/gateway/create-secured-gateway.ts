@@ -9,7 +9,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { WsSecurityGuard, SecurityManager } from '@libs/security';
 import { WsActionRegistry } from '../registry/ws-action.registry';
-import { AuthenticatedSocket } from '../type/authenticated.socket';
+import { AuthenticatedSocket } from '../type/authenticated-socket.type';
 import { SocketRegistry } from '@libs/core';
 
 export interface WsGatewayOptions {

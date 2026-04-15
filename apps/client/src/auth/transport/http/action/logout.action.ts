@@ -1,8 +1,8 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ApiSecurity } from '@libs/security';
-import { LogoutInput } from '../dto';
-import { LogoutUseCase } from '../../../use-case/logout.use-case';
+import { LogoutInput } from '../dto/input/logout.input';
+import { LogoutUseCase } from '../use-case/logout.use-case';
 
 @ApiTags('Auth')
 @Controller('logout')

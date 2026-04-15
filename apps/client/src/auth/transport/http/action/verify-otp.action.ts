@@ -1,7 +1,7 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { VerifyOtpInput } from '../dto';
-import { VerifyOtpUseCase } from '../../../use-case/verify-otp.use-case';
+import { VerifyOtpInput } from '../dto/input/verify-otp.input';
+import { VerifyOtpUseCase } from '../use-case/verify-otp.use-case';
 
 @ApiTags('Auth')
 @Controller('verify-otp')

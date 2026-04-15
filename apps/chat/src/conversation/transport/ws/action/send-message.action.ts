@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { Server } from 'socket.io';
 import { Mapper } from '@libs/core';
 import { WsAction, AuthenticatedSocket } from '@libs/ws';
-import { SendMessageUseCase } from '../../../use-case';
+import { SendMessageUseCase } from '../use-case/send-message.use-case';
 import { ChatConversationRoom } from '../room/chat-conversation.room';
-import { SendMessageInput, MessageNewOutput } from '../dto';
+import { SendMessageInput } from '../dto/input/send-message.input';
+import { MessageNewOutput } from '../dto/output/message-new.output';
 
 @Injectable()
 export class SendMessageAction implements WsAction<SendMessageInput> {

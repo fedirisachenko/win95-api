@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MikroORM, CreateRequestContext } from '@mikro-orm/core';
 import { ChatEntity, ChatStatus, ChatUserEntity } from '@libs/orm';
-import { ChatJoinInput } from '../transport/ws/dto';
+import { ChatJoinInput } from '../dto/input/chat-join.input';
 
 @Injectable()
 export class JoinChatUseCase {

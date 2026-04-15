@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { WsModule, WsNamespace } from '@libs/ws';
 import { Permissions } from '@libs/security';
-import { SearchStartUseCase, SearchCancelUseCase, SearchAcceptUseCase } from './use-case';
+import { SearchStartUseCase } from './transport/ws/use-case/search-start.use-case';
+import { SearchCancelUseCase } from './transport/ws/use-case/search-cancel.use-case';
+import { SearchAcceptUseCase } from './transport/ws/use-case/search-accept.use-case';
 import { SearchStartAction } from './transport/ws/action/search-start.action';
 import { SearchCancelAction } from './transport/ws/action/search-cancel.action';
 import { SearchAcceptAction } from './transport/ws/action/search-accept.action';

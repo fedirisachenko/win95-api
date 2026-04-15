@@ -4,8 +4,8 @@ import * as bcrypt from 'bcrypt';
 import { UserEntity } from '@libs/orm';
 import { NotificationEmitter } from '@libs/notification';
 import { TokenService, AUTH_CONFIG, AuthConfig } from '@libs/security';
-import { SendResetPasswordInput } from '../transport/http/dto';
-import { SendResetPasswordNotification } from '../notification/send-reset-password.notification';
+import { SendResetPasswordInput } from '../dto';
+import { SendResetPasswordNotification } from '../../../notification/send-reset-password.notification';
 
 @Injectable()
 export class SendResetPasswordUseCase {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MikroORM, CreateRequestContext } from '@mikro-orm/core';
 import { ChatEntity, ChatStatus, MessageEntity, UserEntity } from '@libs/orm';
-import { SendMessageInput } from '../transport/ws/dto';
+import { SendMessageInput } from '../dto/input/send-message.input';
 
 @Injectable()
 export class SendMessageUseCase {

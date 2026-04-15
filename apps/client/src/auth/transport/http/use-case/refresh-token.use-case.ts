@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { TokenService, TokenBlacklistService, TokenPair } from '@libs/security';
-import { RefreshTokenInput } from '../transport/http/dto';
+import { RefreshTokenInput } from '../dto';
 
 @Injectable()
 export class RefreshTokenUseCase {

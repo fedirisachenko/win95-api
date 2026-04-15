@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { WsAction, AuthenticatedSocket } from '@libs/ws';
-import { SearchAcceptInput } from '../dto';
-import { SearchAcceptUseCase } from '../../../use-case';
+import { SearchAcceptInput } from '../dto/input/search-accept.input';
+import { SearchAcceptUseCase } from '../use-case/search-accept.use-case';
 
 @Injectable()
 export class SearchAcceptAction implements WsAction<SearchAcceptInput> {

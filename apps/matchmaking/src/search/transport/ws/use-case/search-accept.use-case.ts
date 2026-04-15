@@ -7,11 +7,11 @@ import { SocketRegistry } from '@libs/core';
 import { RmqService } from '@libs/rmq';
 import { WsNamespace } from '@libs/ws';
 import { SearchSessionEntity, SearchMatchStatus } from '@libs/orm';
-import { SearchAcceptInput } from '../transport/ws/dto';
-import { RedisKey } from '../../constant/redis-key.constant';
-import { ACCEPT_TTL_SECONDS, CHAT_READY_TIMEOUT_SECONDS } from '../../constant/matchmaking.constant';
-import { CHAT_READY_TIMEOUT_QUEUE } from '../../match/constant/queue.constant';
-import { ChatReadyTimeoutJobData } from '../../match/dto/job-data/chat-ready-timeout.job-data';
+import { SearchAcceptInput } from '../dto/input/search-accept.input';
+import { RedisKey } from '../../../../constant/redis-key.constant';
+import { ACCEPT_TTL_SECONDS, CHAT_READY_TIMEOUT_SECONDS } from '../../../../constant/matchmaking.constant';
+import { CHAT_READY_TIMEOUT_QUEUE } from '../../../../match/constant/queue.constant';
+import { ChatReadyTimeoutJobData } from '../../../../match/dto/job-data/chat-ready-timeout.job-data';
 
 @Injectable()
 export class SearchAcceptUseCase {

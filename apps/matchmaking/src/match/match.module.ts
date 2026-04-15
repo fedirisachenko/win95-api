@@ -8,7 +8,7 @@ import { AcceptTimeoutProcessor } from './processor/accept-timeout.processor';
 import { ChatReadyTimeoutProcessor } from './processor/chat-ready-timeout.processor';
 import { MatchmakingService } from './service/matchmaking.service';
 import { ChatReadyAction } from './transport/rmq/action/chat-ready.action';
-import { ChatReadyUseCase } from './use-case/chat-ready.use-case';
+import { ChatReadyUseCase } from './transport/rmq/use-case/chat-ready.use-case';
 
 @Module({
     imports: [

@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import { AuthenticatedSocket } from './authenticated.socket';
+import { AuthenticatedSocket } from './authenticated-socket.type';
 
 export interface WsAction<T = any> {
     getEventName(): string;

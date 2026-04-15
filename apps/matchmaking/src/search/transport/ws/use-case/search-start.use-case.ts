@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { MikroORM, CreateRequestContext } from '@mikro-orm/core';
-import { SearchStartInput } from '../transport/ws/dto';
-import { SearchSessionEntity } from '@libs/orm/entity/search-session.entity';
-import { SearchStatus } from '@libs/orm/entity-enum/search-status.enum';
-import { UserEntity } from '@libs/orm';
-import { MatchmakingService } from '../../match/service/matchmaking.service';
+import { SearchStartInput } from '../dto/input/search-start.input';
+import { SearchSessionEntity, SearchStatus, UserEntity } from '@libs/orm';
+import { MatchmakingService } from '../../../../match/service/matchmaking.service';
 
 @Injectable()
 export class SearchStartUseCase {

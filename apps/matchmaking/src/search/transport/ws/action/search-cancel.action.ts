@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { WsAction, AuthenticatedSocket } from '@libs/ws';
-import { SearchCancelInput } from '../dto';
-import { SearchCancelUseCase } from '../../../use-case';
+import { SearchCancelInput } from '../dto/input/search-cancel.input';
+import { SearchCancelUseCase } from '../use-case/search-cancel.use-case';
 
 @Injectable()
 export class SearchCancelAction implements WsAction<SearchCancelInput> {

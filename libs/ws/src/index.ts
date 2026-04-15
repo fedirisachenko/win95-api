@@ -8,6 +8,6 @@ export * from './type/ws-action.interface';
 // registry
 export * from './registry/ws-action.registry';
 // types
-export type * from './type/authenticated.socket';
+export type * from './type/authenticated-socket.type';
 // constants
 export * from './constant/namespace.constant';

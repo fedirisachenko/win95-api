@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { WsAction, AuthenticatedSocket } from '@libs/ws';
-import { JoinChatUseCase } from '../../../use-case';
+import { JoinChatUseCase } from '../use-case/join-chat.use-case';
 import { ChatConversationRoom } from '../room/chat-conversation.room';
-import { ChatJoinInput } from '../dto';
+import { ChatJoinInput } from '../dto/input/chat-join.input';
 
 @Injectable()
 export class ChatJoinAction implements WsAction<ChatJoinInput> {

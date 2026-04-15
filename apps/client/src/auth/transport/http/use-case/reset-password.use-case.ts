@@ -3,7 +3,7 @@ import { EntityManager } from '@mikro-orm/core';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from '@libs/orm';
 import { TokenService } from '@libs/security';
-import { ResetPasswordInput } from '../dto';
+import { ResetPasswordInput } from '../dto/input/reset-password.input';
 
 @Injectable()
 export class ResetPasswordUseCase {

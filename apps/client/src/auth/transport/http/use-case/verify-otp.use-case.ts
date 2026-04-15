@@ -1,6 +1,6 @@
 import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { AUTH_CONFIG, CODE_STORAGE, CodeStorageInterface, AuthConfig } from '@libs/security';
-import { VerifyOtpInput } from '../dto';
+import { VerifyOtpInput } from '../dto/input/verify-otp.input';
 import { otpKey } from '../../../constant/otp.constant';
 import { OtpStorageData } from '../../../type/otp-storage-data.type';
 

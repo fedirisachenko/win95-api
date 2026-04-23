@@ -24,7 +24,7 @@ export class SendMessageAction implements WsAction<SendMessageInput> {
     async invoke(client: AuthenticatedSocket, data: SendMessageInput, server: Server): Promise<void> {
         const message = await this.useCase.invoke(client.data.user.sub, data);
 
-        const messageOutput = this.mapper.map(MessageNewOutput, message);
+        const messageOutput = await this.mapper.map(MessageNewOutput, message);
 
         this.room.emit(server, data.chatId, 'message:new', messageOutput);
     }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { WsException } from '@nestjs/websockets';
-import { MikroORM } from '@mikro-orm/core';
+import { CreateRequestContext, MikroORM } from '@mikro-orm/core';
 import { RmqService } from '@libs/rmq';
 import { ChatEntity, ChatStatus } from '@libs/orm';
 
@@ -11,6 +11,7 @@ export class ChatStateService {
         private readonly rmq: RmqService,
     ) {}
 
+    @CreateRequestContext()
     async ensureActive(chatId: string): Promise<ChatEntity> {
         const chat = await this.orm.em.findOneOrFail(ChatEntity, { id: chatId, status: ChatStatus.ACTIVE });
 

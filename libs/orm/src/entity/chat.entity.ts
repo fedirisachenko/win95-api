@@ -25,8 +25,8 @@ export class ChatEntity {
     @Property({ fieldName: 'starts_at', type: 'datetime', nullable: true })
     startsAt?: Date;
 
-    @Property({ fieldName: 'expires_at', type: 'datetime', nullable: true })
-    expiresAt?: Date;
+    @Property({ fieldName: 'expired_at', type: 'datetime', nullable: true })
+    expiredAt?: Date;
 
     @Property({ fieldName: 'job_id', type: 'string', nullable: true })
     jobId?: string;

@@ -1,11 +1,17 @@
 import 'dotenv/config';
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { BullModule } from '@nestjs/bullmq';
+import { BullBoardModule } from '@bull-board/nestjs';
+import { ExpressAdapter } from '@bull-board/express';
+import { RedisModule } from '@songkeys/nestjs-redis';
 import { OrmModule } from '@libs/orm';
 import { CoreModule } from '@libs/core';
 import { SecurityModule } from '@libs/security';
 import { RmqModule } from '@libs/rmq';
 import mikroOrmConfig from '@config/mikro-orm.config';
+import redisConfig from '@config/redis.config';
+import bullmqConfig from '@config/bullmq.config';
 import { ConversationModule } from './conversation/conversation.module';
 import { ManagementModule } from './management/management.module';
 
@@ -14,6 +20,12 @@ import { ManagementModule } from './management/management.module';
         OrmModule.register(mikroOrmConfig),
         CoreModule.register(),
         SecurityModule.forRoot(),
+        RedisModule.forRoot(redisConfig),
+        BullModule.forRoot(bullmqConfig),
+        BullBoardModule.forRoot({
+            route: '/queues',
+            adapter: ExpressAdapter,
+        }),
         RmqModule.forRootAsync({
             useFactory: (configService: ConfigService) => ({
                 urls: configService.get<string>('AMQP_URLS', 'amqp://localhost:56721').split(','),

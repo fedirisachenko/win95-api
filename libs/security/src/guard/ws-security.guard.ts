@@ -1,9 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Socket } from 'socket.io';
+
+import { TokenPayload } from '@libs/security/type/token.type';
+
 import { JWT_CONFIG } from '../constant/di-token.constant';
 import { JwtConfig } from '../type/jwt-config.type';
-import { TokenPayload } from '../token/token.service';
 
 @Injectable()
 export class WsSecurityGuard {

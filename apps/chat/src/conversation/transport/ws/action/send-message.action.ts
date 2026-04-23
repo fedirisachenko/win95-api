@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Server } from 'socket.io';
 import { Mapper } from '@libs/core';
-import { WsAction, AuthenticatedSocket } from '@libs/ws';
+import { WsAction, AuthenticatedSocket, UseWsGuards } from '@libs/ws';
 import { SendMessageUseCase } from '../use-case/send-message.use-case';
 import { ChatConversationRoom } from '../room/chat-conversation.room';
 import { SendMessageInput } from '../dto/input/send-message.input';
 import { MessageNewOutput } from '../dto/output/message-new.output';
+import { ChatActiveGuard } from '../../../guard/chat-active.guard';
 
 @Injectable()
 export class SendMessageAction implements WsAction<SendMessageInput> {
@@ -19,10 +20,11 @@ export class SendMessageAction implements WsAction<SendMessageInput> {
         private readonly mapper: Mapper,
     ) {}
 
+    @UseWsGuards(ChatActiveGuard)
     async invoke(client: AuthenticatedSocket, data: SendMessageInput, server: Server): Promise<void> {
         const message = await this.useCase.invoke(client.data.user.sub, data);
 
-        const messageOutput = this.mapper.map(MessageNewOutput, message);
+        const messageOutput = await this.mapper.map(MessageNewOutput, message);
 
         this.room.emit(server, data.chatId, 'message:new', messageOutput);
     }

@@ -5,6 +5,9 @@ export * from './gateway/create-secured-gateway';
 export * from './abstract/abstract-ws-room';
 // type
 export * from './type/ws-action.interface';
+export * from './type/ws-action-guard.interface';
+// decorator
+export * from './decorator/use-ws-guards.decorator';
 // registry
 export * from './registry/ws-action.registry';
 // types

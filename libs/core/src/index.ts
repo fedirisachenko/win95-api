@@ -19,6 +19,7 @@ export * from './pipe/abstract-transform.pipe';
 
 // registry
 export * from './registry/socket.registry';
+export * from './registry/ws-server.registry';
 
 // service
 export * from './service/mapper';

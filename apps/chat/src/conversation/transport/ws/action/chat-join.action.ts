@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { WsAction, AuthenticatedSocket } from '@libs/ws';
+import { WsAction, AuthenticatedSocket, UseWsGuards } from '@libs/ws';
 import { JoinChatUseCase } from '../use-case/join-chat.use-case';
 import { ChatConversationRoom } from '../room/chat-conversation.room';
 import { ChatJoinInput } from '../dto/input/chat-join.input';
+import { ChatActiveGuard } from '../../../guard/chat-active.guard';
 
 @Injectable()
 export class ChatJoinAction implements WsAction<ChatJoinInput> {
@@ -15,6 +16,7 @@ export class ChatJoinAction implements WsAction<ChatJoinInput> {
         private readonly room: ChatConversationRoom,
     ) {}
 
+    @UseWsGuards(ChatActiveGuard)
     async invoke(client: AuthenticatedSocket, data: ChatJoinInput): Promise<void> {
         await this.useCase.invoke(client.data.user.sub, data);
         this.room.join(client, data.chatId);

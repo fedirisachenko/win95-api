@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRequestContext } from '@mikro-orm/core';
-import { ChatStatus } from '@libs/orm';
 import { ChatLifecycleService } from '../../../service/chat-lifecycle.service';
 import { ChatFinalizeInput } from '../dto/input/chat-finalize.input';
 
@@ -12,7 +11,7 @@ export class FinalizeChatUseCase {
     async invoke(data: ChatFinalizeInput): Promise<void> {
         await this.chatLifecycleService.finalize({
             chatId: data.chatId,
-            status: ChatStatus.EXPIRED,
+            status: data.status,
         });
     }
 }

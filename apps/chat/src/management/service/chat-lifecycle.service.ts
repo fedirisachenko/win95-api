@@ -52,7 +52,6 @@ export class ChatLifecycleService {
 
     private statusToReason(status: number): string {
         const statusToReasonMap: Record<number, string> = {
-            [ChatStatus.ACTIVE]: 'active',
             [ChatStatus.EXPIRED]: 'expired',
             [ChatStatus.CANCELLED]: 'cancelled',
         };

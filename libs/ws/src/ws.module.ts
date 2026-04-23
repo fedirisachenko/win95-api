@@ -1,16 +1,8 @@
-import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
-import { WsAction } from './interface/ws-action.interface';
+import { DynamicModule, Module } from '@nestjs/common';
+import { WsAction } from './type/ws-action.interface';
+import { WsModuleOptions } from './type/ws-module.interface';
 import { WsActionRegistry } from './registry/ws-action.registry';
 import { createSecuredGateway } from './gateway/create-secured-gateway';
-
-export interface WsModuleOptions {
-    namespace: string;
-    connectionPermission?: string;
-    cors?: object;
-    imports?: Array<Type<any> | DynamicModule>;
-    actions?: Type<WsAction>[];
-    providers?: Provider[];
-}
 
 @Module({})
 export class WsModule {

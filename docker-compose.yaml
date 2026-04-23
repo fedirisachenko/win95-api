@@ -1,30 +1,21 @@
 services:
   db:
-    image: postgres:13.0-alpine
+    image: postgres:18-alpine
     ports:
       - "54321:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql
     env_file:
       - .env.local
     networks:
       - network
 
   redis:
-    image: redis:7-alpine
+    image: redis:alpine
     ports:
       - "63791:6379"
     volumes:
       - redis_data:/data
-    networks:
-      - network
-
-  redis-matchmaking:
-    image: redis:7-alpine
-    ports:
-      - "63792:6379"
-    volumes:
-      - redis_matchmaking_data:/data
     networks:
       - network
 
@@ -39,7 +30,6 @@ services:
 volumes:
   postgres_data:
   redis_data:
-  redis_matchmaking_data:
 
 networks:
   network:

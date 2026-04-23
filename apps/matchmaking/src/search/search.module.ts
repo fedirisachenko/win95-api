@@ -1,22 +1,25 @@
 import { Module } from '@nestjs/common';
-import { WsModule } from '@libs/ws';
+import { WsModule, WsNamespace } from '@libs/ws';
 import { Permissions } from '@libs/security';
-import { SearchStartUseCase, SearchCancelUseCase } from './use-case';
+import { SearchStartUseCase } from './transport/ws/use-case/search-start.use-case';
+import { SearchCancelUseCase } from './transport/ws/use-case/search-cancel.use-case';
+import { SearchAcceptUseCase } from './transport/ws/use-case/search-accept.use-case';
 import { SearchStartAction } from './transport/ws/action/search-start.action';
 import { SearchCancelAction } from './transport/ws/action/search-cancel.action';
+import { SearchAcceptAction } from './transport/ws/action/search-accept.action';
 import { MatchModule } from '../match/match.module';
 
-const actions = [SearchStartAction, SearchCancelAction];
-const useCases = [SearchStartUseCase, SearchCancelUseCase];
+const actions = [SearchStartAction, SearchCancelAction, SearchAcceptAction];
+const useCases = [SearchStartUseCase, SearchCancelUseCase, SearchAcceptUseCase];
 
 @Module({
     imports: [
         WsModule.forFeature({
-            namespace: '/matchmaking/search',
+            namespace: WsNamespace.MATCHMAKING_SEARCH,
             connectionPermission: Permissions.MATCHMAKING.SEARCH,
-            imports: [MatchModule],
             actions,
             providers: [...useCases],
+            imports: [MatchModule],
         }),
     ],
 })

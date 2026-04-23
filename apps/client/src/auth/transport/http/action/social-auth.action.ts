@@ -1,8 +1,9 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Mapper, JsonOutput } from '@libs/core';
-import { SocialAuthUseCase } from '../../../use-case/social-auth.use-case';
-import { SocialAuthInput, TokenPairOutput } from '../dto';
+import { SocialAuthUseCase } from '../use-case/social-auth.use-case';
+import { SocialAuthInput } from '../dto/input/social-auth.input';
+import { TokenPairOutput } from '../dto/output/token-pair.output';
 
 @ApiTags('Social Auth')
 @Controller('social')

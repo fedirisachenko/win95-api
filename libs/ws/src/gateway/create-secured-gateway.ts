@@ -1,4 +1,5 @@
 import { Injectable, Type, ForbiddenException, UnauthorizedException } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 import {
     WebSocketGateway,
     WebSocketServer,
@@ -8,9 +9,11 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { WsSecurityGuard, SecurityManager } from '@libs/security';
+import { SocketRegistry, WsServerRegistry } from '@libs/core';
 import { WsActionRegistry } from '../registry/ws-action.registry';
-import { AuthenticatedSocket } from '../type/authenticated-socket';
-import { SocketRegistry } from '@libs/core';
+import { AuthenticatedSocket } from '../type/authenticated-socket.type';
+import { getWsActionGuards } from '../decorator/use-ws-guards.decorator';
+import { WsActionGuard } from '../type/ws-action-guard.interface';
 
 export interface WsGatewayOptions {
     namespace: string;
@@ -31,11 +34,15 @@ export function createSecuredGateway(options: WsGatewayOptions): Type<any> {
         constructor(
             private readonly wsActionRegistry: WsActionRegistry,
             private readonly socketRegistry: SocketRegistry,
+            private readonly wsServerRegistry: WsServerRegistry,
             private readonly guard: WsSecurityGuard,
             private readonly securityManager: SecurityManager,
+            private readonly moduleRef: ModuleRef,
         ) {}
 
         afterInit(server: Server): void {
+            this.wsServerRegistry.set(options.namespace, server);
+
             server.use(async (client: Socket & { data: any }, next) => {
                 const user = this.guard.authenticate(client);
                 if (!user) return next(new UnauthorizedException());
@@ -56,9 +63,15 @@ export function createSecuredGateway(options: WsGatewayOptions): Type<any> {
                     client.emit('error', { message: `Unknown event: ${event}` });
                     return;
                 }
-                this.socketRegistry.set(client.data.user.sub, client);
+                this.socketRegistry.of(options.namespace).set(client.data.user.sub, client);
 
                 try {
+                    const guardClasses = getWsActionGuards(action.invoke);
+                    for (const GuardClass of guardClasses) {
+                        const guardInstance = this.moduleRef.get<WsActionGuard>(GuardClass, { strict: false });
+                        await guardInstance.canActivate(client, data);
+                    }
+
                     await action.invoke(client, data, this.server);
                 } catch (err) {
                     client.emit('error', { message: err.message });
@@ -67,7 +80,7 @@ export function createSecuredGateway(options: WsGatewayOptions): Type<any> {
         }
 
         handleDisconnect(client: AuthenticatedSocket): void {
-            this.socketRegistry.remove(client.data.user.sub);
+            this.socketRegistry.of(options.namespace).remove(client.data.user.sub);
         }
     }
 

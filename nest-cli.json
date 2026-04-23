@@ -10,15 +10,6 @@
     "monorepo": true,
     "root": "apps/win95",
     "projects": {
-        "cha": {
-            "type": "application",
-            "root": "apps/cha",
-            "entryFile": "main",
-            "sourceRoot": "apps/cha/src",
-            "compilerOptions": {
-                "tsConfigPath": "apps/cha/tsconfig.app.json"
-            }
-        },
         "chat": {
             "type": "application",
             "root": "apps/chat",
@@ -101,6 +92,15 @@
             "sourceRoot": "libs/ws/src",
             "compilerOptions": {
                 "tsConfigPath": "libs/ws/tsconfig.lib.json"
+            }
+        },
+        "rmq": {
+            "type": "library",
+            "root": "libs/rmq",
+            "entryFile": "index",
+            "sourceRoot": "libs/rmq/src",
+            "compilerOptions": {
+                "tsConfigPath": "libs/rmq/tsconfig.lib.json"
             }
         }
     }

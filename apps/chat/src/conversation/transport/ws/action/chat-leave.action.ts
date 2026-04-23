@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { WsAction, AuthenticatedSocket } from '@libs/ws';
 import { ChatConversationRoom } from '../room/chat-conversation.room';
-import { ChatLeaveInput } from '../dto';
+import { ChatLeaveInput } from '../dto/input/chat-leave.input';
 
 @Injectable()
 export class ChatLeaveAction implements WsAction<ChatLeaveInput> {

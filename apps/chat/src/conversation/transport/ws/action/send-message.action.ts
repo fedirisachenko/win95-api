@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Server } from 'socket.io';
-import { WsAction, AuthenticatedSocket } from '@libs/ws';
-import { SendMessageUseCase } from '../../../use-case';
+import { Mapper } from '@libs/core';
+import { WsAction, AuthenticatedSocket, UseWsGuards } from '@libs/ws';
+import { SendMessageUseCase } from '../use-case/send-message.use-case';
 import { ChatConversationRoom } from '../room/chat-conversation.room';
-import { SendMessageInput, MessageNewOutput } from '../dto';
+import { SendMessageInput } from '../dto/input/send-message.input';
+import { MessageNewOutput } from '../dto/output/message-new.output';
+import { ChatActiveGuard } from '../../../guard/chat-active.guard';
 
 @Injectable()
 export class SendMessageAction implements WsAction<SendMessageInput> {
@@ -14,16 +17,14 @@ export class SendMessageAction implements WsAction<SendMessageInput> {
     constructor(
         private readonly useCase: SendMessageUseCase,
         private readonly room: ChatConversationRoom,
+        private readonly mapper: Mapper,
     ) {}
 
+    @UseWsGuards(ChatActiveGuard)
     async invoke(client: AuthenticatedSocket, data: SendMessageInput, server: Server): Promise<void> {
         const message = await this.useCase.invoke(client.data.user.sub, data);
 
-        const messageOutput = new MessageNewOutput();
-        messageOutput.id = message.id;
-        messageOutput.text = message.text;
-        messageOutput.senderId = client.data.user.sub;
-        messageOutput.createdAt = message.createdAt;
+        const messageOutput = await this.mapper.map(MessageNewOutput, message);
 
         this.room.emit(server, data.chatId, 'message:new', messageOutput);
     }

@@ -14,15 +14,15 @@ import { SendResetPasswordAction } from './transport/http/action/send-reset-pass
 import { ResetPasswordAction } from './transport/http/action/reset-password.action';
 import { SocialAuthAction } from './transport/http/action/social-auth.action';
 
-import { SignUpUseCase } from './use-case/sign-up.use-case';
-import { SignInUseCase } from './use-case/sign-in.use-case';
-import { RefreshTokenUseCase } from './use-case/refresh-token.use-case';
-import { LogoutUseCase } from './use-case/logout.use-case';
-import { SendOtpUseCase } from './use-case/send-otp.use-case';
-import { VerifyOtpUseCase } from './use-case/verify-otp.use-case';
-import { SendResetPasswordUseCase } from './use-case/send-reset-password.use-case';
-import { ResetPasswordUseCase } from './use-case/reset-password.use-case';
-import { SocialAuthUseCase } from './use-case/social-auth.use-case';
+import { SignUpUseCase } from './transport/http/use-case/sign-up.use-case';
+import { SignInUseCase } from './transport/http/use-case/sign-in.use-case';
+import { RefreshTokenUseCase } from './transport/http/use-case/refresh-token.use-case';
+import { LogoutUseCase } from './transport/http/use-case/logout.use-case';
+import { SendOtpUseCase } from './transport/http/use-case/send-otp.use-case';
+import { VerifyOtpUseCase } from './transport/http/use-case/verify-otp.use-case';
+import { SendResetPasswordUseCase } from './transport/http/use-case/send-reset-password.use-case';
+import { ResetPasswordUseCase } from './transport/http/use-case/reset-password.use-case';
+import { SocialAuthUseCase } from './transport/http/use-case/social-auth.use-case';
 
 import { SendOtpNotification } from './notification/send-otp.notification';
 import { SendResetPasswordNotification } from './notification/send-reset-password.notification';

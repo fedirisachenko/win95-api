@@ -1,8 +1,9 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Mapper, JsonOutput } from '@libs/core';
-import { SignUpInput, TokenPairOutput } from '../dto';
-import { SignUpUseCase } from '../../../use-case/sign-up.use-case';
+import { SignUpInput } from '../dto/input/sign-up.input';
+import { TokenPairOutput } from '../dto/output/token-pair.output';
+import { SignUpUseCase } from '../use-case/sign-up.use-case';
 
 @ApiTags('Auth')
 @Controller('sign-up')

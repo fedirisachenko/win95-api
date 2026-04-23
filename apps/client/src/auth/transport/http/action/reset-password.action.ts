@@ -1,8 +1,8 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ApiSecurity } from '@libs/security';
-import { ResetPasswordInput } from '../dto';
-import { ResetPasswordUseCase } from '../../../use-case/reset-password.use-case';
+import { ResetPasswordInput } from '../dto/input/reset-password.input';
+import { ResetPasswordUseCase } from '../use-case/reset-password.use-case';
 
 @ApiTags('Auth')
 @Controller('reset-password')

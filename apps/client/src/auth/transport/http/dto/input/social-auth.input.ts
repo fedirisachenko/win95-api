@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsPositive, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class SocialAuthInput {
@@ -9,5 +9,6 @@ export class SocialAuthInput {
 
     @ApiProperty()
     @IsInt()
+    @IsPositive()
     provider: number;
 }

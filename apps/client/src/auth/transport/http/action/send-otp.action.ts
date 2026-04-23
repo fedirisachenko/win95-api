@@ -1,7 +1,7 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { SendOtpInput } from '../dto';
-import { SendOtpUseCase } from '../../../use-case/send-otp.use-case';
+import { SendOtpInput } from '../dto/input/send-otp.input';
+import { SendOtpUseCase } from '../use-case/send-otp.use-case';
 
 @ApiTags('Auth')
 @Controller('send-otp')

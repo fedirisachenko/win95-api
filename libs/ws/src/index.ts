@@ -3,9 +3,14 @@ export * from './ws.module';
 export * from './gateway/create-secured-gateway';
 // abstract
 export * from './abstract/abstract-ws-room';
-// interface
-export * from './interface/ws-action.interface';
+// type
+export * from './type/ws-action.interface';
+export * from './type/ws-action-guard.interface';
+// decorator
+export * from './decorator/use-ws-guards.decorator';
 // registry
 export * from './registry/ws-action.registry';
 // types
-export type * from './type/authenticated-socket';
+export type * from './type/authenticated-socket.type';
+// constants
+export * from './constant/namespace.constant';

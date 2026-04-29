@@ -52,7 +52,7 @@ export class CreateChatUseCase {
 
         await this.chatLifecycle.scheduleFinalization(chatId, data.duration);
 
-        await this.rmq.emit('chat:ready', {
+        await this.rmq.emit('matchmaking:match:chat:ready', {
             chatId,
             userIds: data.userIds,
         });

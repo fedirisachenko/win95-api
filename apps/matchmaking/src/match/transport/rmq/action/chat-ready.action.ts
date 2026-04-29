@@ -7,7 +7,7 @@ import { ChatReadyInput } from '../dto/input/chat-ready.input';
 export class ChatReadyAction {
     constructor(private readonly useCase: ChatReadyUseCase) {}
 
-    @EventPattern('chat:ready')
+    @EventPattern('matchmaking:match:chat:ready')
     async invoke(@Payload() data: ChatReadyInput): Promise<void> {
         await this.useCase.invoke(data);
     }

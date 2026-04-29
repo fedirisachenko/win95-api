@@ -12,6 +12,7 @@ import {
     UserSocialEntity,
     SearchSessionEntity,
     SearchMatchEntity,
+    AchievementEntity,
 } from '@libs/orm';
 
 const ENTITIES = [
@@ -23,6 +24,7 @@ const ENTITIES = [
     UserSocialEntity,
     SearchSessionEntity,
     SearchMatchEntity,
+    AchievementEntity,
 ];
 
 const IS_PROD = process.env.NODE_ENV === 'production';

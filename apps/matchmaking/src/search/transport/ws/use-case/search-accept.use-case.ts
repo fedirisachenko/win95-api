@@ -65,7 +65,7 @@ export class SearchAcceptUseCase {
 
         const userIds = allSessions.map((s) => s.user.id);
 
-        await this.rmq.emit('chat:create', {
+        await this.rmq.emit('chat:management:chat:create', {
             searchMatchId: searchMatch.id,
             userIds,
             duration: allSessions[0].desiredDuration,

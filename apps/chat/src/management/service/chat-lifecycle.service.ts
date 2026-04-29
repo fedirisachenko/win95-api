@@ -24,13 +24,6 @@ export class ChatLifecycleService {
         });
     }
 
-    async cancelFinalization(chatId: string): Promise<void> {
-        const job = await this.finalizeQueue.getJob(chatId);
-        if (job) {
-            await job.remove();
-        }
-    }
-
     async finalize(input: { chatId: string; status: number }): Promise<void> {
         const { chatId, status } = input;
 
@@ -44,7 +37,7 @@ export class ChatLifecycleService {
             return;
         }
 
-        await this.rmq.emit('chat:expire', {
+        await this.rmq.emit('chat:conversation:chat:expire', {
             chatId,
             reason: this.statusToReason(status),
         });

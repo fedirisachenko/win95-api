@@ -18,8 +18,8 @@ export class AchievementEntity {
     @Property({ fieldName: 'progress', type: 'int', default: 0 })
     progress: number = 0;
 
-    @Property({ fieldName: 'completed', type: 'smallint', default: -1 })
-    completed: number = -1;
+    @Property({ fieldName: 'completed', type: 'smallint', default: 0 })
+    completed: number = 0;
 
     @Property({ fieldName: 'metadata', type: 'jsonb' })
     metadata: AchievementMetadata;

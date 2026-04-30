@@ -18,12 +18,16 @@ export class SendMessageUseCase {
 
         achievement.progress += 1;
 
-        achievement.metadata.goals.forEach((goal) => {
-            if (achievement.progress >= goal) {
-                achievement.completed += 1;
-            }
-        });
+        if (achievement.completed + 1 == achievement.metadata.goals.length) {
+            await this.orm.em.persistAndFlush(achievement);
+            return;
+        }
 
+        const currentGoal = achievement.metadata.goals[achievement.completed + 1];
+        if (achievement.progress >= currentGoal) {
+            achievement.completed += 1;
+        }
         await this.orm.em.persistAndFlush(achievement);
+        return;
     }
 }

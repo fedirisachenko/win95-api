@@ -11,14 +11,17 @@ export class UserEntity {
     @Property({ fieldName: 'email', type: 'string', unique: true })
     email: string;
 
-    @Property({ fieldName: 'password', type: 'string' })
-    password: string;
+    @Property({ fieldName: 'password', type: 'string', nullable: true })
+    password?: string;
 
     @Property({ fieldName: 'name', type: 'string', nullable: true })
     name?: string;
 
     @Property({ fieldName: 'reset_password_token', type: 'string', nullable: true })
     resetPasswordToken?: string;
+
+    @Property({ fieldName: 'reset_password_token_expires_at', type: 'datetime', nullable: true })
+    resetPasswordTokenExpiresAt?: Date;
 
     @Property({ fieldName: 'role', type: 'smallint' })
     role: number = 1;

@@ -1,4 +1,4 @@
 export type AcceptTimeoutJobData = {
-    searchMatchId: string;
+    matchId: string;
     userIds: string[];
 };

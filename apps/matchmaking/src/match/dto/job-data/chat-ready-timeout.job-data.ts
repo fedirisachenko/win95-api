@@ -1,4 +1,4 @@
 export type ChatReadyTimeoutJobData = {
-    searchMatchId: string;
+    matchId: string;
     userIds: string[];
 };

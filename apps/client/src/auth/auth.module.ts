@@ -26,6 +26,8 @@ import { SocialAuthUseCase } from './transport/http/use-case/social-auth.use-cas
 
 import { SendOtpNotification } from './notification/send-otp.notification';
 import { SendResetPasswordNotification } from './notification/send-reset-password.notification';
+import { RmqModule } from '@libs/rmq';
+import { ConfigService } from '@nestjs/config';
 
 const actions = [
     SignUpAction,
@@ -71,6 +73,14 @@ const authConfigProvider: Provider = {
         HttpModule,
         RouterModule.register([{ path: '/auth', module: AuthModule }]),
         NotificationModule.forRoot({ events: notifications }),
+        RmqModule.forRootAsync({
+            useFactory: (configService: ConfigService) => ({
+                urls: configService.get<string>('AMQP_URLS', 'amqp://localhost:56721').split(','),
+                exchange: configService.get<string>('AMQP_EXCHANGE_NAME', 'broadcast'),
+                exchangeType: 'direct',
+            }),
+            inject: [ConfigService],
+        }),
     ],
     controllers: actions,
     providers: [

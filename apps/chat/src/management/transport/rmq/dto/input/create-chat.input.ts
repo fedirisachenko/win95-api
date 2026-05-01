@@ -2,7 +2,7 @@ import { IsArray, IsNumber, IsUUID } from 'class-validator';
 
 export class CreateChatInput {
     @IsUUID()
-    searchMatchId: string;
+    matchId: string;
 
     @IsArray()
     @IsUUID('4', { each: true })

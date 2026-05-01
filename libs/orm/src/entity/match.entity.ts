@@ -1,14 +1,14 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 import { v4 } from 'uuid';
-import { SearchMatchStatus } from '../entity-enum/search-match-status.enum';
+import { MatchStatus } from '../entity-enum/match-status.enum';
 
-@Entity({ tableName: 'search_match' })
-export class SearchMatchEntity {
+@Entity({ tableName: 'match' })
+export class MatchEntity {
     @PrimaryKey({ fieldName: 'id', type: 'uuid' })
     readonly id: string = v4();
 
     @Property({ fieldName: 'status', type: 'smallint' })
-    status: number = SearchMatchStatus.PENDING;
+    status: number = MatchStatus.PENDING;
 
     @Property({ fieldName: 'created_at', type: 'datetime' })
     createdAt: Date = new Date();

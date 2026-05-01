@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MikroORM, CreateRequestContext } from '@mikro-orm/core';
 import { SearchStartInput } from '../dto/input/search-start.input';
-import { SearchSessionEntity, SearchStatus, UserEntity } from '@libs/orm';
+import { MatchRequestEntity, MatchRequestStatus, UserEntity } from '@libs/orm';
 import { MatchmakingService } from '../../../../match/service/matchmaking.service';
 
 @Injectable()
@@ -13,25 +13,25 @@ export class SearchStartUseCase {
 
     @CreateRequestContext()
     async invoke(userId: string, data: SearchStartInput): Promise<void> {
-        const existingSearchSession = await this.orm.em.findOne(SearchSessionEntity, {
+        const existingRequest = await this.orm.em.findOne(MatchRequestEntity, {
             user: { id: userId },
-            status: SearchStatus.ACTIVE,
+            status: MatchRequestStatus.ACTIVE,
         });
-        if (existingSearchSession) {
+        if (existingRequest) {
             return;
         }
-        const searchSession = this.orm.em.create(SearchSessionEntity, {
+        const matchRequest = this.orm.em.create(MatchRequestEntity, {
             user: this.orm.em.getReference(UserEntity, userId),
-            status: SearchStatus.ACTIVE,
+            status: MatchRequestStatus.ACTIVE,
             desiredDuration: data.desiredDuration,
         });
 
-        await this.orm.em.persistAndFlush(searchSession);
+        await this.orm.em.persistAndFlush(matchRequest);
 
         await this.matchmakingService.enqueue({
-            searchId: searchSession.id,
+            searchId: matchRequest.id,
             userId,
-            duration: searchSession.desiredDuration,
+            duration: matchRequest.desiredDuration,
         });
     }
 }

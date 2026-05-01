@@ -6,7 +6,7 @@ import { RedisService } from '@songkeys/nestjs-redis';
 import { SocketRegistry } from '@libs/core';
 import { RmqService } from '@libs/rmq';
 import { WsNamespace } from '@libs/ws';
-import { SearchSessionEntity, SearchMatchStatus } from '@libs/orm';
+import { MatchRequestEntity, MatchStatus } from '@libs/orm';
 import { SearchAcceptInput } from '../dto/input/search-accept.input';
 import { RedisKey } from '../../../../constant/redis-key.constant';
 import { ACCEPT_TTL_SECONDS, CHAT_READY_TIMEOUT_SECONDS } from '../../../../constant/matchmaking.constant';
@@ -25,23 +25,23 @@ export class SearchAcceptUseCase {
 
     @CreateRequestContext()
     async invoke(userId: string, data: SearchAcceptInput): Promise<void> {
-        const searchSession = await this.orm.em.findOneOrFail(
-            SearchSessionEntity,
+        const matchRequest = await this.orm.em.findOneOrFail(
+            MatchRequestEntity,
             {
                 id: data.searchId,
                 user: { id: userId },
-                searchMatch: { $ne: null },
+                match: { $ne: null },
             },
-            { populate: ['searchMatch'] },
+            { populate: ['match'] },
         );
 
-        const searchMatch = searchSession.searchMatch.unwrap();
+        const match = matchRequest.match.unwrap();
 
-        if (searchMatch.status !== SearchMatchStatus.PENDING) {
+        if (match.status !== MatchStatus.PENDING) {
             return;
         }
 
-        const acceptKey = RedisKey.matchmakingAccept(searchMatch.id);
+        const acceptKey = RedisKey.matchmakingAccept(match.id);
 
         const client = this.redis.getClient();
         const acceptedUserCount = await client.incr(acceptKey);
@@ -52,27 +52,27 @@ export class SearchAcceptUseCase {
             return;
         }
 
-        const allSessions = await this.orm.em.find(
-            SearchSessionEntity,
-            { searchMatch: { id: searchMatch.id } },
+        const allRequests = await this.orm.em.find(
+            MatchRequestEntity,
+            { match: { id: match.id } },
             { populate: ['user'] },
         );
 
-        searchMatch.status = SearchMatchStatus.ACCEPTED;
+        match.status = MatchStatus.ACCEPTED;
         await this.orm.em.flush();
 
         await client.del(acceptKey);
 
-        const userIds = allSessions.map((s) => s.user.id);
+        const userIds = allRequests.map((r) => r.user.id);
 
-        await this.rmq.emit('chat:create', {
-            searchMatchId: searchMatch.id,
+        await this.rmq.emit('chat:management:chat:create', {
+            matchId: match.id,
             userIds,
-            duration: allSessions[0].desiredDuration,
+            duration: allRequests[0].desiredDuration,
         });
 
         const chatReadyTimeoutJobData: ChatReadyTimeoutJobData = {
-            searchMatchId: searchMatch.id,
+            matchId: match.id,
             userIds,
         };
 

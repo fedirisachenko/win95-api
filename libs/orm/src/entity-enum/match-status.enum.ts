@@ -1,6 +1,6 @@
 import { AbstractEnum } from './abstract-enum';
 
-export class SearchMatchStatus extends AbstractEnum {
+export class MatchStatus extends AbstractEnum {
     protected static choices = {
         1: 'Pending',
         2: 'Accepted',

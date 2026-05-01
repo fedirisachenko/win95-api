@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MikroORM, CreateRequestContext } from '@mikro-orm/core';
-import { ChatEntity, ChatStatus, MessageEntity, UserEntity } from '@libs/orm';
+import { ChatEntity, ChatStatus, ChatMessageEntity, UserEntity } from '@libs/orm';
 import { SendMessageInput } from '../dto/input/send-message.input';
 import { RmqService } from '@libs/rmq';
 
@@ -12,10 +12,10 @@ export class SendMessageUseCase {
     ) {}
 
     @CreateRequestContext()
-    async invoke(userId: string, data: SendMessageInput): Promise<MessageEntity> {
+    async invoke(userId: string, data: SendMessageInput): Promise<ChatMessageEntity> {
         const chat = await this.orm.em.findOneOrFail(ChatEntity, { id: data.chatId, status: ChatStatus.ACTIVE });
 
-        const message = this.orm.em.create(MessageEntity, {
+        const message = this.orm.em.create(ChatMessageEntity, {
             chat,
             sender: this.orm.em.getReference(UserEntity, userId),
             text: data.text,

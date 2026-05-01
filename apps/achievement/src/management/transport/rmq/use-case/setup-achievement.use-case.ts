@@ -9,11 +9,10 @@ export class SetupAchievementUseCase {
     constructor(private readonly em: EntityManager) {}
 
     public async invoke(input: SetupAchievementInput): Promise<void> {
-        const achievements = ACHIEVEMENTS.map(({ type, metadata }) =>
+        const achievements = ACHIEVEMENTS.map(({ type }) =>
             this.em.create(AchievementEntity, {
                 type,
                 user: this.em.getReference(UserEntity, input.userId),
-                metadata,
             }),
         );
 

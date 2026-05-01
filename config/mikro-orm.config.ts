@@ -5,25 +5,23 @@ import { NotFoundException } from '@nestjs/common';
 import { SeedManager } from '@mikro-orm/seeder';
 import {
     ChatEntity,
-    ChatUserEntity,
-    InitEntity,
-    MessageEntity,
+    ChatParticipantEntity,
+    ChatMessageEntity,
     UserEntity,
     UserSocialEntity,
-    SearchSessionEntity,
-    SearchMatchEntity,
+    MatchRequestEntity,
+    MatchEntity,
     AchievementEntity,
 } from '@libs/orm';
 
 const ENTITIES = [
-    InitEntity,
     UserEntity,
     ChatEntity,
-    ChatUserEntity,
-    MessageEntity,
+    ChatParticipantEntity,
+    ChatMessageEntity,
     UserSocialEntity,
-    SearchSessionEntity,
-    SearchMatchEntity,
+    MatchRequestEntity,
+    MatchEntity,
     AchievementEntity,
 ];
 

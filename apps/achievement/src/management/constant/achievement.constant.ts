@@ -1,5 +1,7 @@
-import { AchievementMetadata, AchievementType } from '@libs/orm';
+import { AchievementType } from '@libs/orm';
 
-export const ACHIEVEMENTS: Array<{ type: number; metadata: AchievementMetadata }> = [
-    { type: AchievementType.SEND_MESSAGES, metadata: { goals: [10, 50, 100] } },
-];
+export const ACHIEVEMENT_GOALS: Record<number, number[]> = {
+    [AchievementType.SEND_MESSAGES]: [10, 50, 100],
+};
+
+export const ACHIEVEMENTS: Array<{ type: number }> = [{ type: AchievementType.SEND_MESSAGES }];

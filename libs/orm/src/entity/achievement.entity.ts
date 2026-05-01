@@ -18,11 +18,11 @@ export class AchievementEntity {
     @Property({ fieldName: 'progress', type: 'int', default: 0 })
     progress: number = 0;
 
-    @Property({ fieldName: 'completed', type: 'smallint', default: 0 })
-    completed: number = 0;
+    @Property({ fieldName: 'current_tier', type: 'smallint', default: 0 })
+    currentTier: number = 0;
 
-    @Property({ fieldName: 'metadata', type: 'jsonb' })
-    metadata: AchievementMetadata;
+    @Property({ fieldName: 'metadata', type: 'jsonb', default: '{}' })
+    metadata: AchievementMetadata = {};
 
     @Property({ fieldName: 'created_at', type: 'datetime' })
     createdAt: Date = new Date();

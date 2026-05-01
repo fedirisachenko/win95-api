@@ -1,6 +1,6 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Seeder } from '@mikro-orm/seeder';
-import { ChatEntity, ChatStatus, ChatUserEntity, UserEntity } from '@libs/orm';
+import { ChatEntity, ChatStatus, ChatParticipantEntity, UserEntity } from '@libs/orm';
 
 const DURATION = 1800; // 30 minutes
 
@@ -20,8 +20,8 @@ export class ChatSeeder extends Seeder {
             startsAt,
         });
 
-        em.create(ChatUserEntity, { chat, user: user1 });
-        em.create(ChatUserEntity, { chat, user: user2 });
+        em.create(ChatParticipantEntity, { chat, user: user1 });
+        em.create(ChatParticipantEntity, { chat, user: user2 });
 
         await em.flush();
     }

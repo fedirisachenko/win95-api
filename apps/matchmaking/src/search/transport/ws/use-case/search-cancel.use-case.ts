@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MikroORM, CreateRequestContext } from '@mikro-orm/core';
-import { SearchSessionEntity, SearchStatus } from '@libs/orm';
+import { MatchRequestEntity, MatchRequestStatus } from '@libs/orm';
 import { MatchmakingService } from '../../../../match/service/matchmaking.service';
 import { SearchCancelInput } from '../dto/input/search-cancel.input';
 
@@ -13,17 +13,17 @@ export class SearchCancelUseCase {
 
     @CreateRequestContext()
     async invoke(userId: string, data: SearchCancelInput): Promise<void> {
-        const searchSession = await this.orm.em.findOne(SearchSessionEntity, {
+        const matchRequest = await this.orm.em.findOne(MatchRequestEntity, {
             id: data.searchId,
             user: { id: userId },
-            status: SearchStatus.ACTIVE,
+            status: MatchRequestStatus.ACTIVE,
         });
 
-        if (!searchSession) {
+        if (!matchRequest) {
             return;
         }
 
-        searchSession.status = SearchStatus.CANCELLED;
+        matchRequest.status = MatchRequestStatus.CANCELLED;
         await this.orm.em.flush();
 
         await this.matchmakingService.dequeue(userId);

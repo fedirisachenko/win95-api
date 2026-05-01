@@ -1,12 +1,15 @@
-import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import { Entity, Index, ManyToOne, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';
 import { v4 } from 'uuid';
 import { UserEntity } from './user.entity';
 
 @Entity({ tableName: 'user_social' })
+@Unique({ properties: ['provider', 'socialUserId'] })
+@Unique({ properties: ['user', 'provider'] })
 export class UserSocialEntity {
     @PrimaryKey({ fieldName: 'id', type: 'uuid' })
     readonly id: string = v4();
 
+    @Index()
     @ManyToOne(() => UserEntity, { fieldName: 'user_id', ref: true })
     user: Ref<UserEntity>;
 

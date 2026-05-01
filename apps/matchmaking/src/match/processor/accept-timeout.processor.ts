@@ -5,7 +5,7 @@ import { MikroORM, CreateRequestContext } from '@mikro-orm/core';
 import { RedisService } from '@songkeys/nestjs-redis';
 import { AbstractProcessor, SocketRegistry } from '@libs/core';
 import { WsNamespace } from '@libs/ws';
-import { SearchMatchEntity, SearchMatchStatus, SearchSessionEntity, SearchStatus } from '@libs/orm';
+import { MatchEntity, MatchStatus, MatchRequestEntity, MatchRequestStatus } from '@libs/orm';
 import { ACCEPT_TIMEOUT_QUEUE } from '../constant/queue.constant';
 import { AcceptTimeoutJobData } from '../dto/job-data/accept-timeout.job-data';
 import { RedisKey } from '../../constant/redis-key.constant';
@@ -23,10 +23,10 @@ export class AcceptTimeoutProcessor extends AbstractProcessor<AcceptTimeoutJobDa
 
     @CreateRequestContext()
     async process(job: Job<AcceptTimeoutJobData>): Promise<void> {
-        const { searchMatchId, userIds } = job.data;
+        const { matchId, userIds } = job.data;
         const client = this.redis.getClient();
 
-        const acceptKey = RedisKey.matchmakingAccept(searchMatchId);
+        const acceptKey = RedisKey.matchmakingAccept(matchId);
         const acceptedUserCount = Number(await client.get(acceptKey)) || 0;
 
         if (acceptedUserCount >= 2) {
@@ -35,20 +35,20 @@ export class AcceptTimeoutProcessor extends AbstractProcessor<AcceptTimeoutJobDa
 
         await client.del(acceptKey);
 
-        const searchMatch = await this.orm.em.findOneOrFail(SearchMatchEntity, { id: searchMatchId });
+        const match = await this.orm.em.findOneOrFail(MatchEntity, { id: matchId });
 
-        if (searchMatch.status === SearchMatchStatus.PENDING) {
-            searchMatch.status = SearchMatchStatus.CANCELLED;
+        if (match.status === MatchStatus.PENDING) {
+            match.status = MatchStatus.CANCELLED;
             await this.orm.em.flush();
         }
 
-        const searchSessions = await this.orm.em.find(SearchSessionEntity, {
-            searchMatch: this.orm.em.getReference(SearchMatchEntity, searchMatch.id),
+        const matchRequests = await this.orm.em.find(MatchRequestEntity, {
+            match: this.orm.em.getReference(MatchEntity, match.id),
         });
 
         await this.orm.em.transactional(async (em) => {
-            searchSessions.forEach((session) => {
-                session.status = SearchStatus.CANCELLED;
+            matchRequests.forEach((request) => {
+                request.status = MatchRequestStatus.CANCELLED;
             });
 
             await em.flush();

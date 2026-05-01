@@ -30,7 +30,7 @@ export class ChatLifecycleService {
         const updated = await this.orm.em.nativeUpdate(
             ChatEntity,
             { id: chatId, status: ChatStatus.ACTIVE },
-            { status, expiredAt: new Date() },
+            { status, expiresAt: new Date() },
         );
 
         if (updated === 0) {

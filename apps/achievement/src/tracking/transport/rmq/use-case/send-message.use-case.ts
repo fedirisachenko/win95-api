@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { SendMessageInput } from '../dto/input/send-message.input';
 import { CreateRequestContext, MikroORM } from '@mikro-orm/core';
 import { AchievementEntity, AchievementType } from '@libs/orm';
-import { ACHIEVEMENT_GOALS } from '../../../management/constant/achievement.constant';
+import { ACHIEVEMENT_GOALS } from '../../../../management/constant/achievement.constant';
 
 @Injectable()
 export class SendMessageUseCase {

@@ -4,12 +4,14 @@ import * as bcrypt from 'bcrypt';
 import { UserEntity } from '@libs/orm';
 import { TokenService, TokenPair } from '@libs/security';
 import { SignUpInput } from '../dto/input/sign-up.input';
+import { RmqService } from '@libs/rmq';
 
 @Injectable()
 export class SignUpUseCase {
     constructor(
         private readonly em: EntityManager,
         private readonly tokenService: TokenService,
+        private readonly rmq: RmqService,
     ) {}
 
     async invoke(data: SignUpInput): Promise<TokenPair> {
@@ -28,6 +30,8 @@ export class SignUpUseCase {
         });
 
         await this.em.persistAndFlush(user);
+
+        await this.rmq.emit('achievement:management:setup:achievement', { userId: user.id });
 
         return this.tokenService.generateTokenPair(user.id);
     }

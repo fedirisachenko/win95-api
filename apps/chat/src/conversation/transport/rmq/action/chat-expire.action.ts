@@ -7,7 +7,7 @@ import { ChatExpireInput } from '../dto/input/chat-expire.input';
 export class ChatExpireAction {
     constructor(private readonly useCase: ExpireChatUseCase) {}
 
-    @EventPattern('chat:expire')
+    @EventPattern('chat:conversation:chat:expire')
     async invoke(@Payload() data: ChatExpireInput): Promise<void> {
         await this.useCase.invoke(data);
     }

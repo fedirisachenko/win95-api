@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 import { MapClass, MapField } from '@libs/core';
-import { MessageEntity } from '@libs/orm';
+import { ChatMessageEntity } from '@libs/orm';
 
 @Exclude()
-@MapClass(MessageEntity)
+@MapClass(ChatMessageEntity)
 export class MessageNewOutput {
     @Expose()
     @ApiProperty()

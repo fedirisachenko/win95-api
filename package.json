@@ -12,7 +12,7 @@
         "start:dev": "nest start --watch",
         "start:debug": "nest start --debug --watch",
         "start:prod": "node dist/apps/win95/main",
-        "start:dev:all": "nest start --watch chat & nest start --watch matchmaking & nest start --watch client",
+        "start:dev:all": "nest start --watch chat & nest start --watch matchmaking & nest start --watch client & nest start --watch achievement",
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
         "test": "jest",
         "test:watch": "jest --watch",

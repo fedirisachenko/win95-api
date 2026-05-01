@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MikroORM, CreateRequestContext, ref } from '@mikro-orm/core';
 import { RmqService } from '@libs/rmq';
-import { ChatEntity, ChatUserEntity, ChatStatus, UserEntity, SearchMatchEntity } from '@libs/orm';
+import { ChatEntity, ChatParticipantEntity, ChatStatus, UserEntity, MatchEntity } from '@libs/orm';
 import { CreateChatInput } from '../dto/input/create-chat.input';
 import { ChatLifecycleService } from '../../../service/chat-lifecycle.service';
 
@@ -16,20 +16,20 @@ export class CreateChatUseCase {
     @CreateRequestContext()
     async invoke(data: CreateChatInput): Promise<void> {
         const existingChat = await this.orm.em.findOne(ChatEntity, {
-            searchMatch: { id: data.searchMatchId },
+            match: { id: data.matchId },
         });
 
         if (existingChat) {
             return;
         }
 
-        const searchMatch = await this.orm.em.findOneOrFail(SearchMatchEntity, { id: data.searchMatchId });
+        const match = await this.orm.em.findOneOrFail(MatchEntity, { id: data.matchId });
 
         let chatId: string;
 
         await this.orm.em.transactional(async (em) => {
             const chat = em.create(ChatEntity, {
-                searchMatch: ref(searchMatch),
+                match: ref(match),
                 status: ChatStatus.ACTIVE,
                 duration: data.duration,
                 maxParticipants: data.userIds.length,
@@ -38,7 +38,7 @@ export class CreateChatUseCase {
 
             await Promise.all(
                 data.userIds.map((userId) => {
-                    em.create(ChatUserEntity, {
+                    em.create(ChatParticipantEntity, {
                         chat: ref(chat),
                         user: em.getReference(UserEntity, userId),
                     });
@@ -52,7 +52,7 @@ export class CreateChatUseCase {
 
         await this.chatLifecycle.scheduleFinalization(chatId, data.duration);
 
-        await this.rmq.emit('chat:ready', {
+        await this.rmq.emit('matchmaking:match:chat:ready', {
             chatId,
             userIds: data.userIds,
         });

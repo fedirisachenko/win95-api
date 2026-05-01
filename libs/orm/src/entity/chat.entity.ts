@@ -1,16 +1,16 @@
 import { Entity, ManyToOne, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';
 import { v4 } from 'uuid';
 import { ChatStatus } from '../entity-enum/chat-status.enum';
-import { SearchMatchEntity } from './search-match.entity';
+import { MatchEntity } from './match.entity';
 
 @Entity({ tableName: 'chat' })
 export class ChatEntity {
     @PrimaryKey({ fieldName: 'id', type: 'uuid' })
     readonly id: string = v4();
 
-    @ManyToOne(() => SearchMatchEntity, { fieldName: 'search_match_id', ref: true, nullable: true })
+    @ManyToOne(() => MatchEntity, { fieldName: 'match_id', ref: true, nullable: true })
     @Unique()
-    searchMatch?: Ref<SearchMatchEntity>;
+    match?: Ref<MatchEntity>;
 
     @Property({ fieldName: 'status', type: 'smallint' })
     status: number = ChatStatus.STARTING;
@@ -25,8 +25,8 @@ export class ChatEntity {
     @Property({ fieldName: 'starts_at', type: 'datetime', nullable: true })
     startsAt?: Date;
 
-    @Property({ fieldName: 'expired_at', type: 'datetime', nullable: true })
-    expiredAt?: Date;
+    @Property({ fieldName: 'expires_at', type: 'datetime', nullable: true })
+    expiresAt?: Date;
 
     @Property({ fieldName: 'job_id', type: 'string', nullable: true })
     jobId?: string;

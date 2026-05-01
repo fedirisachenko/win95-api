@@ -1,16 +1,18 @@
-import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import { Entity, Index, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { v4 } from 'uuid';
 import { ChatEntity } from './chat.entity';
 import { UserEntity } from './user.entity';
 
-@Entity({ tableName: 'message' })
-export class MessageEntity {
+@Entity({ tableName: 'chat_message' })
+@Index({ properties: ['chat', 'createdAt'] })
+export class ChatMessageEntity {
     @PrimaryKey({ fieldName: 'id', type: 'uuid' })
     readonly id: string = v4();
 
     @ManyToOne(() => ChatEntity, { fieldName: 'chat_id', ref: true })
     chat: Ref<ChatEntity>;
 
+    @Index()
     @ManyToOne(() => UserEntity, { fieldName: 'sender_id', ref: true })
     sender: Ref<UserEntity>;
 

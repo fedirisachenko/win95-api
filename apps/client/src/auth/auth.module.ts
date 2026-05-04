@@ -1,6 +1,5 @@
 import { Module, Provider } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { RouterModule } from '@nestjs/core';
 import { NotificationModule } from '@libs/notification';
 import { AUTH_CONFIG, SOCIAL_PROVIDERS, GoogleProvider, AuthConfig } from '@libs/security';
 
@@ -59,7 +58,6 @@ const authConfigProvider: Provider = {
     provide: AUTH_CONFIG,
     useFactory: (): AuthConfig => ({
         enabled: true,
-        routePrefix: '/auth',
         otp: {
             expiresInSeconds: 300,
             codeLength: 6,
@@ -71,7 +69,6 @@ const authConfigProvider: Provider = {
 @Module({
     imports: [
         HttpModule,
-        RouterModule.register([{ path: '/auth', module: AuthModule }]),
         NotificationModule.forRoot({ events: notifications }),
         RmqModule.forRootAsync({
             useFactory: (configService: ConfigService) => ({

@@ -6,7 +6,7 @@ import { TokenPairOutput } from '../dto/output/token-pair.output';
 import { SignInUseCase } from '../use-case/sign-in.use-case';
 
 @ApiTags('Auth')
-@Controller('sign-in')
+@Controller('api-client/auth/sign-in')
 export class SignInAction {
     constructor(
         private readonly useCase: SignInUseCase,

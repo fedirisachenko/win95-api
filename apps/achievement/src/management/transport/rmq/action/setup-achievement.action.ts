@@ -7,7 +7,7 @@ import { SetupAchievementUseCase } from '../use-case/setup-achievement.use-case'
 export class SetupAchievementAction {
     constructor(private readonly useCase: SetupAchievementUseCase) {}
 
-    @EventPattern('achievement:management:setup:achievement')
+    @EventPattern('user:registered')
     public async invoke(@Payload() data: SetupAchievementInput): Promise<void> {
         await this.useCase.invoke(data);
     }

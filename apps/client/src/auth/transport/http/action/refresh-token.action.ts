@@ -6,7 +6,7 @@ import { RefreshTokenUseCase } from '../use-case/refresh-token.use-case';
 import { TokenPairOutput } from '../dto/output/token-pair.output';
 
 @ApiTags('Auth')
-@Controller('refresh')
+@Controller('api-client/auth/refresh')
 export class RefreshTokenAction {
     constructor(
         private readonly useCase: RefreshTokenUseCase,

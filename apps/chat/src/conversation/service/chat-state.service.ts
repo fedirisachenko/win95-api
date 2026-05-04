@@ -18,7 +18,7 @@ export class ChatStateService {
         const plannedEnd = chat.startsAt ? chat.startsAt.getTime() + chat.duration * 1000 : 0;
 
         if (plannedEnd <= Date.now()) {
-            await this.rmq.emit('chat:management:chat:finalize', {
+            await this.rmq.emit('chat:finalized', {
                 chatId,
                 status: ChatStatus.EXPIRED,
             });

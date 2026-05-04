@@ -15,14 +15,6 @@ export class CreateChatUseCase {
 
     @CreateRequestContext()
     async invoke(data: CreateChatInput): Promise<void> {
-        const existingChat = await this.orm.em.findOne(ChatEntity, {
-            match: { id: data.matchId },
-        });
-
-        if (existingChat) {
-            return;
-        }
-
         const match = await this.orm.em.findOneOrFail(MatchEntity, { id: data.matchId });
 
         let chatId: string;
@@ -52,7 +44,7 @@ export class CreateChatUseCase {
 
         await this.chatLifecycle.scheduleFinalization(chatId, data.duration);
 
-        await this.rmq.emit('matchmaking:match:chat:ready', {
+        await this.rmq.emit('chat:created', {
             chatId,
             userIds: data.userIds,
         });

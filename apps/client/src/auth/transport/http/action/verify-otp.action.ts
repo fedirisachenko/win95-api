@@ -4,7 +4,7 @@ import { VerifyOtpInput } from '../dto/input/verify-otp.input';
 import { VerifyOtpUseCase } from '../use-case/verify-otp.use-case';
 
 @ApiTags('Auth')
-@Controller('verify-otp')
+@Controller('api-client/auth/verify-otp')
 export class VerifyOtpAction {
     constructor(private readonly useCase: VerifyOtpUseCase) {}
 

@@ -30,16 +30,12 @@ export class SearchAcceptUseCase {
             {
                 id: data.searchId,
                 user: { id: userId },
-                match: { $ne: null },
+                match: { status: MatchStatus.PENDING },
             },
             { populate: ['match'] },
         );
 
         const match = matchRequest.match.unwrap();
-
-        if (match.status !== MatchStatus.PENDING) {
-            return;
-        }
 
         const acceptKey = RedisKey.matchmakingAccept(match.id);
 
@@ -65,7 +61,7 @@ export class SearchAcceptUseCase {
 
         const userIds = allRequests.map((r) => r.user.id);
 
-        await this.rmq.emit('chat:management:chat:create', {
+        await this.rmq.emit('match:accepted', {
             matchId: match.id,
             userIds,
             duration: allRequests[0].desiredDuration,

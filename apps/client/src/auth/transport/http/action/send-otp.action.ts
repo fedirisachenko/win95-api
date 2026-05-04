@@ -4,7 +4,7 @@ import { SendOtpInput } from '../dto/input/send-otp.input';
 import { SendOtpUseCase } from '../use-case/send-otp.use-case';
 
 @ApiTags('Auth')
-@Controller('send-otp')
+@Controller('api-client/auth/send-otp')
 export class SendOtpAction {
     constructor(private readonly useCase: SendOtpUseCase) {}
 

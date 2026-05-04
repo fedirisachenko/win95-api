@@ -37,7 +37,7 @@ export class ChatLifecycleService {
             return;
         }
 
-        await this.rmq.emit('chat:conversation:chat:expire', {
+        await this.rmq.emit('chat:expired', {
             chatId,
             reason: this.statusToReason(status),
         });

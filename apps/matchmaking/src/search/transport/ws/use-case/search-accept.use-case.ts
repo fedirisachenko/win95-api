@@ -61,7 +61,7 @@ export class SearchAcceptUseCase {
 
         const userIds = allRequests.map((r) => r.user.id);
 
-        await this.rmq.emit('chat:management:chat:create', {
+        await this.rmq.emit('match:accepted', {
             matchId: match.id,
             userIds,
             duration: allRequests[0].desiredDuration,

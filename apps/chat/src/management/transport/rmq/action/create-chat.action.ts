@@ -7,7 +7,7 @@ import { CreateChatInput } from '../dto/input/create-chat.input';
 export class CreateChatAction {
     constructor(private readonly useCase: CreateChatUseCase) {}
 
-    @EventPattern('chat:management:chat:create')
+    @EventPattern('match:accepted')
     async invoke(@Payload() data: CreateChatInput): Promise<void> {
         await this.useCase.invoke(data);
     }

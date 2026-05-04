@@ -23,8 +23,7 @@ export class SendMessageUseCase {
 
         await this.orm.em.persistAndFlush(message);
 
-        // move to broadcast queue
-        await this.rmq.emit('achievement:tracking:send:message', { userId });
+        await this.rmq.emit('chat:message-sent', { userId });
 
         return message;
     }

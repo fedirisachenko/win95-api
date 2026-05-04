@@ -60,7 +60,7 @@ export class SocialAuthUseCase {
         await this.em.flush();
 
         if (!isUserExists) {
-            await this.rmq.emit('achievement:management:setup:achievement', { userId: user.id });
+            await this.rmq.emit('user:registered', { userId: user.id });
         }
 
         return this.tokenService.generateTokenPair(user.id);

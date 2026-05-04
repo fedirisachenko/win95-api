@@ -7,7 +7,7 @@ import { ChatFinalizeInput } from '../dto/input/chat-finalize.input';
 export class FinalizeChatAction {
     constructor(private readonly useCase: FinalizeChatUseCase) {}
 
-    @EventPattern('chat:management:chat:finalize')
+    @EventPattern('chat:finalized')
     async invoke(@Payload() data: ChatFinalizeInput): Promise<void> {
         await this.useCase.invoke(data);
     }

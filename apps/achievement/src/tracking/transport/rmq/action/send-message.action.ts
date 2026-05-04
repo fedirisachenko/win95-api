@@ -7,8 +7,7 @@ import { SendMessageUseCase } from '../use-case/send-message.use-case';
 export class SendMessageAction {
     constructor(private readonly useCase: SendMessageUseCase) {}
 
-    // look how broadcast receives messages
-    @EventPattern('achievement:tracking:send:message')
+    @EventPattern('chat:message-sent')
     async invoke(@Payload() data: SendMessageInput): Promise<void> {
         await this.useCase.invoke(data);
     }

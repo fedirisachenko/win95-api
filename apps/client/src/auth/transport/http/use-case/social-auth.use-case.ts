@@ -5,7 +5,6 @@ import * as crypto from 'crypto';
 import { UserEntity, UserSocialEntity } from '@libs/orm';
 import { TokenService, TokenPair, SocialProviderInterface, SOCIAL_PROVIDERS } from '@libs/security';
 import { SocialAuthInput } from '../dto/input/social-auth.input';
-import { RmqService } from '@libs/rmq';
 
 @Injectable()
 export class SocialAuthUseCase {
@@ -14,7 +13,6 @@ export class SocialAuthUseCase {
     constructor(
         private readonly em: EntityManager,
         private readonly tokenService: TokenService,
-        private readonly rmq: RmqService,
         @Inject(SOCIAL_PROVIDERS) providers: SocialProviderInterface[],
     ) {
         for (const provider of providers) {
@@ -22,17 +20,17 @@ export class SocialAuthUseCase {
         }
     }
 
-    async invoke(data: SocialAuthInput): Promise<TokenPair> {
+    async invoke(data: SocialAuthInput): Promise<{ tokens: TokenPair; newUserId: string | null }> {
         const provider = this.providersMap.get(data.provider);
         if (!provider) throw new UnauthorizedException('Unsupported provider');
 
         const socialData = await provider.verify(data.token);
         if (!socialData) throw new UnauthorizedException('Invalid social token');
 
-        const isUserExists = await this.em.findOne(UserEntity, { email: socialData.email });
+        const existingUser = await this.em.findOne(UserEntity, { email: socialData.email });
         let user: UserEntity;
 
-        if (!isUserExists) {
+        if (!existingUser) {
             const randomPassword = crypto.randomBytes(32).toString('hex');
             const hashedPassword = await bcrypt.hash(randomPassword, 10);
 
@@ -42,6 +40,8 @@ export class SocialAuthUseCase {
                 name: socialData.name,
                 emailVerified: true,
             });
+        } else {
+            user = existingUser;
         }
 
         const existingSocial = await this.em.findOne(UserSocialEntity, {
@@ -59,10 +59,9 @@ export class SocialAuthUseCase {
 
         await this.em.flush();
 
-        if (!isUserExists) {
-            await this.rmq.emit('user:registered', { userId: user.id });
-        }
-
-        return this.tokenService.generateTokenPair(user.id);
+        return {
+            tokens: await this.tokenService.generateTokenPair(user.id),
+            newUserId: !existingUser ? user.id : null,
+        };
     }
 }

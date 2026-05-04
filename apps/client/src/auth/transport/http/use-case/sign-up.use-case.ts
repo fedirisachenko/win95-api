@@ -4,17 +4,15 @@ import * as bcrypt from 'bcrypt';
 import { UserEntity } from '@libs/orm';
 import { TokenService, TokenPair } from '@libs/security';
 import { SignUpInput } from '../dto/input/sign-up.input';
-import { RmqService } from '@libs/rmq';
 
 @Injectable()
 export class SignUpUseCase {
     constructor(
         private readonly em: EntityManager,
         private readonly tokenService: TokenService,
-        private readonly rmq: RmqService,
     ) {}
 
-    async invoke(data: SignUpInput): Promise<TokenPair> {
+    async invoke(data: SignUpInput): Promise<{ tokens: TokenPair; userId: string }> {
         const existingUser = await this.em.findOne(UserEntity, { email: data.email });
 
         if (existingUser) {
@@ -31,8 +29,9 @@ export class SignUpUseCase {
 
         await this.em.persistAndFlush(user);
 
-        await this.rmq.emit('user:registered', { userId: user.id });
-
-        return this.tokenService.generateTokenPair(user.id);
+        return {
+            tokens: await this.tokenService.generateTokenPair(user.id),
+            userId: user.id,
+        };
     }
 }

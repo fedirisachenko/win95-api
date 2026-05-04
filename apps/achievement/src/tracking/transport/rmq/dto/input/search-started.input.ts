@@ -1,6 +1,6 @@
 import { IsUUID } from 'class-validator';
 
-export class SendMessageInput {
+export class SearchStartedInput {
     @IsUUID()
     userId: string;
 }

@@ -4,7 +4,6 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { RedisService } from '@songkeys/nestjs-redis';
 import { SocketRegistry } from '@libs/core';
-import { RmqService } from '@libs/rmq';
 import { WsNamespace } from '@libs/ws';
 import { MatchRequestEntity, MatchStatus } from '@libs/orm';
 import { SearchAcceptInput } from '../dto/input/search-accept.input';
@@ -13,18 +12,23 @@ import { ACCEPT_TTL_SECONDS, CHAT_READY_TIMEOUT_SECONDS } from '../../../../cons
 import { CHAT_READY_TIMEOUT_QUEUE } from '../../../../match/constant/queue.constant';
 import { ChatReadyTimeoutJobData } from '../../../../match/dto/job-data/chat-ready-timeout.job-data';
 
+export type MatchAcceptedEvent = {
+    matchId: string;
+    userIds: string[];
+    duration: number;
+};
+
 @Injectable()
 export class SearchAcceptUseCase {
     constructor(
         private readonly orm: MikroORM,
         private readonly redis: RedisService,
         private readonly socketRegistry: SocketRegistry,
-        private readonly rmq: RmqService,
         @InjectQueue(CHAT_READY_TIMEOUT_QUEUE) private readonly chatReadyTimeoutQueue: Queue,
     ) {}
 
     @CreateRequestContext()
-    async invoke(userId: string, data: SearchAcceptInput): Promise<void> {
+    async invoke(userId: string, data: SearchAcceptInput): Promise<MatchAcceptedEvent | null> {
         const matchRequest = await this.orm.em.findOneOrFail(
             MatchRequestEntity,
             {
@@ -45,7 +49,7 @@ export class SearchAcceptUseCase {
         if (acceptedUserCount < 2) {
             await client.expire(acceptKey, ACCEPT_TTL_SECONDS);
             this.socketRegistry.of(WsNamespace.MATCHMAKING_SEARCH).get(userId)?.emit('search:waiting', {});
-            return;
+            return null;
         }
 
         const allRequests = await this.orm.em.find(
@@ -59,13 +63,7 @@ export class SearchAcceptUseCase {
 
         await client.del(acceptKey);
 
-        const userIds = allRequests.map((r) => r.user.id);
-
-        await this.rmq.emit('match:accepted', {
-            matchId: match.id,
-            userIds,
-            duration: allRequests[0].desiredDuration,
-        });
+        const userIds = allRequests.map((request) => request.user.id);
 
         const chatReadyTimeoutJobData: ChatReadyTimeoutJobData = {
             matchId: match.id,
@@ -75,5 +73,11 @@ export class SearchAcceptUseCase {
         await this.chatReadyTimeoutQueue.add('chat-ready-timeout', chatReadyTimeoutJobData, {
             delay: CHAT_READY_TIMEOUT_SECONDS * 1000,
         });
+
+        return {
+            matchId: match.id,
+            userIds,
+            duration: allRequests[0].desiredDuration,
+        };
     }
 }

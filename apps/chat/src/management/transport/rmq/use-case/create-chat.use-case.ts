@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { MikroORM, CreateRequestContext, ref } from '@mikro-orm/core';
-import { RmqService } from '@libs/rmq';
 import { ChatEntity, ChatParticipantEntity, ChatStatus, UserEntity, MatchEntity } from '@libs/orm';
 import { CreateChatInput } from '../dto/input/create-chat.input';
 import { ChatLifecycleService } from '../../../service/chat-lifecycle.service';
@@ -9,12 +8,11 @@ import { ChatLifecycleService } from '../../../service/chat-lifecycle.service';
 export class CreateChatUseCase {
     constructor(
         private readonly orm: MikroORM,
-        private readonly rmq: RmqService,
         private readonly chatLifecycle: ChatLifecycleService,
     ) {}
 
     @CreateRequestContext()
-    async invoke(data: CreateChatInput): Promise<void> {
+    async invoke(data: CreateChatInput): Promise<string> {
         const match = await this.orm.em.findOneOrFail(MatchEntity, { id: data.matchId });
 
         let chatId: string;
@@ -44,9 +42,6 @@ export class CreateChatUseCase {
 
         await this.chatLifecycle.scheduleFinalization(chatId, data.duration);
 
-        await this.rmq.emit('chat:created', {
-            chatId,
-            userIds: data.userIds,
-        });
+        return chatId;
     }
 }

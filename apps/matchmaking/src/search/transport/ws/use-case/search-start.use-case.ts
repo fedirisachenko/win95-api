@@ -3,6 +3,7 @@ import { MikroORM, CreateRequestContext } from '@mikro-orm/core';
 import { SearchStartInput } from '../dto/input/search-start.input';
 import { MatchRequestEntity, MatchRequestStatus, UserEntity } from '@libs/orm';
 import { MatchmakingService } from '../../../../match/service/matchmaking.service';
+import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class SearchStartUseCase {
@@ -17,9 +18,11 @@ export class SearchStartUseCase {
             user: { id: userId },
             status: MatchRequestStatus.ACTIVE,
         });
+
         if (existingRequest) {
-            return;
+            throw new WsException('User already has an active search');
         }
+
         const matchRequest = this.orm.em.create(MatchRequestEntity, {
             user: this.orm.em.getReference(UserEntity, userId),
             status: MatchRequestStatus.ACTIVE,

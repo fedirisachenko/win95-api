@@ -6,7 +6,7 @@ import { SocialAuthInput } from '../dto/input/social-auth.input';
 import { TokenPairOutput } from '../dto/output/token-pair.output';
 
 @ApiTags('Social Auth')
-@Controller('social')
+@Controller('api-client/auth/social')
 export class SocialAuthAction {
     constructor(
         private readonly useCase: SocialAuthUseCase,

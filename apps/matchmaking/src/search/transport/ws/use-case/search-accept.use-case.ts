@@ -30,16 +30,12 @@ export class SearchAcceptUseCase {
             {
                 id: data.searchId,
                 user: { id: userId },
-                match: { $ne: null },
+                match: { status: MatchStatus.PENDING },
             },
             { populate: ['match'] },
         );
 
         const match = matchRequest.match.unwrap();
-
-        if (match.status !== MatchStatus.PENDING) {
-            return;
-        }
 
         const acceptKey = RedisKey.matchmakingAccept(match.id);
 

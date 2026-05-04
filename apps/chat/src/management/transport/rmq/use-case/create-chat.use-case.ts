@@ -15,14 +15,6 @@ export class CreateChatUseCase {
 
     @CreateRequestContext()
     async invoke(data: CreateChatInput): Promise<void> {
-        const existingChat = await this.orm.em.findOne(ChatEntity, {
-            match: { id: data.matchId },
-        });
-
-        if (existingChat) {
-            return;
-        }
-
         const match = await this.orm.em.findOneOrFail(MatchEntity, { id: data.matchId });
 
         let chatId: string;

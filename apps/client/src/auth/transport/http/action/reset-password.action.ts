@@ -5,7 +5,7 @@ import { ResetPasswordInput } from '../dto/input/reset-password.input';
 import { ResetPasswordUseCase } from '../use-case/reset-password.use-case';
 
 @ApiTags('Auth')
-@Controller('reset-password')
+@Controller('api-client/auth/reset-password')
 export class ResetPasswordAction {
     constructor(private readonly useCase: ResetPasswordUseCase) {}
 

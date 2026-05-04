@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 import { BullBoardModule } from '@bull-board/nestjs';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
-import { MATCHMAKING_QUEUE, ACCEPT_TIMEOUT_QUEUE, CHAT_READY_TIMEOUT_QUEUE } from './constant/queue.constant';
-import { MatchmakingProcessor } from './processor/matchmaking.processor';
+import { MATCH_ATTEMPT_QUEUE, ACCEPT_TIMEOUT_QUEUE, CHAT_READY_TIMEOUT_QUEUE } from './constant/queue.constant';
+import { MatchAttemptProcessor } from './processor/match-attempt.processor';
 import { AcceptTimeoutProcessor } from './processor/accept-timeout.processor';
 import { ChatReadyTimeoutProcessor } from './processor/chat-ready-timeout.processor';
 import { MatchmakingService } from './service/matchmaking.service';
@@ -12,11 +12,11 @@ import { ChatReadyUseCase } from './transport/rmq/use-case/chat-ready.use-case';
 
 @Module({
     imports: [
-        BullModule.registerQueue({ name: MATCHMAKING_QUEUE }),
+        BullModule.registerQueue({ name: MATCH_ATTEMPT_QUEUE }),
         BullModule.registerQueue({ name: ACCEPT_TIMEOUT_QUEUE }),
         BullModule.registerQueue({ name: CHAT_READY_TIMEOUT_QUEUE }),
         BullBoardModule.forFeature({
-            name: MATCHMAKING_QUEUE,
+            name: MATCH_ATTEMPT_QUEUE,
             adapter: BullMQAdapter,
         }),
         BullBoardModule.forFeature({
@@ -30,7 +30,7 @@ import { ChatReadyUseCase } from './transport/rmq/use-case/chat-ready.use-case';
     ],
     controllers: [ChatReadyAction],
     providers: [
-        MatchmakingProcessor,
+        MatchAttemptProcessor,
         AcceptTimeoutProcessor,
         ChatReadyTimeoutProcessor,
         MatchmakingService,

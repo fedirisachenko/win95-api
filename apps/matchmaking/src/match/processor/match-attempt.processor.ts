@@ -7,22 +7,22 @@ import { AbstractProcessor, SocketRegistry } from '@libs/core';
 import { MatchRequestEntity, MatchEntity, MatchStatus } from '@libs/orm';
 import { WsNamespace } from '@libs/ws';
 import { MatchmakingService } from '../service/matchmaking.service';
-import { MATCHMAKING_QUEUE, ACCEPT_TIMEOUT_QUEUE } from '../constant/queue.constant';
+import { MATCH_ATTEMPT_QUEUE, ACCEPT_TIMEOUT_QUEUE } from '../constant/queue.constant';
 import { MATCH_LUA } from '../constant/lua.constant';
 import { ACCEPT_TIMEOUT_SECONDS } from '../../constant/matchmaking.constant';
 import { AcceptTimeoutJobData } from '../dto/job-data/accept-timeout.job-data';
 import { MatchAttemptJobData } from '../dto/job-data/match-attempt.job-data';
 import { RedisKey } from '../../constant/redis-key.constant';
 
-@Processor(MATCHMAKING_QUEUE)
+@Processor(MATCH_ATTEMPT_QUEUE)
 @Injectable()
-export class MatchmakingProcessor extends AbstractProcessor<MatchAttemptJobData, void> {
+export class MatchAttemptProcessor extends AbstractProcessor<MatchAttemptJobData, void> {
     constructor(
         private readonly orm: MikroORM,
         private readonly redis: RedisService,
         private readonly socketRegistry: SocketRegistry,
         private readonly matchmakingService: MatchmakingService,
-        @InjectQueue(MATCHMAKING_QUEUE) private readonly matchmakingQueue: Queue,
+        @InjectQueue(MATCH_ATTEMPT_QUEUE) private readonly matchAttemptQueue: Queue,
         @InjectQueue(ACCEPT_TIMEOUT_QUEUE) private readonly acceptTimeoutQueue: Queue,
     ) {
         super();
@@ -31,7 +31,7 @@ export class MatchmakingProcessor extends AbstractProcessor<MatchAttemptJobData,
     async process(job: Job<MatchAttemptJobData>): Promise<void> {
         const { duration, language } = job.data;
         const client = this.redis.getClient();
-        const key = RedisKey.matchmakingQueue(duration, language);
+        const key = RedisKey.matchAttemptQueue(duration, language);
 
         const result = await client.eval(MATCH_LUA, 1, key);
 
@@ -47,7 +47,7 @@ export class MatchmakingProcessor extends AbstractProcessor<MatchAttemptJobData,
         };
 
         if (remaining >= 2) {
-            await this.matchmakingQueue.add('match-attempt', matchAttemptJobData, {
+            await this.matchAttemptQueue.add('match-attempt', matchAttemptJobData, {
                 jobId: `mm:${duration}:${language}`,
                 delay: 100,
             });

@@ -5,7 +5,7 @@ import { LogoutInput } from '../dto/input/logout.input';
 import { LogoutUseCase } from '../use-case/logout.use-case';
 
 @ApiTags('Auth')
-@Controller('logout')
+@Controller('api-client/auth/logout')
 export class LogoutAction {
     constructor(private readonly useCase: LogoutUseCase) {}
 

@@ -22,19 +22,11 @@ export class ChatReadyTimeoutProcessor extends AbstractProcessor<ChatReadyTimeou
     async process(job: Job<ChatReadyTimeoutJobData>): Promise<void> {
         const { matchId, userIds } = job.data;
 
-        const chat = await this.orm.em.findOne(ChatEntity, {
+        await this.orm.em.findOneOrFail(ChatEntity, {
             match: { id: matchId },
         });
 
-        if (chat) {
-            return;
-        }
-
-        const match = await this.orm.em.findOneOrFail(MatchEntity, { id: matchId });
-
-        if (match.status !== MatchStatus.ACCEPTED) {
-            return;
-        }
+        const match = await this.orm.em.findOneOrFail(MatchEntity, { id: matchId, status: MatchStatus.ACCEPTED });
 
         match.status = MatchStatus.CANCELLED;
 

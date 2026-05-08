@@ -1,14 +1,15 @@
 import { Controller } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
-import { ExpireChatUseCase } from '../use-case/expire-chat.use-case';
+
+import { ExpireChatActionService } from '../../../action-service/expire-chat.action-service';
 import { ChatExpireInput } from '../dto/input/chat-expire.input';
 
 @Controller()
 export class ChatExpireAction {
-    constructor(private readonly useCase: ExpireChatUseCase) {}
+    constructor(private readonly actionService: ExpireChatActionService) {}
 
     @EventPattern('chat:expired')
     async invoke(@Payload() data: ChatExpireInput): Promise<void> {
-        await this.useCase.invoke(data);
+        await this.actionService.invoke(data);
     }
 }

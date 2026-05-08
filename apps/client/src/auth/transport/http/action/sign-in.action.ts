@@ -1,15 +1,17 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Mapper, JsonOutput } from '@libs/core';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+
+import { JsonOutput, Mapper } from '@libs/core';
+
+import { SignInActionService } from '../../../action-service/sign-in.action-service';
 import { SignInInput } from '../dto/input/sign-in.input';
 import { TokenPairOutput } from '../dto/output/token-pair.output';
-import { SignInUseCase } from '../use-case/sign-in.use-case';
 
 @ApiTags('Auth')
 @Controller('api-client/auth/sign-in')
 export class SignInAction {
     constructor(
-        private readonly useCase: SignInUseCase,
+        private readonly actionService: SignInActionService,
         private readonly mapper: Mapper,
     ) {}
 
@@ -19,7 +21,7 @@ export class SignInAction {
     @ApiResponse({ status: 200, description: 'Signed in successfully', type: TokenPairOutput })
     @ApiResponse({ status: 401, description: 'Invalid credentials' })
     async invoke(@Body() data: SignInInput): Promise<TokenPairOutput> {
-        const result = await this.useCase.invoke(data);
+        const result = await this.actionService.invoke(data);
         return this.mapper.map(TokenPairOutput, new JsonOutput(result));
     }
 }

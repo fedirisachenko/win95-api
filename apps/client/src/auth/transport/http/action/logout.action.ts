@@ -1,13 +1,15 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+
 import { ApiSecurity } from '@libs/security';
+
+import { LogoutActionService } from '../../../action-service/logout.action-service';
 import { LogoutInput } from '../dto/input/logout.input';
-import { LogoutUseCase } from '../use-case/logout.use-case';
 
 @ApiTags('Auth')
 @Controller('api-client/auth/logout')
 export class LogoutAction {
-    constructor(private readonly useCase: LogoutUseCase) {}
+    constructor(private readonly actionService: LogoutActionService) {}
 
     @Post()
     @HttpCode(HttpStatus.OK)
@@ -15,7 +17,7 @@ export class LogoutAction {
     @ApiResponse({ status: 200, description: 'Logged out successfully' })
     @ApiSecurity()
     async invoke(@Body() data: LogoutInput): Promise<boolean> {
-        await this.useCase.invoke(data);
+        await this.actionService.invoke(data);
         return true;
     }
 }

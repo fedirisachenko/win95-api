@@ -1,5 +1,5 @@
 import { bootstrap } from '../../bootstrap';
-import { MatchmakingModule } from './mathmaking.module';
+import { MatchmakingModule } from './matchmaking.module';
 
 bootstrap({
     module: MatchmakingModule,

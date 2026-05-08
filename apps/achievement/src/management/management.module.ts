@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
+
+import { SetupAchievementActionService } from './action-service/setup-achievement.action-service';
 import { SetupAchievementAction } from './transport/rmq/action/setup-achievement.action';
-import { SetupAchievementUseCase } from './transport/rmq/use-case/setup-achievement.use-case';
 
 @Module({
     controllers: [SetupAchievementAction],
-    providers: [SetupAchievementUseCase],
+    providers: [SetupAchievementActionService],
 })
 export class ManagementModule {}

@@ -1,14 +1,15 @@
 import { Controller } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
-import { ChatReadyUseCase } from '../use-case/chat-ready.use-case';
+
+import { ChatReadyActionService } from '../../../action-service/chat-ready.action-service';
 import { ChatReadyInput } from '../dto/input/chat-ready.input';
 
 @Controller()
 export class ChatReadyAction {
-    constructor(private readonly useCase: ChatReadyUseCase) {}
+    constructor(private readonly actionService: ChatReadyActionService) {}
 
     @EventPattern('chat:created')
     async invoke(@Payload() data: ChatReadyInput): Promise<void> {
-        await this.useCase.invoke(data);
+        await this.actionService.invoke(data);
     }
 }

@@ -7,4 +7,5 @@ export type OtpConfig = {
 export type AuthConfig = {
     enabled: boolean;
     otp: OtpConfig;
+    routePrefix?: string;
 };

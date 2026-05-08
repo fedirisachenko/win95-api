@@ -1,16 +1,18 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Mapper, JsonOutput } from '@libs/core';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+
+import { JsonOutput, Mapper } from '@libs/core';
 import { RmqService } from '@libs/rmq';
+
+import { SignUpActionService } from '../../../action-service/sign-up.action-service';
 import { SignUpInput } from '../dto/input/sign-up.input';
 import { TokenPairOutput } from '../dto/output/token-pair.output';
-import { SignUpUseCase } from '../use-case/sign-up.use-case';
 
 @ApiTags('Auth')
 @Controller('api-client/auth/sign-up')
 export class SignUpAction {
     constructor(
-        private readonly useCase: SignUpUseCase,
+        private readonly actionService: SignUpActionService,
         private readonly mapper: Mapper,
         private readonly rmq: RmqService,
     ) {}
@@ -21,7 +23,7 @@ export class SignUpAction {
     @ApiResponse({ status: 201, description: 'User created successfully', type: TokenPairOutput })
     @ApiResponse({ status: 409, description: 'User already exists' })
     async invoke(@Body() data: SignUpInput): Promise<TokenPairOutput> {
-        const { tokens, userId } = await this.useCase.invoke(data);
+        const { tokens, userId } = await this.actionService.invoke(data);
 
         await this.rmq.emit('user:registered', { userId });
 

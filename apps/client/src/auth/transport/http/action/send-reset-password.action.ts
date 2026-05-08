@@ -1,13 +1,15 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+
 import { ApiSecurity } from '@libs/security';
+
+import { SendResetPasswordActionService } from '../../../action-service/send-reset-password.action-service';
 import { SendResetPasswordInput } from '../dto/input/send-reset-password.input';
-import { SendResetPasswordUseCase } from '../use-case/send-reset-password.use-case';
 
 @ApiTags('Auth')
 @Controller('api-client/auth/send-reset-password')
 export class SendResetPasswordAction {
-    constructor(private readonly useCase: SendResetPasswordUseCase) {}
+    constructor(private readonly actionService: SendResetPasswordActionService) {}
 
     @Post()
     @HttpCode(HttpStatus.OK)
@@ -15,7 +17,7 @@ export class SendResetPasswordAction {
     @ApiResponse({ status: 200, description: 'Reset password email sent' })
     @ApiSecurity()
     async invoke(@Body() data: SendResetPasswordInput): Promise<boolean> {
-        await this.useCase.invoke(data);
+        await this.actionService.invoke(data);
         return true;
     }
 }

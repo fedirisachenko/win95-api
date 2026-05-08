@@ -4,7 +4,7 @@ import { Queue } from 'bullmq';
 import { RedisService } from '@songkeys/nestjs-redis';
 import { MATCH_ATTEMPT_QUEUE } from '../constant/queue.constant';
 import { MatchAttemptJobData } from '../dto/job-data/match-attempt.job-data';
-import { EnqueueInput } from '../type/mathmaking-service.type';
+import { EnqueueInput } from '../type/matchmaking-service.type';
 import { RedisKey } from '../../constant/redis-key.constant';
 
 @Injectable()

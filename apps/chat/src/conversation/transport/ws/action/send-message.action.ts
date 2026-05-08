@@ -1,31 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { Server } from 'socket.io';
+
 import { Mapper } from '@libs/core';
-import { WsAction, AuthenticatedSocket, UseWsGuards } from '@libs/ws';
 import { RmqService } from '@libs/rmq';
-import { SendMessageUseCase } from '../use-case/send-message.use-case';
-import { ChatConversationRoom } from '../room/chat-conversation.room';
+import { AuthenticatedSocket, UseWsGuards, WsAction } from '@libs/ws';
+
+import { SendMessageActionService } from '../../../action-service/send-message.action-service';
 import { SendMessageInput } from '../dto/input/send-message.input';
 import { MessageNewOutput } from '../dto/output/message-new.output';
-import { ChatActiveGuard } from '../../../guard/chat-active.guard';
+import { ChatActiveGuard } from '../guard/chat-active.guard';
+import { ChatConversationRoom } from '../room/chat-conversation.room';
 
 @Injectable()
 export class SendMessageAction implements WsAction<SendMessageInput> {
-    getEventName(): string {
-        return 'message:send';
-    }
-
     constructor(
-        private readonly useCase: SendMessageUseCase,
+        private readonly actionService: SendMessageActionService,
         private readonly room: ChatConversationRoom,
         private readonly mapper: Mapper,
         private readonly rmq: RmqService,
     ) {}
 
+    getEventName(): string {
+        return 'message:send';
+    }
+
     @UseWsGuards(ChatActiveGuard)
     async invoke(client: AuthenticatedSocket, data: SendMessageInput, server: Server): Promise<void> {
-        const message = await this.useCase.invoke(client.data.user.sub, data);
-
+        const message = await this.actionService.invoke(client.data.user.sub, data);
         const messageOutput = await this.mapper.map(MessageNewOutput, message);
 
         this.room.emit(server, data.chatId, 'message:new', messageOutput);

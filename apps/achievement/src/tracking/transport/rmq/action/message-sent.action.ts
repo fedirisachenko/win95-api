@@ -1,16 +1,17 @@
 import { Controller } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
+
+import { TrackKeywordMessagesActionService } from '../../../action-service/track-keyword-messages.action-service';
+import { TrackRapidMessagesActionService } from '../../../action-service/track-rapid-messages.action-service';
+import { TrackSendMessagesActionService } from '../../../action-service/track-send-messages.action-service';
 import { MessageSentInput } from '../dto/input/message-sent.input';
-import { TrackSendMessagesUseCase } from '../use-case/track-send-messages.use-case';
-import { TrackRapidMessagesUseCase } from '../use-case/track-rapid-messages.use-case';
-import { TrackKeywordMessagesUseCase } from '../use-case/track-keyword-messages.use-case';
 
 @Controller()
 export class MessageSentAction {
     constructor(
-        private readonly trackSendMessages: TrackSendMessagesUseCase,
-        private readonly trackRapidMessages: TrackRapidMessagesUseCase,
-        private readonly trackKeywordMessages: TrackKeywordMessagesUseCase,
+        private readonly trackSendMessages: TrackSendMessagesActionService,
+        private readonly trackRapidMessages: TrackRapidMessagesActionService,
+        private readonly trackKeywordMessages: TrackKeywordMessagesActionService,
     ) {}
 
     @EventPattern('chat:message-sent')

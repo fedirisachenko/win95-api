@@ -1,32 +1,31 @@
 import { Module, Provider } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
+
 import { NotificationModule } from '@libs/notification';
-import { AUTH_CONFIG, SOCIAL_PROVIDERS, GoogleProvider, AuthConfig } from '@libs/security';
+import { RmqModule } from '@libs/rmq';
+import { AUTH_CONFIG, AuthConfig, GoogleProvider, SOCIAL_PROVIDERS } from '@libs/security';
 
-import { SignUpAction } from './transport/http/action/sign-up.action';
-import { SignInAction } from './transport/http/action/sign-in.action';
-import { RefreshTokenAction } from './transport/http/action/refresh-token.action';
-import { LogoutAction } from './transport/http/action/logout.action';
-import { SendOtpAction } from './transport/http/action/send-otp.action';
-import { VerifyOtpAction } from './transport/http/action/verify-otp.action';
-import { SendResetPasswordAction } from './transport/http/action/send-reset-password.action';
-import { ResetPasswordAction } from './transport/http/action/reset-password.action';
-import { SocialAuthAction } from './transport/http/action/social-auth.action';
-
-import { SignUpUseCase } from './transport/http/use-case/sign-up.use-case';
-import { SignInUseCase } from './transport/http/use-case/sign-in.use-case';
-import { RefreshTokenUseCase } from './transport/http/use-case/refresh-token.use-case';
-import { LogoutUseCase } from './transport/http/use-case/logout.use-case';
-import { SendOtpUseCase } from './transport/http/use-case/send-otp.use-case';
-import { VerifyOtpUseCase } from './transport/http/use-case/verify-otp.use-case';
-import { SendResetPasswordUseCase } from './transport/http/use-case/send-reset-password.use-case';
-import { ResetPasswordUseCase } from './transport/http/use-case/reset-password.use-case';
-import { SocialAuthUseCase } from './transport/http/use-case/social-auth.use-case';
-
+import { LogoutActionService } from './action-service/logout.action-service';
+import { RefreshTokenActionService } from './action-service/refresh-token.action-service';
+import { ResetPasswordActionService } from './action-service/reset-password.action-service';
+import { SendOtpActionService } from './action-service/send-otp.action-service';
+import { SendResetPasswordActionService } from './action-service/send-reset-password.action-service';
+import { SignInActionService } from './action-service/sign-in.action-service';
+import { SignUpActionService } from './action-service/sign-up.action-service';
+import { SocialAuthActionService } from './action-service/social-auth.action-service';
+import { VerifyOtpActionService } from './action-service/verify-otp.action-service';
 import { SendOtpNotification } from './notification/send-otp.notification';
 import { SendResetPasswordNotification } from './notification/send-reset-password.notification';
-import { RmqModule } from '@libs/rmq';
-import { ConfigService } from '@nestjs/config';
+import { LogoutAction } from './transport/http/action/logout.action';
+import { RefreshTokenAction } from './transport/http/action/refresh-token.action';
+import { ResetPasswordAction } from './transport/http/action/reset-password.action';
+import { SendOtpAction } from './transport/http/action/send-otp.action';
+import { SendResetPasswordAction } from './transport/http/action/send-reset-password.action';
+import { SignInAction } from './transport/http/action/sign-in.action';
+import { SignUpAction } from './transport/http/action/sign-up.action';
+import { SocialAuthAction } from './transport/http/action/social-auth.action';
+import { VerifyOtpAction } from './transport/http/action/verify-otp.action';
 
 const actions = [
     SignUpAction,
@@ -40,16 +39,16 @@ const actions = [
     SocialAuthAction,
 ];
 
-const useCases = [
-    SignUpUseCase,
-    SignInUseCase,
-    RefreshTokenUseCase,
-    LogoutUseCase,
-    SendOtpUseCase,
-    VerifyOtpUseCase,
-    SendResetPasswordUseCase,
-    ResetPasswordUseCase,
-    SocialAuthUseCase,
+const actionServices = [
+    SignUpActionService,
+    SignInActionService,
+    RefreshTokenActionService,
+    LogoutActionService,
+    SendOtpActionService,
+    VerifyOtpActionService,
+    SendResetPasswordActionService,
+    ResetPasswordActionService,
+    SocialAuthActionService,
 ];
 
 const notifications = [SendOtpNotification, SendResetPasswordNotification];
@@ -82,7 +81,7 @@ const authConfigProvider: Provider = {
     controllers: actions,
     providers: [
         authConfigProvider,
-        ...useCases,
+        ...actionServices,
         GoogleProvider,
         {
             provide: SOCIAL_PROVIDERS,
